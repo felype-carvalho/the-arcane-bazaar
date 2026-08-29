@@ -19,6 +19,15 @@ describe('filterAndSortItems', () => {
     expect(result.every((item) => ['Rare', 'Legendary'].includes(item.rarity) && item.category === 'Weapon' && item.availability === 'Limited')).toBe(true)
   })
 
+  it('filters items using the updated categories', () => {
+    const result = filterAndSortItems(ITEMS, {
+      ...EMPTY_FILTERS,
+      categories: ['Bag/Container'],
+    }, 'name', 'asc')
+
+    expect(result.map((item) => item.name)).toEqual(['Bag of Holding'])
+  })
+
   it('sorts fixed prices before variable prices in ascending order', () => {
     const result = filterAndSortItems(ITEMS, EMPTY_FILTERS, 'price', 'asc')
     const firstVariableIndex = result.findIndex((item) => item.basePriceGp == null)

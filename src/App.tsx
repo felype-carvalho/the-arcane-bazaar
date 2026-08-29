@@ -44,7 +44,36 @@ import type {
 const PAGE_SIZE = 10
 const TYPES: ItemType[] = ['Magic', 'Common']
 const RARITIES: Rarity[] = ['Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact']
-const CATEGORIES: Category[] = ['Weapon', 'Armor', 'Ring', 'Consumable', 'Potion', 'Scroll', 'Tool', 'Accessory', 'Wondrous']
+const CATEGORIES: Category[] = [
+  'Adventuring Gear',
+  'Ammunition',
+  'Amulet',
+  'Apparel',
+  'Armor',
+  'Bag/Container',
+  'Clockwork',
+  'Consumable',
+  'Explosive',
+  'Food and Drink',
+  'Gem',
+  'Instrument',
+  'Mount',
+  'Other',
+  'Poison',
+  'Potion',
+  'Ring',
+  'Scroll',
+  'Service',
+  'Spellcasting Focus',
+  'Staff / Rod',
+  'Summonable',
+  'Tattoo',
+  'Tome',
+  'Tool',
+  'Trade Good',
+  'Vehicle',
+  'Weapon',
+]
 const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']
 
 const rarityClass: Record<Rarity, string> = {
@@ -56,8 +85,11 @@ const rarityClass: Record<Rarity, string> = {
   Artifact: 'rarity-artifact',
 }
 
-const categoryIcon: Partial<Record<Category, string>> = {
-  Weapon: '⚔️', Armor: '🛡️', Ring: '💍', Consumable: '🧪', Potion: '🧪', Scroll: '📜', Tool: '🔧', Accessory: '🎭', Wondrous: '✨',
+const categoryIcon: Record<Category, string> = {
+  Consumable: '🧪', Potion: '⚗️', Scroll: '📜', Apparel: '🧥', Ring: '💍', Amulet: '📿', Weapon: '⚔️', Armor: '🛡️',
+  'Spellcasting Focus': '🪄', 'Staff / Rod': '🦯', Tattoo: '🖋️', Clockwork: '⚙️', Instrument: '🎵', 'Bag/Container': '🎒', Gem: '💎', Tome: '📕',
+  Tool: '🔧', Summonable: '👻', Ammunition: '🏹', 'Adventuring Gear': '🧰', Explosive: '💥', 'Food and Drink': '🍽️', Mount: '🐎', Poison: '☠️',
+  Service: '🤝', 'Trade Good': '⚖️', Vehicle: '🛶', Other: '✨',
 }
 
 type FilterGroup = Exclude<keyof ItemFilters, 'search'>
@@ -207,11 +239,11 @@ function Catalog({ items, selectedId, sortKey, direction, onSort, onSelect }: Ca
                 className={`catalog-row ${selectedId === item.id ? 'selected' : ''}`}
               >
                 <td>
-                  <div className="flex items-center gap-3"><span className="text-xl" aria-hidden="true">{item.icon}</span><span className="font-display text-[12px] font-semibold text-cream">{item.name}</span></div>
+                  <span className="font-display text-[12px] font-semibold text-cream">{item.name}</span>
                 </td>
                 <td>
                   <TypeMark type={item.type} />
-                  <p className="mt-1 text-[10px] text-muted">{categoryIcon[item.category]} {item.category} · {item.subtype}</p>
+                  <p className="mt-1 text-[10px] text-muted">{categoryIcon[item.category]} {item.category}</p>
                 </td>
                 <td><RarityBadge rarity={item.rarity} /></td>
                 <td className="font-display text-xs font-semibold text-gold-bright">{item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : formatGp(item.basePriceGp)}</td>

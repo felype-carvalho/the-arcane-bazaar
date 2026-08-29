@@ -4,6 +4,36 @@ import { describe, expect, it } from 'vitest'
 import App from './App'
 
 describe('Arcane Bazaar app', () => {
+  it('renders the desktop catalog without name icons or item subtypes', async () => {
+    render(<App />)
+
+    const table = await screen.findByRole('table')
+    const row = within(table).getByRole('row', { name: /Bag of Holding/i })
+    const cells = within(row).getAllByRole('cell')
+
+    expect(cells[0]).toHaveTextContent(/^Bag of Holding$/)
+    expect(cells[0].querySelector('[aria-hidden="true"]')).not.toBeInTheDocument()
+    expect(cells[1]).toHaveTextContent('Magic')
+    expect(cells[1]).toHaveTextContent('Bag/Container')
+    expect(within(cells[1]).queryByText('Container')).not.toBeInTheDocument()
+  })
+
+  it('lists every category once and in the configured order', () => {
+    render(<App />)
+
+    const expectedCategories = [
+      'Adventuring Gear', 'Ammunition', 'Amulet', 'Apparel', 'Armor', 'Bag/Container',
+      'Clockwork', 'Consumable', 'Explosive', 'Food and Drink', 'Gem', 'Instrument', 'Mount',
+      'Other', 'Poison', 'Potion', 'Ring', 'Scroll', 'Service', 'Spellcasting Focus',
+      'Staff / Rod', 'Summonable', 'Tattoo', 'Tome', 'Tool', 'Trade Good', 'Vehicle', 'Weapon',
+    ]
+    const categoryFilter = screen.getByRole('group', { name: 'Category' })
+    const categoryNames = within(categoryFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.querySelector('span:last-child')?.textContent)
+
+    expect(categoryNames).toEqual(expectedCategories)
+    expect(new Set(categoryNames).size).toBe(expectedCategories.length)
+  })
+
   it('loads the catalog and shows an empty state for an unmatched search', async () => {
     const user = userEvent.setup()
     render(<App />)
