@@ -109,34 +109,29 @@ function TypeMark({ type }: { type: ItemType }) {
 
 interface FilterPanelProps {
   filters: ItemFilters
-  totalItems: number
-  filteredCount: number
   onSearch: (value: string) => void
   onToggle: (group: FilterGroup, value: string) => void
   onClear: () => void
   onClose?: () => void
 }
 
-function FilterPanel({ filters, totalItems, filteredCount, onSearch, onToggle, onClear, onClose }: FilterPanelProps) {
+function FilterPanel({ filters, onSearch, onToggle, onClear, onClose }: FilterPanelProps) {
   const isDirty = filters.search !== '' || filters.types.length > 0 || filters.rarities.length > 0 || filters.categories.length > 0 || filters.availabilities.length > 0
   return (
     <aside className="flex h-full min-h-0 flex-col bg-panel" aria-label="Item filters">
       <div className="flex items-start justify-between border-b border-border px-5 py-4">
-        <div>
-          <h2 className="font-display text-sm uppercase tracking-[0.14em] text-gold">Filters</h2>
-          <p className="mt-1 text-[10px] text-muted">{filteredCount} of {totalItems} items</p>
-        </div>
+        <h2 className="font-display text-sm uppercase tracking-[0.14em] text-gold">Filters</h2>
         {onClose && <button className="icon-button" onClick={onClose} aria-label="Close filters"><X size={18} /></button>}
       </div>
 
       <div className="arcane-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4">
         <label className="relative block">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-violet-300" size={15} />
+          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-violet-300" size={15} />
           <span className="sr-only">Search items</span>
           <input
             value={filters.search}
             onChange={(event) => onSearch(event.target.value)}
-            className="field h-10 w-full pl-9 pr-3 text-xs"
+            className="field search-field h-10 w-full text-xs"
             placeholder="Search items..."
           />
         </label>
@@ -165,12 +160,23 @@ function FilterGroupSection({ title, group, options, selected, onToggle, coloriz
   colorize?: boolean
   showIcons?: boolean
 }) {
+  const [isOpen, setIsOpen] = useState(false)
+  const optionsId = `filter-${group}-options`
+
   return (
     <fieldset className="mt-5 border-b border-border/70 pb-4 last:border-b-0">
-      <legend className="mb-3 flex w-full items-center justify-between font-display text-[11px] uppercase tracking-[0.14em] text-gold">
-        {title}<ChevronDown size={12} />
+      <legend className="w-full">
+        <button
+          type="button"
+          className="flex w-full items-center justify-between font-display text-sm uppercase tracking-[0.14em] text-gold"
+          aria-expanded={isOpen}
+          aria-controls={optionsId}
+          onClick={() => setIsOpen((current) => !current)}
+        >
+          {title}<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
       </legend>
-      <div className="space-y-2.5">
+      <div id={optionsId} className="mt-3 space-y-2.5" hidden={!isOpen}>
         {options.map((option) => (
           <label key={option} className="group flex cursor-pointer items-center gap-2.5 text-xs text-cream transition-colors hover:text-gold-bright">
             <input
@@ -559,7 +565,7 @@ export default function App() {
 
       <div className="flex min-h-0 flex-1">
         <div className="hidden w-[242px] shrink-0 border-r border-border lg:block">
-          <FilterPanel filters={filters} totalItems={items.length} filteredCount={filtered.length} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onToggle={toggleFilter} onClear={() => setFilters(EMPTY_FILTERS)} />
+          <FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onToggle={toggleFilter} onClear={() => setFilters(EMPTY_FILTERS)} />
         </div>
 
         <main className="flex min-w-0 flex-1 flex-col bg-catalog">
@@ -589,7 +595,7 @@ export default function App() {
 
       {filtersOpen && (
         <div className="drawer-backdrop lg:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setFiltersOpen(false) }}>
-          <div className="drawer left"><FilterPanel filters={filters} totalItems={items.length} filteredCount={filtered.length} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onToggle={toggleFilter} onClear={() => setFilters(EMPTY_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
+          <div className="drawer left"><FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onToggle={toggleFilter} onClear={() => setFilters(EMPTY_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
         </div>
       )}
 

@@ -18,8 +18,12 @@ describe('Arcane Bazaar app', () => {
     expect(within(cells[1]).queryByText('Container')).not.toBeInTheDocument()
   })
 
-  it('lists every category once and in the configured order', () => {
+  it('starts filter groups collapsed and lists categories in the configured order', async () => {
+    const user = userEvent.setup()
     render(<App />)
+
+    expect(screen.queryByText(/\d+ of \d+ items/i)).not.toBeInTheDocument()
+    expect(screen.getByLabelText('Search items')).toHaveClass('search-field')
 
     const expectedCategories = [
       'Adventuring Gear', 'Ammunition', 'Amulet', 'Apparel', 'Armor', 'Bag/Container',
@@ -27,6 +31,12 @@ describe('Arcane Bazaar app', () => {
       'Other', 'Poison', 'Potion', 'Ring', 'Scroll', 'Service', 'Spellcasting Focus',
       'Staff / Rod', 'Summonable', 'Tattoo', 'Tome', 'Tool', 'Trade Good', 'Vehicle', 'Weapon',
     ]
+    const toggles = ['Item type', 'Rarity', 'Category', 'Availability'].map((name) => screen.getByRole('button', { name }))
+    expect(toggles.every((toggle) => toggle.getAttribute('aria-expanded') === 'false')).toBe(true)
+
+    await user.click(screen.getByRole('button', { name: 'Category' }))
+    expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'true')
+
     const categoryFilter = screen.getByRole('group', { name: 'Category' })
     const categoryNames = within(categoryFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.querySelector('span:last-child')?.textContent)
 

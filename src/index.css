@@ -27,7 +27,9 @@
 * { box-sizing: border-box; }
 html { background: var(--color-app); }
 body { margin: 0; min-width: 320px; min-height: 100vh; }
-button, input, select { font: inherit; }
+@layer base {
+  button, input, select { font: inherit; }
+}
 button { cursor: pointer; }
 button:disabled { cursor: not-allowed; }
 ::selection { color: #fff5cf; background: rgb(160 110 21 / 45%); }
@@ -64,6 +66,8 @@ button:disabled { cursor: not-allowed; }
   outline: none;
   transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
 }
+
+.search-field { padding-right: 12px; padding-left: 36px; }
 
 .field::placeholder { color: #777994; }
 .field:hover { border-color: #514d66; }
