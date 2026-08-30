@@ -1,7 +1,22 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
+import { MemoryRouter, useLocation } from 'react-router-dom'
 import App from './App'
+
+function LocationDisplay() {
+  const location = useLocation()
+  return <output aria-label="Current path">{location.pathname}</output>
+}
+
+function renderApp(initialEntries = ['/catalog']) {
+  return render(
+    <MemoryRouter initialEntries={initialEntries}>
+      <App />
+      <LocationDisplay />
+    </MemoryRouter>,
+  )
+}
 
 vi.mock('./services/catalog', async () => {
   const { ITEM_FIXTURES } = await import('./test/fixtures/items')
@@ -17,8 +32,22 @@ vi.mock('./services/catalog', async () => {
 })
 
 describe('Arcane Bazaar app', () => {
+  it('redirects the root route to the catalog', async () => {
+    renderApp(['/'])
+
+    expect(await screen.findByLabelText('Current path')).toHaveTextContent('/catalog')
+    expect(screen.getByRole('heading', { name: 'The Arcane Bazaar' })).toBeInTheDocument()
+  })
+
+  it('renders the catalog directly at its canonical route', async () => {
+    renderApp()
+
+    expect(await screen.findByRole('table')).toBeInTheDocument()
+    expect(screen.getByLabelText('Current path')).toHaveTextContent('/catalog')
+  })
+
   it('renders the desktop catalog without name icons or item subtypes', async () => {
-    render(<App />)
+    renderApp()
 
     const table = await screen.findByRole('table')
     const row = within(table).getByRole('row', { name: /Bag of Holding/i })
@@ -33,7 +62,7 @@ describe('Arcane Bazaar app', () => {
 
   it('starts filter groups collapsed and lists categories in the configured order', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    renderApp()
 
     expect(screen.queryByText(/\d+ of \d+ items/i)).not.toBeInTheDocument()
     expect(screen.getByLabelText('Search items')).toHaveClass('search-field')
@@ -59,7 +88,7 @@ describe('Arcane Bazaar app', () => {
 
   it('loads the catalog and shows an empty state for an unmatched search', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    renderApp()
     expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
     await user.type(screen.getAllByLabelText('Search items')[0], 'something not in the bazaar')
     expect(await screen.findByText('No items found')).toBeInTheDocument()
@@ -67,7 +96,7 @@ describe('Arcane Bazaar app', () => {
 
   it('opens the complete item sheet and closes it with Escape', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    renderApp()
     const button = await screen.findByRole('button', { name: /view full item sheet/i })
     await user.click(button)
     const dialog = screen.getByRole('dialog', { name: 'Bag of Holding' })
@@ -78,7 +107,7 @@ describe('Arcane Bazaar app', () => {
 
   it('paginates the catalog and selects an item from the next page', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    renderApp()
     const next = await screen.findByRole('button', { name: 'Next page' })
     expect(next).toBeEnabled()
     await user.click(next)
@@ -89,7 +118,7 @@ describe('Arcane Bazaar app', () => {
 
   it('adds and removes a custom percentage modifier', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    renderApp()
     expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
     await user.type(screen.getByLabelText('Modifier name'), 'Festival tax')
     await user.type(screen.getByLabelText('Modifier percent'), '10')

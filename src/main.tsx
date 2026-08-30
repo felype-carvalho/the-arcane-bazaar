@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
 import '@fontsource/cinzel/latin-500.css'
 import '@fontsource/cinzel/latin-600.css'
 import '@fontsource/inter/latin-400.css'
@@ -14,6 +15,8 @@ document.querySelectorAll<HTMLMetaElement>('meta[property="og:image"], meta[name
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 )
