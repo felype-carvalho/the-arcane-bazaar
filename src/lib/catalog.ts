@@ -21,7 +21,7 @@ export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey:
     if (filters.types.length && !filters.types.includes(item.type)) return false
     if (filters.rarities.length && !filters.rarities.includes(item.rarity)) return false
     if (filters.categories.length && !filters.categories.includes(item.category)) return false
-    if (filters.availabilities.length && !filters.availabilities.includes(item.availability)) return false
+    // if (filters.availabilities.length && !filters.availabilities.includes(item.availability)) return false
     return true
   })
 

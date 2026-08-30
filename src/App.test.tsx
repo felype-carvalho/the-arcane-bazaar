@@ -27,7 +27,16 @@ vi.mock('./services/catalog', async () => {
     tags: [...ITEM_FIXTURES[1].tags],
     properties: [...ITEM_FIXTURES[1].properties],
   }))
-  const catalog = [...ITEM_FIXTURES, ...filler]
+  const commonItem = {
+    ...ITEM_FIXTURES[1],
+    id: 'common-rope',
+    name: 'Hempen Rope',
+    type: 'Common' as const,
+    rarity: 'None' as const,
+    tags: [...ITEM_FIXTURES[1].tags],
+    properties: [...ITEM_FIXTURES[1].properties],
+  }
+  const catalog = [commonItem, ...ITEM_FIXTURES, ...filler]
   return { getItems: () => Promise.resolve(catalog.map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
 
@@ -47,7 +56,10 @@ describe('Arcane Bazaar app', () => {
   })
 
   it('renders the desktop catalog without name icons or item subtypes', async () => {
+    const user = userEvent.setup()
     renderApp()
+
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
 
     const table = await screen.findByRole('table')
     const row = within(table).getByRole('row', { name: /Bag of Holding/i })
@@ -60,7 +72,7 @@ describe('Arcane Bazaar app', () => {
     expect(within(cells[1]).queryByText('Container')).not.toBeInTheDocument()
   })
 
-  it('starts filter groups collapsed and lists categories in the configured order', async () => {
+  it('starts item type expanded, keeps the other filter groups collapsed, and lists categories in the configured order', async () => {
     const user = userEvent.setup()
     renderApp()
 
@@ -73,8 +85,11 @@ describe('Arcane Bazaar app', () => {
       'Other', 'Poison', 'Potion', 'Ring', 'Scroll', 'Service', 'Spellcasting Focus',
       'Staff / Rod', 'Summonable', 'Tattoo', 'Tome', 'Tool', 'Trade Good', 'Vehicle', 'Weapon',
     ]
-    const toggles = ['Item type', 'Rarity', 'Category', 'Availability'].map((name) => screen.getByRole('button', { name }))
-    expect(toggles.every((toggle) => toggle.getAttribute('aria-expanded') === 'false')).toBe(true)
+    const toggles = [
+      'Item type', 'Rarity', 'Category',
+      // 'Availability',
+    ].map((name) => screen.getByRole('button', { name }))
+    expect(toggles.map((toggle) => toggle.getAttribute('aria-expanded'))).toEqual(['true', 'false', 'false'])
 
     await user.click(screen.getByRole('button', { name: 'Category' }))
     expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'true')
@@ -86,9 +101,32 @@ describe('Arcane Bazaar app', () => {
     expect(new Set(categoryNames).size).toBe(expectedCategories.length)
   })
 
+  it('allows only one item type to be selected at a time', async () => {
+    const user = userEvent.setup()
+    renderApp()
+
+    const itemTypeFilter = screen.getByRole('group', { name: 'Item type' })
+    const radios = within(itemTypeFilter).getAllByRole('radio')
+    const [common, magic] = radios
+
+    expect(radios.map((radio) => radio.parentElement?.textContent)).toEqual(['Common', 'Magic'])
+
+    expect(magic).not.toBeChecked()
+    expect(common).toBeChecked()
+
+    await user.click(magic)
+    expect(magic).toBeChecked()
+    expect(common).not.toBeChecked()
+
+    await user.click(common)
+    expect(magic).not.toBeChecked()
+    expect(common).toBeChecked()
+  })
+
   it('loads the catalog and shows an empty state for an unmatched search', async () => {
     const user = userEvent.setup()
     renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
     expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
     await user.type(screen.getAllByLabelText('Search items')[0], 'something not in the bazaar')
     expect(await screen.findByText('No items found')).toBeInTheDocument()
@@ -97,6 +135,7 @@ describe('Arcane Bazaar app', () => {
   it('opens the complete item sheet and closes it with Escape', async () => {
     const user = userEvent.setup()
     renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
     const button = await screen.findByRole('button', { name: /view full item sheet/i })
     await user.click(button)
     const dialog = screen.getByRole('dialog', { name: 'Bag of Holding' })
@@ -108,6 +147,7 @@ describe('Arcane Bazaar app', () => {
   it('paginates the catalog and selects an item from the next page', async () => {
     const user = userEvent.setup()
     renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
     const next = await screen.findByRole('button', { name: 'Next page' })
     expect(next).toBeEnabled()
     await user.click(next)
@@ -119,6 +159,7 @@ describe('Arcane Bazaar app', () => {
   it('adds and removes a custom percentage modifier', async () => {
     const user = userEvent.setup()
     renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
     expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
     await user.type(screen.getByLabelText('Modifier name'), 'Festival tax')
     await user.type(screen.getByLabelText('Modifier percent'), '10')

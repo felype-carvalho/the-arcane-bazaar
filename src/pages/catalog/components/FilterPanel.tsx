@@ -1,24 +1,26 @@
-import { useState } from 'react'
+import { useId, useState } from 'react'
 import { ChevronDown, Search, X } from 'lucide-react'
 import { CATEGORIES, CATEGORY_ICONS } from '../../../lib/items/categories'
-import type { Availability, Category, ItemFilters, ItemType, Rarity } from '../../../types'
+import type { /* Availability, */ Category, ItemFilters, ItemType, Rarity } from '../../../types'
 
-const TYPES: ItemType[] = ['Magic', 'Common']
+const TYPES: ItemType[] = ['Common', 'Magic']
 const RARITIES: Rarity[] = ['None', 'Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact', 'Varies', 'Unknown']
-const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']
+// const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']
 
 export type FilterGroup = Exclude<keyof ItemFilters, 'search'>
 
 interface FilterPanelProps {
   filters: ItemFilters
   onSearch: (value: string) => void
+  onTypeSelect: (value: ItemType) => void
   onToggle: (group: FilterGroup, value: string) => void
   onClear: () => void
   onClose?: () => void
 }
 
-export function FilterPanel({ filters, onSearch, onToggle, onClear, onClose }: FilterPanelProps) {
-  const isDirty = filters.search !== '' || filters.types.length > 0 || filters.rarities.length > 0 || filters.categories.length > 0 || filters.availabilities.length > 0
+export function FilterPanel({ filters, onSearch, onTypeSelect, onToggle, onClear, onClose }: FilterPanelProps) {
+  const isDirty = filters.search !== '' || filters.types.length > 0 || filters.rarities.length > 0 || filters.categories.length > 0
+  // || filters.availabilities.length > 0
 
   return (
     <aside className="flex h-full min-h-0 flex-col bg-panel" aria-label="Item filters">
@@ -39,10 +41,10 @@ export function FilterPanel({ filters, onSearch, onToggle, onClear, onClose }: F
           />
         </label>
 
-        <FilterGroupSection title="Item type" group="types" options={TYPES} selected={filters.types} onToggle={onToggle} />
+        <FilterGroupSection title="Item type" group="types" options={TYPES} selected={filters.types} onToggle={onToggle} onSingleSelect={(value) => onTypeSelect(value as ItemType)} selectionMode="single" defaultOpen />
         <FilterGroupSection title="Rarity" group="rarities" options={RARITIES} selected={filters.rarities} onToggle={onToggle} colorize />
         <FilterGroupSection title="Category" group="categories" options={CATEGORIES} selected={filters.categories} onToggle={onToggle} showIcons />
-        <FilterGroupSection title="Availability" group="availabilities" options={AVAILABILITIES} selected={filters.availabilities} onToggle={onToggle} />
+        {/* <FilterGroupSection title="Availability" group="availabilities" options={AVAILABILITIES} selected={filters.availabilities} onToggle={onToggle} /> */}
       </div>
 
       <div className="border-t border-border p-4">
@@ -54,24 +56,28 @@ export function FilterPanel({ filters, onSearch, onToggle, onClear, onClose }: F
   )
 }
 
-function FilterGroupSection({ title, group, options, selected, onToggle, colorize = false, showIcons = false }: {
+function FilterGroupSection({ title, group, options, selected, onToggle, onSingleSelect, selectionMode = 'multiple', colorize = false, showIcons = false, defaultOpen = false }: {
   title: string
   group: FilterGroup
   options: readonly string[]
   selected: readonly string[]
   onToggle: (group: FilterGroup, value: string) => void
+  onSingleSelect?: (value: string) => void
+  selectionMode?: 'single' | 'multiple'
   colorize?: boolean
   showIcons?: boolean
+  defaultOpen?: boolean
 }) {
-  const [isOpen, setIsOpen] = useState(false)
-  const optionsId = `filter-${group}-options`
+  const [isOpen, setIsOpen] = useState(defaultOpen)
+  const instanceId = useId()
+  const optionsId = `filter-${group}-${instanceId}-options`
 
   return (
     <fieldset className="mt-5 border-b border-border/70 pb-4 last:border-b-0">
       <legend className="w-full">
         <button
           type="button"
-          className="flex w-full items-center justify-between font-display text-sm uppercase tracking-[0.14em] text-gold"
+          className="flex w-full items-center justify-between font-display text-[12px] uppercase tracking-[0.14em] text-gold"
           aria-expanded={isOpen}
           aria-controls={optionsId}
           onClick={() => setIsOpen((current) => !current)}
@@ -83,10 +89,11 @@ function FilterGroupSection({ title, group, options, selected, onToggle, coloriz
         {options.map((option) => (
           <label key={option} className="group flex cursor-pointer items-center gap-2.5 text-xs text-cream transition-colors hover:text-gold-bright">
             <input
-              type="checkbox"
+              type={selectionMode === 'single' ? 'radio' : 'checkbox'}
+              name={selectionMode === 'single' ? `filter-${group}-${instanceId}` : undefined}
               checked={selected.includes(option)}
-              onChange={() => onToggle(group, option)}
-              className="arcane-checkbox"
+              onChange={() => selectionMode === 'single' ? onSingleSelect?.(option) : onToggle(group, option)}
+              className={selectionMode === 'single' ? 'accent-gold' : 'arcane-checkbox'}
             />
             {showIcons && <span aria-hidden="true">{CATEGORY_ICONS[option as Category]}</span>}
             <span className={colorize ? `filter-${option.toLowerCase().replaceAll(' ', '-')}` : ''}>{option}</span>
