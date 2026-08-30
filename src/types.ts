@@ -97,5 +97,5 @@ export interface PricingResult {
   adjustments: PricingAdjustment[]
 }
 
-export type SortKey = 'name' | 'type' | 'rarity' | 'price'
+export type SortKey = 'name' | 'type' | 'category' | 'rarity' | 'price'
 export type SortDirection = 'asc' | 'desc'

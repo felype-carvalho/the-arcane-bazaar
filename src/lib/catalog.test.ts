@@ -35,4 +35,11 @@ describe('filterAndSortItems', () => {
     expect(result.slice(0, firstVariableIndex).every((item) => item.basePriceGp != null)).toBe(true)
     expect(result.slice(firstVariableIndex).every((item) => item.basePriceGp == null)).toBe(true)
   })
+
+  it('sorts items by category', () => {
+    const result = filterAndSortItems(ITEM_FIXTURES, EMPTY_FILTERS, 'category', 'asc')
+    const categories = result.map((item) => item.category)
+
+    expect(categories).toEqual([...categories].sort((a, b) => a.localeCompare(b)))
+  })
 })

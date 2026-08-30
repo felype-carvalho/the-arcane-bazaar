@@ -44,10 +44,11 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
         <table className="w-full border-collapse text-left">
           <thead className="sticky top-0 z-10 bg-panel-strong shadow-[0_1px_0_var(--color-border)]">
             <tr>
-              <SortHeader label="Name" column="name" className="w-[36%]" />
-              <SortHeader label="Item type" column="type" className="w-[28%]" />
-              <SortHeader label="Rarity" column="rarity" className="w-[18%]" />
-              <SortHeader label="Price" column="price" className="w-[18%]" />
+              <SortHeader label="Name" column="name" className="w-[40%]" />
+              <SortHeader label="Item type" column="type" className="w-[10%]" />
+              <SortHeader label="Category" column="category" className="w-[20%]" />
+              <SortHeader label="Rarity" column="rarity" className="w-[15%]" />
+              <SortHeader label="Price" column="price" className="w-[15%]" />
             </tr>
           </thead>
           <tbody>
@@ -62,14 +63,12 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
               >
                 <td>
                   <span className="flex flex-wrap items-center gap-2">
-                    <span className="font-display text-[12px] font-semibold text-cream">{formatCatalogItemName(item.name)}</span>
+                    <span className="font-display text-[13px] font-semibold text-cream">{formatCatalogItemName(item.name)}</span>
                     <SourceChip source={item.source} />
                   </span>
                 </td>
-                <td>
-                  <TypeMark type={item.type} />
-                  <p className="mt-1 text-[10px] text-muted">{CATEGORY_ICONS[item.category]} {item.category}</p>
-                </td>
+                <td><TypeMark type={item.type} /></td>
+                <td className="text-[12px] font-semibold">{CATEGORY_ICONS[item.category]} {item.category}</td>
                 <td><RarityBadge rarity={item.rarity} /></td>
                 <td className="font-display text-xs font-semibold text-gold-bright">{item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : formatGp(item.basePriceGp)}</td>
               </tr>

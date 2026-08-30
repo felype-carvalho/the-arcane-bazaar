@@ -193,7 +193,9 @@ button:disabled { cursor: not-allowed; }
 
 .page-button { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid #37384d; border-radius: 4px; color: #9192a9; background: #202134; }
 .page-button:hover:not(:disabled) { color: var(--color-gold-bright); border-color: #6d592d; }
+.page-button.active { border-color: #8c7133; color: var(--color-gold-bright); background: rgb(184 139 36 / 14%); box-shadow: inset 0 0 0 1px rgb(225 186 76 / 10%); }
 .page-button:disabled { opacity: .32; }
+.page-gap { display: grid; width: 16px; height: 28px; place-items: center; color: var(--color-muted); }
 
 .drawer-backdrop { position: fixed; inset: 60px 0 0; z-index: 40; background: rgb(4 5 12 / 72%); backdrop-filter: blur(3px); }
 .drawer { position: absolute; top: 0; bottom: 0; width: min(390px, 92vw); box-shadow: 0 0 35px rgb(0 0 0 / 55%); animation: slide-in 180ms ease-out; }

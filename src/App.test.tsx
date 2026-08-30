@@ -20,7 +20,7 @@ function renderApp(initialEntries = ['/catalog']) {
 
 vi.mock('./services/catalog', async () => {
   const { ITEM_FIXTURES } = await import('./test/fixtures/items')
-  const filler = Array.from({ length: 8 }, (_, index) => ({
+  const filler = Array.from({ length: 18 }, (_, index) => ({
     ...ITEM_FIXTURES[1],
     id: `test-relic-${index + 1}`,
     name: `Test Relic ${index + 1}`,
@@ -55,7 +55,7 @@ describe('Arcane Bazaar app', () => {
     expect(screen.getByLabelText('Current path')).toHaveTextContent('/catalog')
   })
 
-  it('renders the desktop catalog with expansion chips and without name icons or item subtypes', async () => {
+  it('renders the desktop catalog with separate item type and category columns', async () => {
     const user = userEvent.setup()
     renderApp()
 
@@ -65,13 +65,16 @@ describe('Arcane Bazaar app', () => {
     const row = within(table).getByRole('row', { name: /Bag of Holding/i })
     const cells = within(row).getAllByRole('cell')
 
+    expect(within(table).getByRole('columnheader', { name: 'Item type' })).toBeInTheDocument()
+    expect(within(table).getByRole('columnheader', { name: 'Category' })).toBeInTheDocument()
     expect(within(cells[0]).getByText('Bag of Holding')).toBeInTheDocument()
-    expect(within(cells[0]).getByTitle('Source: DMG')).toHaveTextContent(/^DMG'14$/)
-    expect(within(cells[0]).getByTitle('Source: DMG')).toHaveClass('source-chip')
+    expect(within(cells[0]).getByTitle("Source: DMG'14")).toHaveTextContent(/^DMG'14$/)
+    expect(within(cells[0]).getByTitle("Source: DMG'14")).toHaveClass('source-chip')
     expect(cells[0].querySelector('[aria-hidden="true"]')).not.toBeInTheDocument()
     expect(cells[1]).toHaveTextContent('Magic')
-    expect(cells[1]).toHaveTextContent('Bag/Container')
-    expect(within(cells[1]).queryByText('Container')).not.toBeInTheDocument()
+    expect(cells[1]).not.toHaveTextContent('Bag/Container')
+    expect(cells[2]).toHaveTextContent('Bag/Container')
+    expect(within(cells[2]).queryByText('Container')).not.toBeInTheDocument()
   })
 
   it('starts item type expanded, keeps the other filter groups collapsed, and lists categories in the configured order', async () => {

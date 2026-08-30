@@ -28,7 +28,8 @@ export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey:
   return filtered.sort((a, b) => {
     let result = 0
     if (sortKey === 'name') result = a.name.localeCompare(b.name)
-    if (sortKey === 'type') result = a.type.localeCompare(b.type) || a.category.localeCompare(b.category)
+    if (sortKey === 'type') result = a.type.localeCompare(b.type)
+    if (sortKey === 'category') result = a.category.localeCompare(b.category)
     if (sortKey === 'rarity') result = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity]
     if (sortKey === 'price') {
       if (a.basePriceGp == null && b.basePriceGp == null) result = a.name.localeCompare(b.name)
