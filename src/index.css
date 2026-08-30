@@ -92,11 +92,14 @@ button:disabled { cursor: not-allowed; }
 .arcane-checkbox:focus-visible { outline: 2px solid #ddb94c; outline-offset: 2px; }
 
 .filter-common { color: #aeb6c9; }
+.filter-none { color: #9299aa; }
 .filter-uncommon { color: #43e999; }
 .filter-rare { color: #58a9ff; }
 .filter-very-rare { color: #ba76ff; }
 .filter-legendary { color: #ff923e; }
 .filter-artifact { color: #ff625c; }
+.filter-varies { color: #d3b56f; }
+.filter-unknown { color: #9a91aa; }
 
 .icon-button {
   display: inline-grid;
@@ -159,11 +162,14 @@ button:disabled { cursor: not-allowed; }
 
 .rarity-badge { display: inline-flex; align-items: center; min-height: 22px; border: 1px solid; border-radius: 999px; padding: 1px 10px 0; font-family: var(--font-display); font-size: 9px; text-transform: uppercase; letter-spacing: .07em; white-space: nowrap; }
 .rarity-common { color: #b7c0d2; border-color: #4e5565; background: rgb(68 75 91 / 20%); box-shadow: 0 0 8px rgb(110 126 155 / 12%); }
+.rarity-none { color: #a4aaba; border-color: #454956; background: rgb(65 68 78 / 18%); box-shadow: none; }
 .rarity-uncommon { color: #4af4a3; border-color: #24714e; background: rgb(16 83 55 / 20%); box-shadow: 0 0 10px rgb(40 224 138 / 18%); }
 .rarity-rare { color: #66b1ff; border-color: #285a8e; background: rgb(24 72 122 / 23%); box-shadow: 0 0 10px rgb(56 151 255 / 18%); }
 .rarity-very-rare { color: #c587ff; border-color: #75439e; background: rgb(101 50 136 / 22%); box-shadow: 0 0 10px rgb(174 91 255 / 18%); }
 .rarity-legendary { color: #ff9a43; border-color: #8f4e1e; background: rgb(117 54 13 / 20%); box-shadow: 0 0 12px rgb(255 128 38 / 24%); }
 .rarity-artifact { color: #ff6f6f; border-color: #8f3037; background: rgb(116 24 35 / 22%); box-shadow: 0 0 12px rgb(255 61 76 / 22%); }
+.rarity-varies { color: #e2c270; border-color: #806928; background: rgb(110 84 20 / 20%); box-shadow: 0 0 10px rgb(220 180 70 / 14%); }
+.rarity-unknown { color: #aaa2b8; border-color: #575063; background: rgb(73 66 83 / 20%); box-shadow: none; }
 
 .variable-price { display: inline-block; border: 1px solid #745719; border-radius: 3px; padding: 3px 7px; background: rgb(125 88 10 / 18%); font-size: 9px; }
 .type-pill, .tag-pill { display: inline-flex; min-height: 21px; align-items: center; gap: 5px; border: 1px solid #51455f; border-radius: 999px; padding: 2px 9px; font-family: var(--font-display); font-size: 8px; text-transform: uppercase; letter-spacing: .08em; color: #dfcfee; background: rgb(77 47 94 / 18%); }

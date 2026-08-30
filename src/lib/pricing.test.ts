@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import { ITEMS } from '../data/items'
+import { ITEM_FIXTURES } from '../test/fixtures/items'
 import { calculatePricing, DEFAULT_MODIFIERS } from './pricing'
 
-const fixedItem = ITEMS.find((item) => item.id === 'bag-of-holding')!
-const variableItem = ITEMS.find((item) => item.id === 'vorpal-sword')!
+const fixedItem = ITEM_FIXTURES.find((item) => item.id === 'bag-of-holding')!
+const variableItem = ITEM_FIXTURES.find((item) => item.id === 'vorpal-sword')!
 
 describe('calculatePricing', () => {
   it('uses 100% for buying and 50% for selling at neutral settings', () => {

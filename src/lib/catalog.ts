@@ -1,12 +1,15 @@
 import type { Item, ItemFilters, Rarity, SortDirection, SortKey } from '../types'
 
 const RARITY_ORDER: Record<Rarity, number> = {
-  Common: 0,
-  Uncommon: 1,
-  Rare: 2,
-  'Very Rare': 3,
-  Legendary: 4,
-  Artifact: 5,
+  None: 0,
+  Common: 1,
+  Uncommon: 2,
+  Rare: 3,
+  'Very Rare': 4,
+  Legendary: 5,
+  Artifact: 6,
+  Varies: 7,
+  Unknown: 8,
 }
 
 export const EMPTY_FILTERS: ItemFilters = { search: '', types: [], rarities: [], categories: [], availabilities: [] }

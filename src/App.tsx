@@ -22,6 +22,7 @@ import {
   X,
 } from 'lucide-react'
 import { filterAndSortItems, EMPTY_FILTERS } from './lib/catalog'
+import { CATEGORIES, CATEGORY_ICONS } from './lib/items/categories'
 import { calculatePricing, DEFAULT_MODIFIERS, formatGp, signedLabel } from './lib/pricing'
 import { getItems } from './services/catalog'
 import type {
@@ -43,53 +44,19 @@ import type {
 
 const PAGE_SIZE = 10
 const TYPES: ItemType[] = ['Magic', 'Common']
-const RARITIES: Rarity[] = ['Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact']
-const CATEGORIES: Category[] = [
-  'Adventuring Gear',
-  'Ammunition',
-  'Amulet',
-  'Apparel',
-  'Armor',
-  'Bag/Container',
-  'Clockwork',
-  'Consumable',
-  'Explosive',
-  'Food and Drink',
-  'Gem',
-  'Instrument',
-  'Mount',
-  'Other',
-  'Poison',
-  'Potion',
-  'Ring',
-  'Scroll',
-  'Service',
-  'Spellcasting Focus',
-  'Staff / Rod',
-  'Summonable',
-  'Tattoo',
-  'Tome',
-  'Tool',
-  'Trade Good',
-  'Vehicle',
-  'Weapon',
-]
+const RARITIES: Rarity[] = ['None', 'Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact', 'Varies', 'Unknown']
 const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']
 
 const rarityClass: Record<Rarity, string> = {
+  None: 'rarity-none',
   Common: 'rarity-common',
   Uncommon: 'rarity-uncommon',
   Rare: 'rarity-rare',
   'Very Rare': 'rarity-very-rare',
   Legendary: 'rarity-legendary',
   Artifact: 'rarity-artifact',
-}
-
-const categoryIcon: Record<Category, string> = {
-  Consumable: '🧪', Potion: '⚗️', Scroll: '📜', Apparel: '🧥', Ring: '💍', Amulet: '📿', Weapon: '⚔️', Armor: '🛡️',
-  'Spellcasting Focus': '🪄', 'Staff / Rod': '🦯', Tattoo: '🖋️', Clockwork: '⚙️', Instrument: '🎵', 'Bag/Container': '🎒', Gem: '💎', Tome: '📕',
-  Tool: '🔧', Summonable: '👻', Ammunition: '🏹', 'Adventuring Gear': '🧰', Explosive: '💥', 'Food and Drink': '🍽️', Mount: '🐎', Poison: '☠️',
-  Service: '🤝', 'Trade Good': '⚖️', Vehicle: '🛶', Other: '✨',
+  Varies: 'rarity-varies',
+  Unknown: 'rarity-unknown',
 }
 
 type FilterGroup = Exclude<keyof ItemFilters, 'search'>
@@ -185,7 +152,7 @@ function FilterGroupSection({ title, group, options, selected, onToggle, coloriz
               onChange={() => onToggle(group, option)}
               className="arcane-checkbox"
             />
-            {showIcons && <span aria-hidden="true">{categoryIcon[option as Category]}</span>}
+            {showIcons && <span aria-hidden="true">{CATEGORY_ICONS[option as Category]}</span>}
             <span className={colorize ? `filter-${option.toLowerCase().replaceAll(' ', '-')}` : ''}>{option}</span>
           </label>
         ))}
@@ -249,7 +216,7 @@ function Catalog({ items, selectedId, sortKey, direction, onSort, onSelect }: Ca
                 </td>
                 <td>
                   <TypeMark type={item.type} />
-                  <p className="mt-1 text-[10px] text-muted">{categoryIcon[item.category]} {item.category}</p>
+                  <p className="mt-1 text-[10px] text-muted">{CATEGORY_ICONS[item.category]} {item.category}</p>
                 </td>
                 <td><RarityBadge rarity={item.rarity} /></td>
                 <td className="font-display text-xs font-semibold text-gold-bright">{item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : formatGp(item.basePriceGp)}</td>
@@ -412,7 +379,7 @@ function ItemDetails({ item, onOpenModal, onClose, modifiers, setModifiers, manu
       </div>
 
       <div className="grid grid-cols-2 gap-x-5 gap-y-4 border-b border-border px-5 py-4">
-        <DetailFact label="Category" value={`${categoryIcon[item.category]} ${item.category}`} />
+        <DetailFact label="Category" value={`${CATEGORY_ICONS[item.category]} ${item.category}`} />
         <DetailFact label="Subtype" value={item.subtype} />
         <DetailFact label="Weight" value={item.weight} />
         <DetailFact label="Attunement" value={item.attunement ? 'Required' : 'Not required'} />

@@ -1,5 +1,7 @@
 export type ItemType = 'Magic' | 'Common'
-export type Rarity = 'Common' | 'Uncommon' | 'Rare' | 'Very Rare' | 'Legendary' | 'Artifact'
+export type Rarity = 'None' | 'Common' | 'Uncommon' | 'Rare' | 'Very Rare' | 'Legendary' | 'Artifact' | 'Varies' | 'Unknown'
+export type ItemEdition = 'classic' | 'one' | 'unspecified'
+export type ItemOrigin = 'item' | 'itemGroup' | 'baseitem' | 'specificVariant'
 export type Category =
   | 'Consumable'
   | 'Potion'
@@ -46,6 +48,9 @@ export interface Item {
   tags: string[]
   properties: string[]
   attunement: boolean
+  source: string
+  edition: ItemEdition
+  origin: ItemOrigin
 }
 
 export interface ItemFilters {

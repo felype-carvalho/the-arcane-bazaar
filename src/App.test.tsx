@@ -1,7 +1,20 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import App from './App'
+
+vi.mock('./services/catalog', async () => {
+  const { ITEM_FIXTURES } = await import('./test/fixtures/items')
+  const filler = Array.from({ length: 8 }, (_, index) => ({
+    ...ITEM_FIXTURES[1],
+    id: `test-relic-${index + 1}`,
+    name: `Test Relic ${index + 1}`,
+    tags: [...ITEM_FIXTURES[1].tags],
+    properties: [...ITEM_FIXTURES[1].properties],
+  }))
+  const catalog = [...ITEM_FIXTURES, ...filler]
+  return { getItems: () => Promise.resolve(catalog.map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
+})
 
 describe('Arcane Bazaar app', () => {
   it('renders the desktop catalog without name icons or item subtypes', async () => {
@@ -61,6 +74,17 @@ describe('Arcane Bazaar app', () => {
     expect(within(dialog).getByText('Complete item sheet')).toBeInTheDocument()
     await user.keyboard('{Escape}')
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+  })
+
+  it('paginates the catalog and selects an item from the next page', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    const next = await screen.findByRole('button', { name: 'Next page' })
+    expect(next).toBeEnabled()
+    await user.click(next)
+    const row = await screen.findByRole('row', { name: /Vicious Longsword/i })
+    await user.click(row)
+    expect((await screen.findAllByText('Vicious Longsword')).length).toBeGreaterThan(0)
   })
 
   it('adds and removes a custom percentage modifier', async () => {
