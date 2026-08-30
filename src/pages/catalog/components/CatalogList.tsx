@@ -3,6 +3,7 @@ import { CATEGORY_ICONS } from '../../../lib/items/categories'
 import { formatGp } from '../../../lib/pricing'
 import type { Item, SortDirection, SortKey } from '../../../types'
 import { RarityBadge, TypeMark } from './ItemBadges'
+import { SourceChip } from './SourceChip'
 
 interface CatalogListProps {
   items: Item[]
@@ -11,6 +12,11 @@ interface CatalogListProps {
   direction: SortDirection
   onSort: (key: SortKey) => void
   onSelect: (item: Item) => void
+}
+
+export function formatCatalogItemName(name: string): string {
+  const match = name.match(/^(\+[1-3])\s+(.+)$/)
+  return match ? `${match[2]}, ${match[1]}` : name
 }
 
 export function CatalogList({ items, selectedId, sortKey, direction, onSort, onSelect }: CatalogListProps) {
@@ -54,7 +60,12 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                 aria-selected={selectedId === item.id}
                 className={`catalog-row ${selectedId === item.id ? 'selected' : ''}`}
               >
-                <td><span className="font-display text-[12px] font-semibold text-cream">{item.name}</span></td>
+                <td>
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="font-display text-[12px] font-semibold text-cream">{formatCatalogItemName(item.name)}</span>
+                    <SourceChip source={item.source} />
+                  </span>
+                </td>
                 <td>
                   <TypeMark type={item.type} />
                   <p className="mt-1 text-[10px] text-muted">{CATEGORY_ICONS[item.category]} {item.category}</p>
@@ -72,7 +83,10 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
           <button key={item.id} onClick={() => onSelect(item)} className={`item-card text-left ${selectedId === item.id ? 'selected' : ''}`}>
             <span className="text-2xl" aria-hidden="true">{item.icon}</span>
             <span className="min-w-0 flex-1">
-              <span className="block truncate font-display text-xs font-semibold text-cream">{item.name}</span>
+              <span className="flex min-w-0 items-center gap-1.5">
+                <span className="min-w-0 truncate font-display text-xs font-semibold text-cream">{formatCatalogItemName(item.name)}</span>
+                <SourceChip source={item.source} />
+              </span>
               <span className="mt-1 block text-[10px] text-muted">{item.category} · {item.subtype}</span>
             </span>
             <span className="flex flex-col items-end gap-2">

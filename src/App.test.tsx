@@ -55,7 +55,7 @@ describe('Arcane Bazaar app', () => {
     expect(screen.getByLabelText('Current path')).toHaveTextContent('/catalog')
   })
 
-  it('renders the desktop catalog without name icons or item subtypes', async () => {
+  it('renders the desktop catalog with expansion chips and without name icons or item subtypes', async () => {
     const user = userEvent.setup()
     renderApp()
 
@@ -65,7 +65,9 @@ describe('Arcane Bazaar app', () => {
     const row = within(table).getByRole('row', { name: /Bag of Holding/i })
     const cells = within(row).getAllByRole('cell')
 
-    expect(cells[0]).toHaveTextContent(/^Bag of Holding$/)
+    expect(within(cells[0]).getByText('Bag of Holding')).toBeInTheDocument()
+    expect(within(cells[0]).getByTitle('Source: DMG')).toHaveTextContent(/^DMG'14$/)
+    expect(within(cells[0]).getByTitle('Source: DMG')).toHaveClass('source-chip')
     expect(cells[0].querySelector('[aria-hidden="true"]')).not.toBeInTheDocument()
     expect(cells[1]).toHaveTextContent('Magic')
     expect(cells[1]).toHaveTextContent('Bag/Container')
