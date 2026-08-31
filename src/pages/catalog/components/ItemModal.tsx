@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { Coins, Shield, Sparkles, Swords, X } from 'lucide-react'
-import { formatGp } from '../../../lib/pricing'
+import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
 import type { Item } from '../../../types'
 import { DetailFact } from './ItemDetails'
 import { RarityBadge } from './ItemBadges'
@@ -48,7 +48,7 @@ export function ItemModal({ item, onClose }: ItemModalProps) {
           <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="sheet-fact"><Swords size={17} /><DetailFact label="Category" value={item.category} /></div>
             <div className="sheet-fact"><Shield size={17} /><DetailFact label="Subtype" value={item.subtype} /></div>
-            <div className="sheet-fact"><Coins size={17} /><DetailFact label="Base price" value={item.basePriceGp == null ? 'Variable' : formatGp(item.basePriceGp)} /></div>
+            <div className="sheet-fact"><Coins size={17} /><DetailFact label="Base price" value={item.basePriceGp == null ? 'Variable' : <CurrencyDisplay valueGp={item.basePriceGp} />} /></div>
             <div className="sheet-fact"><Sparkles size={17} /><DetailFact label="Attunement" value={item.attunement ? 'Required' : 'Not required'} /></div>
           </div>
           <section className="mt-8 border-t border-border pt-6">

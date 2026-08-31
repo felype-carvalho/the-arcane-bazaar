@@ -1,6 +1,7 @@
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import { ChevronDown, Plus, SlidersHorizontal, Trash2 } from 'lucide-react'
-import { calculatePricing, formatGp, signedLabel } from '../../../lib/pricing'
+import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
+import { calculatePricing, signedLabel } from '../../../lib/pricing'
 import type {
   Economy,
   Item,
@@ -79,7 +80,7 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
 
       {result ? (
         <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between text-[10px] text-muted"><span>Base price</span><strong className="font-display text-cream">{formatGp(result.basePrice)}</strong></div>
+          <div className="mb-2 flex items-center justify-between text-[10px] text-muted"><span>Base price</span><strong className="font-display text-cream"><CurrencyDisplay valueGp={result.basePrice} /></strong></div>
           <details className="breakdown group">
             <summary>Adjustment breakdown <ChevronDown size={13} /></summary>
             <div className="space-y-1.5 border-t border-border/70 px-3 py-2">
@@ -93,12 +94,12 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="price-result buy">
               <span>Buy from merchant</span>
-              <strong>{formatGp(result.buyPrice)}</strong>
+              <strong><CurrencyDisplay valueGp={result.buyPrice} /></strong>
               <small>{signedLabel(result.buyTotalPercent)} adjustment</small>
             </div>
             <div className="price-result sell">
               <span>Sell to merchant</span>
-              <strong>{formatGp(result.sellPrice)}</strong>
+              <strong><CurrencyDisplay valueGp={result.sellPrice} /></strong>
               <small>50% base · {signedLabel(result.sellTotalPercent)}</small>
             </div>
           </div>

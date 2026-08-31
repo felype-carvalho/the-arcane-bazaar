@@ -12,6 +12,8 @@
   --color-border: #333248;
   --color-gold: #c69b32;
   --color-gold-bright: #f4c94f;
+  --color-silver: #c7cbd4;
+  --color-bronze: #c58f61;
   --color-cream: #f2e8cf;
   --color-muted: #77799a;
 }
@@ -173,6 +175,11 @@ button:disabled { cursor: not-allowed; }
 .rarity-unknown { color: #aaa2b8; border-color: #575063; background: rgb(73 66 83 / 20%); box-shadow: none; }
 
 .variable-price { display: inline-block; border: 1px solid #745719; border-radius: 3px; padding: 3px 7px; background: rgb(125 88 10 / 18%); font-size: 9px; }
+.currency-display { display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; }
+.currency-part { white-space: nowrap; }
+.currency-gp { color: var(--color-gold-bright); }
+.currency-sp { color: var(--color-silver); }
+.currency-cp { color: var(--color-bronze); }
 .type-pill, .tag-pill { display: inline-flex; min-height: 21px; align-items: center; gap: 5px; border: 1px solid #51455f; border-radius: 999px; padding: 2px 9px; font-family: var(--font-display); font-size: 8px; text-transform: uppercase; letter-spacing: .08em; color: #dfcfee; background: rgb(77 47 94 / 18%); }
 .tag-pill { border-radius: 3px; border-color: #5b4b2b; color: #dcbf5e; background: rgb(96 72 15 / 12%); }
 

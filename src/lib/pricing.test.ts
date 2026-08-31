@@ -29,14 +29,20 @@ describe('calculatePricing', () => {
     expect(result?.sellPrice).toBe(3800)
   })
 
-  it('clamps extreme modifiers and never returns less than one GP', () => {
+  it('clamps extreme modifiers while preserving sub-GP prices', () => {
     const high = calculatePricing(fixedItem, { ...DEFAULT_MODIFIERS, custom: [{ id: 'high', name: 'High', percent: 1000 }] })
     const low = calculatePricing({ ...fixedItem, basePriceGp: 1 }, { ...DEFAULT_MODIFIERS, custom: [{ id: 'low', name: 'Low', percent: -1000 }] })
     expect(high?.buyTotalPercent).toBe(300)
     expect(high?.buyPrice).toBe(16000)
     expect(low?.buyTotalPercent).toBe(-90)
-    expect(low?.buyPrice).toBe(1)
-    expect(low?.sellPrice).toBe(1)
+    expect(low?.buyPrice).toBe(0.1)
+    expect(low?.sellPrice).toBe(0.05)
+  })
+
+  it('keeps fractional GP amounts at neutral settings', () => {
+    const result = calculatePricing({ ...fixedItem, basePriceGp: 0.5 }, DEFAULT_MODIFIERS)
+    expect(result?.buyPrice).toBe(0.5)
+    expect(result?.sellPrice).toBe(0.25)
   })
 
   it('requires a manual price for variable items', () => {

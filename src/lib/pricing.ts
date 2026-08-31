@@ -1,4 +1,5 @@
 import type { Item, PricingAdjustment, PricingModifiers, PricingResult } from '../types'
+import { CurrencyConverter } from './currency'
 
 export const DEFAULT_MODIFIERS: PricingModifiers = {
   economy: 'stable',
@@ -25,10 +26,6 @@ const NEGOTIATION = {
 
 const clamp = (value: number) => Math.min(300, Math.max(-90, value))
 const signedLabel = (value: number) => `${value > 0 ? '+' : ''}${value}%`
-
-export function formatGp(value: number): string {
-  return `${new Intl.NumberFormat('en-US').format(value)} GP`
-}
 
 export function calculatePricing(item: Item, modifiers: PricingModifiers, manualBasePrice?: number | null): PricingResult | null {
   const basePrice = item.basePriceGp ?? manualBasePrice
@@ -57,8 +54,8 @@ export function calculatePricing(item: Item, modifiers: PricingModifiers, manual
     basePrice,
     buyTotalPercent,
     sellTotalPercent,
-    buyPrice: Math.max(1, Math.round(basePrice * (1 + buyTotalPercent / 100))),
-    sellPrice: Math.max(1, Math.round(basePrice * 0.5 * (1 + sellTotalPercent / 100))),
+    buyPrice: CurrencyConverter.normalizeGp(basePrice * (1 + buyTotalPercent / 100)),
+    sellPrice: CurrencyConverter.normalizeGp(basePrice * 0.5 * (1 + sellTotalPercent / 100)),
     adjustments,
   }
 }

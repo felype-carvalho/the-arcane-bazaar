@@ -1,7 +1,7 @@
-import { type Dispatch, type SetStateAction } from 'react'
+import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { BookOpen, Coins, Sparkles, Tag, X } from 'lucide-react'
+import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
 import { CATEGORY_ICONS } from '../../../lib/items/categories'
-import { formatGp } from '../../../lib/pricing'
 import type { Item, PricingModifiers } from '../../../types'
 import { RarityBadge } from './ItemBadges'
 import { PriceCalculator } from './PriceCalculator'
@@ -43,7 +43,7 @@ export function ItemDetails({ item, onOpenModal, onClose, modifiers, setModifier
       <div className="border-b border-border px-5 py-4">
         <p className="eyebrow">Availability &amp; price</p>
         <div className="mt-2 grid grid-cols-2 gap-2">
-          <div className="detail-box"><Coins size={15} className="text-gold" /><span>{item.basePriceGp == null ? 'Variable price' : formatGp(item.basePriceGp)}</span></div>
+          <div className="detail-box"><Coins size={15} className="text-gold" /><span>{item.basePriceGp == null ? 'Variable price' : <CurrencyDisplay valueGp={item.basePriceGp} />}</span></div>
           <div className="detail-box"><Tag size={14} className="text-violet-300" /><span>{item.availability}</span></div>
         </div>
       </div>
@@ -59,6 +59,6 @@ export function ItemDetails({ item, onOpenModal, onClose, modifiers, setModifier
   )
 }
 
-export function DetailFact({ label, value }: { label: string, value: string }) {
+export function DetailFact({ label, value }: { label: string, value: ReactNode }) {
   return <div><p className="eyebrow">{label}</p><p className="mt-1.5 font-display text-[11px] font-semibold leading-5 text-cream">{value}</p></div>
 }
