@@ -3,7 +3,7 @@ import { BookOpen, Coins, Sparkles, Tag, X } from 'lucide-react'
 import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
 import { CATEGORY_ICONS } from '../../../lib/items/categories'
 import type { Item, PricingModifiers } from '../../../types'
-import { RarityBadge } from './ItemBadges'
+import { itemTypeLabel, RarityBadge } from './ItemBadges'
 import { PriceCalculator } from './PriceCalculator'
 
 interface ItemDetailsProps {
@@ -27,7 +27,7 @@ export function ItemDetails({ item, onOpenModal, onClose, modifiers, setModifier
               <h2 className="font-display text-base leading-6 text-gold-bright">{item.name}</h2>
               {onClose && <button className="icon-button shrink-0" onClick={onClose} aria-label="Close item details"><X size={18} /></button>}
             </div>
-            <div className="mt-2 flex flex-wrap gap-2"><RarityBadge rarity={item.rarity} /><span className="type-pill"><Sparkles size={11} /> {item.type}</span></div>
+            <div className="mt-2 flex flex-wrap gap-2"><RarityBadge rarity={item.rarity} /><span className="type-pill"><Sparkles size={11} /> {itemTypeLabel(item.type)}</span></div>
           </div>
         </div>
         <p className="mt-4 font-display text-[11px] leading-6 text-gold-bright/90">{item.description}</p>

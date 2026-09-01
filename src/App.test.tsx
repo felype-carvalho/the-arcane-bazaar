@@ -59,9 +59,13 @@ describe('Arcane Bazaar app', () => {
     const user = userEvent.setup()
     renderApp()
 
+    const initialTable = await screen.findByRole('table')
+    const mundaneRow = within(initialTable).getByRole('row', { name: /Hempen Rope/i })
+    expect(within(mundaneRow).getAllByRole('cell')[1]).toHaveTextContent('📦Mundane')
+
     await user.click(screen.getByRole('radio', { name: 'Magic' }))
 
-    const table = await screen.findByRole('table')
+    const table = screen.getByRole('table')
     const row = within(table).getByRole('row', { name: /Bag of Holding/i })
     const cells = within(row).getAllByRole('cell')
 
@@ -71,7 +75,7 @@ describe('Arcane Bazaar app', () => {
     expect(within(cells[0]).getByTitle("Source: DMG'14")).toHaveTextContent(/^DMG'14$/)
     expect(within(cells[0]).getByTitle("Source: DMG'14")).toHaveClass('source-chip')
     expect(cells[0].querySelector('[aria-hidden="true"]')).not.toBeInTheDocument()
-    expect(cells[1]).toHaveTextContent('Magic')
+    expect(cells[1]).toHaveTextContent('✨Magic')
     expect(cells[1]).not.toHaveTextContent('Bag/Container')
     expect(cells[2]).toHaveTextContent('Bag/Container')
     expect(within(cells[2]).queryByText('Container')).not.toBeInTheDocument()
@@ -114,18 +118,44 @@ describe('Arcane Bazaar app', () => {
     const radios = within(itemTypeFilter).getAllByRole('radio')
     const [common, magic] = radios
 
-    expect(radios.map((radio) => radio.parentElement?.textContent)).toEqual(['Common', 'Magic'])
+    expect(radios.map((radio) => radio.parentElement?.textContent)).toEqual(['📦Mundane', '✨Magic'])
+    expect(within(itemTypeFilter).getByText('Mundane')).toHaveClass('text-[11px]', 'font-medium', 'uppercase')
 
     expect(magic).not.toBeChecked()
     expect(common).toBeChecked()
+
+    const clearButton = screen.getByRole('button', { name: 'Clear all filters' })
+    expect(clearButton).toHaveClass('primary-button')
+    expect(clearButton).toBeEnabled()
 
     await user.click(magic)
     expect(magic).toBeChecked()
     expect(common).not.toBeChecked()
+    expect(clearButton).toBeEnabled()
 
     await user.click(common)
     expect(magic).not.toBeChecked()
     expect(common).toBeChecked()
+
+    await user.click(magic)
+    await user.type(screen.getByLabelText('Search items'), 'rope')
+    await user.click(clearButton)
+
+    expect(screen.getByLabelText('Search items')).toHaveValue('')
+    expect(common).toBeChecked()
+    expect(magic).not.toBeChecked()
+    expect(clearButton).toBeEnabled()
+  })
+
+  it('shows the mundane item type label in item details and the full sheet', async () => {
+    const user = userEvent.setup()
+    renderApp()
+
+    const details = await screen.findByLabelText('Hempen Rope details')
+    expect(within(details).getByText('Mundane')).toBeInTheDocument()
+
+    await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
+    expect(within(screen.getByRole('dialog', { name: 'Hempen Rope' })).getByText('Mundane')).toBeInTheDocument()
   })
 
   it('loads the catalog and shows an empty state for an unmatched search', async () => {

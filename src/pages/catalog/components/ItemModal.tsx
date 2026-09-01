@@ -3,7 +3,7 @@ import { Coins, Shield, Sparkles, Swords, X } from 'lucide-react'
 import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
 import type { Item } from '../../../types'
 import { DetailFact } from './ItemDetails'
-import { RarityBadge } from './ItemBadges'
+import { itemTypeLabel, RarityBadge } from './ItemBadges'
 
 interface ItemModalProps {
   item: Item
@@ -43,7 +43,7 @@ export function ItemModal({ item, onClose }: ItemModalProps) {
           <button className="icon-button" onClick={onClose} aria-label="Close item sheet"><X size={20} /></button>
         </div>
         <div className="arcane-scrollbar overflow-y-auto p-6 md:p-8">
-          <div className="flex flex-wrap gap-2"><RarityBadge rarity={item.rarity} /><span className="type-pill"><Sparkles size={11} /> {item.type}</span><span className="tag-pill">{item.availability}</span></div>
+          <div className="flex flex-wrap gap-2"><RarityBadge rarity={item.rarity} /><span className="type-pill"><Sparkles size={11} /> {itemTypeLabel(item.type)}</span><span className="tag-pill">{item.availability}</span></div>
           <p className="mt-6 max-w-2xl font-display text-sm leading-7 text-cream">{item.description}</p>
           <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="sheet-fact"><Swords size={17} /><DetailFact label="Category" value={item.category} /></div>

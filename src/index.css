@@ -132,10 +132,10 @@ button:disabled { cursor: not-allowed; }
   transition: filter 150ms ease, border-color 150ms ease, color 150ms ease, background 150ms ease;
 }
 .primary-button { border: 1px solid #9e293b; color: #fff2ce; background: linear-gradient(180deg, #7b1e32, #641526); box-shadow: 0 5px 16px rgb(80 8 25 / 25%); }
-.primary-button:hover { filter: brightness(1.14); }
+.primary-button:hover:not(:disabled) { filter: brightness(1.14); }
 .secondary-button { min-height: 34px; border: 1px solid #3c3b52; color: #aaa9bd; background: #202135; }
 .secondary-button:hover:not(:disabled) { color: var(--color-gold-bright); border-color: #695b3a; }
-.secondary-button:disabled { opacity: .38; }
+.primary-button:disabled, .secondary-button:disabled { cursor: not-allowed; opacity: .38; }
 
 .table-sort {
   display: flex;

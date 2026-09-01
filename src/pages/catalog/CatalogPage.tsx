@@ -70,7 +70,7 @@ export function CatalogPage() {
     <>
       <div className="flex min-h-0 flex-1">
         <div className="hidden w-[242px] shrink-0 border-r border-border lg:block">
-          <FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={(type) => setFilters((current) => ({ ...current, types: [type] }))} onToggle={toggleFilter} onClear={() => setFilters(EMPTY_FILTERS)} />
+          <FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={(type) => setFilters((current) => ({ ...current, types: [type] }))} onToggle={toggleFilter} onClear={() => setFilters(INITIAL_FILTERS)} />
         </div>
 
         <main className="flex min-w-0 flex-1 flex-col bg-catalog">
@@ -100,7 +100,7 @@ export function CatalogPage() {
 
       {filtersOpen && (
         <div className="drawer-backdrop lg:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setFiltersOpen(false) }}>
-          <div className="drawer left"><FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={(type) => setFilters((current) => ({ ...current, types: [type] }))} onToggle={toggleFilter} onClear={() => setFilters(EMPTY_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
+          <div className="drawer left"><FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={(type) => setFilters((current) => ({ ...current, types: [type] }))} onToggle={toggleFilter} onClear={() => setFilters(INITIAL_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
         </div>
       )}
 
