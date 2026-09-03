@@ -48,11 +48,13 @@ export interface RawItemEntry extends RawNamedEntity {
 
 export interface RawMagicVariant extends JsonRecord {
   name: string
+  source?: string
   edition?: 'classic'
   type?: string
   requires?: JsonRecord[]
   excludes?: JsonRecord
   inherits: JsonRecord
+  _copy?: RawCopy
 }
 
 export interface RawItemsFile extends JsonRecord {

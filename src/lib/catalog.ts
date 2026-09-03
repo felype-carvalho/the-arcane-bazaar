@@ -1,18 +1,32 @@
-import type { Item, ItemFilters, Rarity, SortDirection, SortKey } from '../types'
+import type { Category, Item, ItemFilters, ItemType, Rarity, SortDirection, SortKey } from '../types'
+import { CATEGORIES } from './items/categories'
 
-const RARITY_ORDER: Record<Rarity, number> = {
-  None: 0,
-  Common: 1,
-  Uncommon: 2,
-  Rare: 3,
-  'Very Rare': 4,
-  Legendary: 5,
-  Artifact: 6,
-  Varies: 7,
-  Unknown: 8,
-}
+export const RARITIES: readonly Rarity[] = ['None', 'Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact', 'Varies', 'Unknown']
+
+const RARITY_ORDER = Object.fromEntries(RARITIES.map((rarity, index) => [rarity, index])) as Record<Rarity, number>
 
 export const EMPTY_FILTERS: ItemFilters = { search: '', types: [], rarities: [], categories: [], availabilities: [] }
+
+export interface AvailableFilterOptions {
+  rarities: Rarity[]
+  categories: Category[]
+}
+
+export function getAvailableFilterOptions(items: readonly Item[], type: ItemType): AvailableFilterOptions {
+  const rarities = new Set<Rarity>()
+  const categories = new Set<Category>()
+
+  for (const item of items) {
+    if (item.type !== type) continue
+    rarities.add(item.rarity)
+    categories.add(item.category)
+  }
+
+  return {
+    rarities: RARITIES.filter((rarity) => rarities.has(rarity)),
+    categories: CATEGORIES.filter((category) => categories.has(category)),
+  }
+}
 
 export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey: SortKey, direction: SortDirection): Item[] {
   const query = filters.search.trim().toLocaleLowerCase()

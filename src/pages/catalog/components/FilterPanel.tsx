@@ -1,25 +1,27 @@
 import { useId, useState } from 'react'
 import { ChevronDown, Search, X } from 'lucide-react'
-import { CATEGORIES, CATEGORY_ICONS } from '../../../lib/items/categories'
+import { CATEGORY_ICONS } from '../../../lib/items/categories'
 import type { /* Availability, */ Category, ItemFilters, ItemType, Rarity } from '../../../types'
 import { TypeMark } from './ItemBadges'
 
 const TYPES: ItemType[] = ['Common', 'Magic']
-const RARITIES: Rarity[] = ['None', 'Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact', 'Varies', 'Unknown']
 // const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']
 
 export type FilterGroup = Exclude<keyof ItemFilters, 'search'>
 
 interface FilterPanelProps {
   filters: ItemFilters
+  availableRarities: readonly Rarity[]
+  availableCategories: readonly Category[]
   onSearch: (value: string) => void
   onTypeSelect: (value: ItemType) => void
   onToggle: (group: FilterGroup, value: string) => void
+  onCategorySelect: (value: Category | 'All') => void
   onClear: () => void
   onClose?: () => void
 }
 
-export function FilterPanel({ filters, onSearch, onTypeSelect, onToggle, onClear, onClose }: FilterPanelProps) {
+export function FilterPanel({ filters, availableRarities, availableCategories, onSearch, onTypeSelect, onToggle, onCategorySelect, onClear, onClose }: FilterPanelProps) {
   return (
     <aside className="flex h-full min-h-0 flex-col bg-panel" aria-label="Item filters">
       <div className="flex items-start justify-between border-b border-border px-5 py-4">
@@ -40,8 +42,8 @@ export function FilterPanel({ filters, onSearch, onTypeSelect, onToggle, onClear
         </label>
 
         <FilterGroupSection title="Item type" group="types" options={TYPES} selected={filters.types} onToggle={onToggle} onSingleSelect={(value) => onTypeSelect(value as ItemType)} selectionMode="single" showTypeMarks defaultOpen />
-        <FilterGroupSection title="Rarity" group="rarities" options={RARITIES} selected={filters.rarities} onToggle={onToggle} colorize />
-        <FilterGroupSection title="Category" group="categories" options={CATEGORIES} selected={filters.categories} onToggle={onToggle} showIcons />
+        <FilterGroupSection title="Rarity" group="rarities" options={availableRarities} selected={filters.rarities} onToggle={onToggle} colorize />
+        <CategoryFilterSection options={availableCategories} selected={filters.categories} onSelect={onCategorySelect} />
         {/* <FilterGroupSection title="Availability" group="availabilities" options={AVAILABILITIES} selected={filters.availabilities} onToggle={onToggle} /> */}
       </div>
 
@@ -54,7 +56,7 @@ export function FilterPanel({ filters, onSearch, onTypeSelect, onToggle, onClear
   )
 }
 
-function FilterGroupSection({ title, group, options, selected, onToggle, onSingleSelect, selectionMode = 'multiple', colorize = false, showIcons = false, showTypeMarks = false, defaultOpen = false }: {
+function FilterGroupSection({ title, group, options, selected, onToggle, onSingleSelect, selectionMode = 'multiple', colorize = false, showTypeMarks = false, defaultOpen = false }: {
   title: string
   group: FilterGroup
   options: readonly string[]
@@ -63,7 +65,6 @@ function FilterGroupSection({ title, group, options, selected, onToggle, onSingl
   onSingleSelect?: (value: string) => void
   selectionMode?: 'single' | 'multiple'
   colorize?: boolean
-  showIcons?: boolean
   showTypeMarks?: boolean
   defaultOpen?: boolean
 }) {
@@ -94,11 +95,47 @@ function FilterGroupSection({ title, group, options, selected, onToggle, onSingl
               onChange={() => selectionMode === 'single' ? onSingleSelect?.(option) : onToggle(group, option)}
               className={selectionMode === 'single' ? 'accent-gold' : 'arcane-checkbox'}
             />
-            {showIcons && <span aria-hidden="true">{CATEGORY_ICONS[option as Category]}</span>}
             {showTypeMarks
               ? <TypeMark type={option as ItemType} />
               : <span className={colorize ? `filter-${option.toLowerCase().replaceAll(' ', '-')}` : ''}>{option}</span>}
           </label>
+        ))}
+      </div>
+    </fieldset>
+  )
+}
+
+function CategoryFilterSection({ options, selected, onSelect }: {
+  options: readonly Category[]
+  selected: readonly Category[]
+  onSelect: (value: Category | 'All') => void
+}) {
+  const [isOpen, setIsOpen] = useState(false)
+  const instanceId = useId()
+  const optionsId = `filter-categories-${instanceId}-options`
+
+  return (
+    <fieldset className="mt-5 border-b border-border/70 pb-4 last:border-b-0">
+      <legend className="w-full">
+        <button
+          type="button"
+          className="flex w-full items-center justify-between font-display text-[12px] uppercase tracking-[0.14em] text-gold"
+          aria-expanded={isOpen}
+          aria-controls={optionsId}
+          onClick={() => setIsOpen((current) => !current)}
+        >
+          Category<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        </button>
+      </legend>
+      <div id={optionsId} className="mt-3 flex flex-wrap gap-2" hidden={!isOpen}>
+        <button type="button" className="category-chip" aria-pressed={selected.length === 0} onClick={() => onSelect('All')}>
+          All
+        </button>
+        {options.map((category) => (
+          <button key={category} type="button" className="category-chip" aria-pressed={selected.includes(category)} onClick={() => onSelect(category)}>
+            <span aria-hidden="true">{CATEGORY_ICONS[category]}</span>
+            <span>{category}</span>
+          </button>
         ))}
       </div>
     </fieldset>

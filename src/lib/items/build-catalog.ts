@@ -33,6 +33,12 @@ function processEntity(entity: RawItemEntity, origin: Exclude<ItemOrigin, 'speci
   }
 }
 
+function magicVariantSource(variant: ItemJsonFiles['variants']['magicvariant'][number]): string {
+  if (typeof variant.source === 'string') return variant.source
+  if (typeof variant.inherits?.source === 'string') return variant.inherits.source
+  throw new Error(`magicvariant: ${variant.name} has no source`)
+}
+
 function buildIndexes(files: ItemJsonFiles, itemTypes: RawItemType[]): NormalizationIndexes {
   const typeAdditionalEntries = new Map<string, unknown[]>()
   for (const entry of files.base.itemTypeAdditionalEntries ?? []) {
@@ -86,7 +92,9 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
   }
   const resolvedItems = resolveCopies(files.items.item, { collectionName: 'item' })
   const resolvedTypes = resolveCopies(files.base.itemType, { identityField: 'abbreviation', collectionName: 'itemType' })
-  const specificVariants = buildSpecificVariants(files.base.baseitem, files.variants.magicvariant)
+  const variantsWithSources = files.variants.magicvariant.map((variant) => ({ ...structuredClone(variant), source: magicVariantSource(variant) }))
+  const resolvedVariants = resolveCopies(variantsWithSources, { collectionName: 'magicvariant' })
+  const specificVariants = buildSpecificVariants(files.base.baseitem, resolvedVariants)
   const processed: ProcessedItemEntity[] = [
     ...resolvedItems.map((entity) => processEntity(entity, 'item')),
     ...files.items.itemGroup.map((entity) => processEntity(entity, 'itemGroup')),

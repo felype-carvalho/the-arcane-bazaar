@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ITEM_FIXTURES } from '../test/fixtures/items'
-import { EMPTY_FILTERS, filterAndSortItems } from './catalog'
+import { EMPTY_FILTERS, filterAndSortItems, getAvailableFilterOptions } from './catalog'
 
 describe('filterAndSortItems', () => {
   it('searches by item name without case sensitivity', () => {
@@ -41,5 +41,31 @@ describe('filterAndSortItems', () => {
     const categories = result.map((item) => item.category)
 
     expect(categories).toEqual([...categories].sort((a, b) => a.localeCompare(b)))
+  })
+
+  it('derives deduplicated filter options for the selected item type in canonical order', () => {
+    const commonItems = [
+      { ...ITEM_FIXTURES[2], id: 'common-weapon', type: 'Common' as const, rarity: 'Rare' as const },
+      { ...ITEM_FIXTURES[0], id: 'common-bag', type: 'Common' as const, rarity: 'None' as const },
+      { ...ITEM_FIXTURES[3], id: 'another-common-weapon', type: 'Common' as const, rarity: 'Rare' as const },
+    ]
+    const items = [...ITEM_FIXTURES, ...commonItems]
+
+    expect(getAvailableFilterOptions(items, 'Common')).toEqual({
+      rarities: ['None', 'Rare'],
+      categories: ['Bag/Container', 'Weapon'],
+    })
+    expect(getAvailableFilterOptions(items, 'Magic')).toEqual({
+      rarities: ['Uncommon', 'Rare', 'Legendary'],
+      categories: ['Bag/Container', 'Gem', 'Weapon'],
+    })
+  })
+
+  it('returns empty filter options without mutating the catalog when the type has no items', () => {
+    const items = ITEM_FIXTURES.map((item) => ({ ...item }))
+    const snapshot = items.map((item) => ({ ...item }))
+
+    expect(getAvailableFilterOptions(items, 'Common')).toEqual({ rarities: [], categories: [] })
+    expect(items).toEqual(snapshot)
   })
 })

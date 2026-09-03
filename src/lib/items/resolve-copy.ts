@@ -17,17 +17,58 @@ function matchesReplacement(value: unknown, replace: JsonRecord): boolean {
   return false
 }
 
+function valuesEqual(left: unknown, right: unknown): boolean {
+  if (Object.is(left, right)) return true
+  if (Array.isArray(left) || Array.isArray(right)) {
+    return Array.isArray(left) && Array.isArray(right) && left.length === right.length && left.every((value, index) => valuesEqual(value, right[index]))
+  }
+  if (!isJsonRecord(left) || !isJsonRecord(right)) return false
+  const leftKeys = Object.keys(left)
+  const rightKeys = Object.keys(right)
+  return leftKeys.length === rightKeys.length && leftKeys.every((key) => key in right && valuesEqual(left[key], right[key]))
+}
+
+function resolveFieldTarget(entity: CopyableEntity, field: string, context: string): { target: JsonRecord; key: string } {
+  const path = field.split('.')
+  const key = path.pop()
+  if (!key || path.some((segment) => !segment)) throw new Error(`${context}: invalid _mod target ${field}`)
+
+  let target: JsonRecord = entity
+  for (const segment of path) {
+    const next = target[segment]
+    if (!isJsonRecord(next)) throw new Error(`${context}: _mod target ${field} has a non-object path segment ${segment}`)
+    target = next
+  }
+  return { target, key }
+}
+
 function applyModification(entity: CopyableEntity, field: string, operation: unknown, context: string): void {
+  const { target, key } = resolveFieldTarget(entity, field, context)
+  if (operation === 'remove') {
+    delete target[key]
+    return
+  }
   if (!isJsonRecord(operation) || typeof operation.mode !== 'string') throw new Error(`${context}: invalid _mod operation for ${field}`)
-  const existing = entity[field]
+  if (operation.mode === 'setProp') {
+    if (!('value' in operation)) throw new Error(`${context}: setProp requires a value`)
+    target[key] = clone(operation.value)
+    return
+  }
+
+  const existing = target[key]
   if (existing !== undefined && !Array.isArray(existing)) throw new Error(`${context}: _mod target ${field} is not an array`)
   const current: unknown[] = Array.isArray(existing) ? existing : []
-  if (existing === undefined) entity[field] = current
+  if (existing === undefined) target[key] = current
   const items = normalizeItems(operation.items)
 
   switch (operation.mode) {
     case 'appendArr':
       current.push(...items)
+      return
+    case 'appendIfNotExistsArr':
+      for (const item of items) {
+        if (!current.some((value) => valuesEqual(value, item))) current.push(item)
+      }
       return
     case 'insertArr': {
       if (typeof operation.index !== 'number' || !Number.isInteger(operation.index)) throw new Error(`${context}: insertArr requires an integer index`)

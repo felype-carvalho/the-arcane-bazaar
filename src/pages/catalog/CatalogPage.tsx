@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CircleHelp, Filter, Menu, Sparkles } from 'lucide-react'
-import { filterAndSortItems, EMPTY_FILTERS } from '../../lib/catalog'
+import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '../../lib/catalog'
 import { DEFAULT_MODIFIERS } from '../../lib/pricing'
 import { getItems } from '../../services/catalog'
-import type { Item, ItemFilters, PricingModifiers, SortDirection, SortKey } from '../../types'
+import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../../types'
 import { CatalogList } from './components/CatalogList'
 import { FilterPanel, type FilterGroup } from './components/FilterPanel'
 import { ItemDetails } from './components/ItemDetails'
@@ -40,6 +40,8 @@ export function CatalogPage() {
     return () => { document.body.style.overflow = '' }
   }, [modalOpen, filtersOpen, detailsOpen])
 
+  const selectedType = filters.types[0] ?? 'Common'
+  const availableFilterOptions = useMemo(() => getAvailableFilterOptions(items, selectedType), [items, selectedType])
   const filtered = useMemo(() => filterAndSortItems(items, filters, sortKey, direction), [items, filters, sortKey, direction])
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const safePage = Math.min(page, Math.max(totalPages, 1))
@@ -53,6 +55,30 @@ export function CatalogPage() {
     setFilters((current) => {
       const values = current[group] as string[]
       return { ...current, [group]: values.includes(value) ? values.filter((entry) => entry !== value) : [...values, value] }
+    })
+  }
+
+  const selectType = (type: ItemType) => {
+    const available = getAvailableFilterOptions(items, type)
+    const rarities = new Set(available.rarities)
+    const categories = new Set(available.categories)
+
+    setFilters((current) => ({
+      ...current,
+      types: [type],
+      rarities: current.rarities.filter((rarity) => rarities.has(rarity)),
+      categories: current.categories.filter((category) => categories.has(category)),
+    }))
+  }
+
+  const selectCategory = (category: Category | 'All') => {
+    setFilters((current) => {
+      if (category === 'All') return current.categories.length ? { ...current, categories: [] } : current
+
+      const categories = current.categories.includes(category)
+        ? current.categories.filter((entry) => entry !== category)
+        : [...current.categories, category]
+      return { ...current, categories }
     })
   }
 
@@ -70,7 +96,7 @@ export function CatalogPage() {
     <>
       <div className="flex min-h-0 flex-1">
         <div className="hidden w-[242px] shrink-0 border-r border-border lg:block">
-          <FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={(type) => setFilters((current) => ({ ...current, types: [type] }))} onToggle={toggleFilter} onClear={() => setFilters(INITIAL_FILTERS)} />
+          <FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onClear={() => setFilters(INITIAL_FILTERS)} />
         </div>
 
         <main className="flex min-w-0 flex-1 flex-col bg-catalog">
@@ -100,7 +126,7 @@ export function CatalogPage() {
 
       {filtersOpen && (
         <div className="drawer-backdrop lg:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setFiltersOpen(false) }}>
-          <div className="drawer left"><FilterPanel filters={filters} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={(type) => setFilters((current) => ({ ...current, types: [type] }))} onToggle={toggleFilter} onClear={() => setFilters(INITIAL_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
+          <div className="drawer left"><FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onClear={() => setFilters(INITIAL_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
         </div>
       )}
 

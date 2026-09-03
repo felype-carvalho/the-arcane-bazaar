@@ -23,18 +23,25 @@ describe('item UIDs', () => {
 })
 
 describe('_copy resolution', () => {
-  it('resolves recursive copies and the supported array modifications without mutating input', () => {
+  it('resolves recursive copies and the supported modifications without mutating input', () => {
     const entities = deepFreeze<RawItemEntity[]>([
-      { name: 'Parent', source: 'TST', entries: ['a', 'b'], page: 1 },
+      { name: 'Parent', source: 'TST', entries: ['a', 'b'], property: ['existing'], page: 1, metadata: { obsolete: true } },
       { name: 'Middle', source: 'TST', _copy: { name: 'Parent', source: 'TST', _mod: { entries: { mode: 'insertArr', index: 1, items: 'inserted' } } } },
-      { name: 'Child', source: 'TST', _copy: { name: 'Middle', source: 'TST', _preserve: { page: true }, _mod: { entries: [
-        { mode: 'replaceArr', replace: { value: 'b' }, items: 'replaced' },
-        { mode: 'appendArr', items: 'last' },
-      ] } } },
+      { name: 'Child', source: 'TST', _copy: { name: 'Middle', source: 'TST', _preserve: { page: true }, _mod: {
+        entries: [
+          { mode: 'replaceArr', replace: { value: 'b' }, items: 'replaced' },
+          { mode: 'appendArr', items: 'last' },
+        ],
+        property: { mode: 'appendIfNotExistsArr', items: ['existing', 'new'] },
+        'metadata.obsolete': 'remove',
+        'metadata.label': { mode: 'setProp', value: 'updated' },
+      } } },
     ])
     const before = JSON.stringify(entities)
     const resolved = resolveCopies(entities, { collectionName: 'item' })
     expect(resolved[2].entries).toEqual(['a', 'inserted', 'replaced', 'last'])
+    expect(resolved[2].property).toEqual(['existing', 'new'])
+    expect(resolved[2].metadata).toEqual({ label: 'updated' })
     expect(resolved[2].page).toBe(1)
     expect(resolved[2]._copy).toBeUndefined()
     expect(JSON.stringify(entities)).toBe(before)

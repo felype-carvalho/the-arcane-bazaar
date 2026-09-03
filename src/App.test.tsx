@@ -33,10 +33,20 @@ vi.mock('./services/catalog', async () => {
     name: 'Hempen Rope',
     type: 'Common' as const,
     rarity: 'None' as const,
+    category: 'Adventuring Gear' as const,
     tags: [...ITEM_FIXTURES[1].tags],
     properties: [...ITEM_FIXTURES[1].properties],
   }
-  const catalog = [commonItem, ...ITEM_FIXTURES, ...filler]
+  const commonWeapon = {
+    ...ITEM_FIXTURES[2],
+    id: 'common-practice-sword',
+    name: 'Practice Sword',
+    type: 'Common' as const,
+    rarity: 'Common' as const,
+    tags: [...ITEM_FIXTURES[2].tags],
+    properties: [...ITEM_FIXTURES[2].properties],
+  }
+  const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, ...filler]
   return { getItems: () => Promise.resolve(catalog.map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
 
@@ -81,19 +91,13 @@ describe('Arcane Bazaar app', () => {
     expect(within(cells[2]).queryByText('Container')).not.toBeInTheDocument()
   })
 
-  it('starts item type expanded, keeps the other filter groups collapsed, and lists categories in the configured order', async () => {
+  it('starts item type expanded and lists only the ordered facets available for the selected type', async () => {
     const user = userEvent.setup()
     renderApp()
 
     expect(screen.queryByText(/\d+ of \d+ items/i)).not.toBeInTheDocument()
     expect(screen.getByLabelText('Search items')).toHaveClass('search-field')
 
-    const expectedCategories = [
-      'Adventuring Gear', 'Ammunition', 'Amulet', 'Apparel', 'Armor', 'Bag/Container',
-      'Clockwork', 'Consumable', 'Explosive', 'Food and Drink', 'Gem', 'Instrument', 'Mount',
-      'Other', 'Poison', 'Potion', 'Ring', 'Scroll', 'Service', 'Spellcasting Focus',
-      'Staff / Rod', 'Summonable', 'Tattoo', 'Tome', 'Tool', 'Trade Good', 'Vehicle', 'Weapon',
-    ]
     const toggles = [
       'Item type', 'Rarity', 'Category',
       // 'Availability',
@@ -104,10 +108,87 @@ describe('Arcane Bazaar app', () => {
     expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'true')
 
     const categoryFilter = screen.getByRole('group', { name: 'Category' })
-    const categoryNames = within(categoryFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.querySelector('span:last-child')?.textContent)
+    const categoryNames = within(categoryFilter).getAllByRole('button')
+      .filter((button) => button.hasAttribute('aria-pressed'))
+      .map((button) => button.querySelector('span:last-child')?.textContent ?? button.textContent)
 
-    expect(categoryNames).toEqual(expectedCategories)
-    expect(new Set(categoryNames).size).toBe(expectedCategories.length)
+    expect(categoryNames).toEqual(['All', 'Adventuring Gear', 'Weapon'])
+    expect(new Set(categoryNames).size).toBe(categoryNames.length)
+
+    await user.click(screen.getByRole('button', { name: 'Rarity' }))
+    const rarityFilter = screen.getByRole('group', { name: 'Rarity' })
+    expect(within(rarityFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.textContent)).toEqual(['None', 'Common'])
+
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+
+    expect(within(categoryFilter).getAllByRole('button')
+      .filter((button) => button.hasAttribute('aria-pressed'))
+      .map((button) => button.querySelector('span:last-child')?.textContent ?? button.textContent)).toEqual(['All', 'Bag/Container', 'Gem', 'Weapon'])
+    expect(within(rarityFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.textContent)).toEqual(['Uncommon', 'Rare', 'Legendary'])
+  })
+
+  it('applies the All category rules and supports multiple category chips', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await screen.findByRole('table')
+    await user.click(screen.getByRole('button', { name: 'Category' }))
+
+    const all = screen.getByRole('button', { name: 'All' })
+    const adventuringGear = screen.getByRole('button', { name: 'Adventuring Gear' })
+    const weapon = screen.getByRole('button', { name: 'Weapon' })
+
+    expect(all).toHaveAttribute('aria-pressed', 'true')
+    expect(all).toHaveClass('category-chip')
+    await user.click(all)
+    expect(all).toHaveAttribute('aria-pressed', 'true')
+
+    await user.click(adventuringGear)
+    expect(all).toHaveAttribute('aria-pressed', 'false')
+    expect(adventuringGear).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('row', { name: /Hempen Rope/i })).toBeInTheDocument()
+    expect(screen.queryByRole('row', { name: /Practice Sword/i })).not.toBeInTheDocument()
+
+    await user.click(weapon)
+    expect(adventuringGear).toHaveAttribute('aria-pressed', 'true')
+    expect(weapon).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('row', { name: /Practice Sword/i })).toBeInTheDocument()
+
+    await user.click(adventuringGear)
+    expect(adventuringGear).toHaveAttribute('aria-pressed', 'false')
+    expect(weapon).toHaveAttribute('aria-pressed', 'true')
+
+    await user.click(all)
+    expect(all).toHaveAttribute('aria-pressed', 'true')
+    expect(weapon).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.getByRole('row', { name: /Hempen Rope/i })).toBeInTheDocument()
+    expect(screen.getByRole('row', { name: /Practice Sword/i })).toBeInTheDocument()
+  })
+
+  it('removes unavailable facets and preserves compatible ones when the item type changes', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await screen.findByRole('table')
+    await user.click(screen.getByRole('button', { name: 'Rarity' }))
+    await user.click(screen.getByRole('button', { name: 'Category' }))
+
+    await user.click(screen.getByRole('checkbox', { name: 'None' }))
+    await user.click(screen.getByRole('button', { name: 'Adventuring Gear' }))
+    expect(screen.getByRole('row', { name: /Hempen Rope/i })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+
+    expect(screen.queryByRole('checkbox', { name: 'None' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Adventuring Gear' })).not.toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('radio', { name: 'Mundane' }))
+    await user.click(screen.getByRole('button', { name: 'Weapon' }))
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+
+    expect(screen.getByRole('button', { name: 'Weapon' })).toHaveAttribute('aria-pressed', 'true')
+    expect(screen.getByRole('row', { name: /Vicious Longsword/i })).toBeInTheDocument()
+    expect(screen.queryByRole('row', { name: /Bag of Holding/i })).not.toBeInTheDocument()
   })
 
   it('allows only one item type to be selected at a time', async () => {
