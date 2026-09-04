@@ -61,10 +61,10 @@ export interface ItemFilters {
   availabilities: Availability[]
 }
 
-export type Economy = 'recession' | 'stable' | 'thriving'
-export type Market = 'oversupply' | 'balanced' | 'highDemand'
-export type Reputation = 'unknown' | 'trusted' | 'celebrated'
-export type Negotiation = 'poor' | 'fair' | 'skilled'
+export type Economy = 'stable' | 'prosperous' | 'depressed'
+export type Market = 'regular' | 'competitive' | 'blackMarket' | 'restricted'
+export type Reputation = 'neutral' | 'despised' | 'mistrusted' | 'honored' | 'admired'
+export type Negotiation = 'success' | 'standard' | 'failure'
 export type MagicFrequency = 'rare' | 'standard' | 'abundant'
 
 export interface CustomModifier {

@@ -1,9 +1,64 @@
 import { describe, expect, it } from 'vitest'
 import { ITEM_FIXTURES } from '../test/fixtures/items'
-import { calculatePricing, DEFAULT_MODIFIERS } from './pricing'
+import type { PricingModifiers } from '../types'
+import {
+  calculatePricing,
+  DEFAULT_MODIFIERS,
+  ECONOMY_OPTIONS,
+  MAGIC_FREQUENCY_OPTIONS,
+  MARKET_OPTIONS,
+  NEGOTIATION_OPTIONS,
+  REPUTATION_OPTIONS,
+} from './pricing'
 
 const fixedItem = ITEM_FIXTURES.find((item) => item.id === 'bag-of-holding')!
 const variableItem = ITEM_FIXTURES.find((item) => item.id === 'vorpal-sword')!
+
+interface ModifierCase {
+  name: string
+  adjustmentLabel: string
+  modifiers: PricingModifiers
+  buyPercent: number
+  sellPercent: number
+}
+
+const modifierCases: ModifierCase[] = [
+  ...ECONOMY_OPTIONS.map((option) => ({
+    name: `Economy: ${option.label}`,
+    adjustmentLabel: `Economy · ${option.label}`,
+    modifiers: { ...DEFAULT_MODIFIERS, economy: option.value },
+    buyPercent: option.buyPercent,
+    sellPercent: option.sellPercent,
+  })),
+  ...MARKET_OPTIONS.map((option) => ({
+    name: `Market: ${option.label}`,
+    adjustmentLabel: `Market · ${option.label}`,
+    modifiers: { ...DEFAULT_MODIFIERS, market: option.value },
+    buyPercent: option.buyPercent,
+    sellPercent: option.sellPercent,
+  })),
+  ...REPUTATION_OPTIONS.map((option) => ({
+    name: `Party Reputation: ${option.label}`,
+    adjustmentLabel: `Party Reputation · ${option.label}`,
+    modifiers: { ...DEFAULT_MODIFIERS, reputation: option.value },
+    buyPercent: option.buyPercent,
+    sellPercent: option.sellPercent,
+  })),
+  ...NEGOTIATION_OPTIONS.map((option) => ({
+    name: `NPC Negotiation: ${option.label}`,
+    adjustmentLabel: `NPC Negotiation · ${option.label}`,
+    modifiers: { ...DEFAULT_MODIFIERS, negotiation: option.value },
+    buyPercent: option.buyPercent,
+    sellPercent: option.sellPercent,
+  })),
+  ...MAGIC_FREQUENCY_OPTIONS.map((option) => ({
+    name: `Magic Frequency: ${option.label}`,
+    adjustmentLabel: `Magic Frequency · ${option.label}`,
+    modifiers: { ...DEFAULT_MODIFIERS, magicFrequency: option.value },
+    buyPercent: option.buyPercent,
+    sellPercent: option.sellPercent,
+  })),
+]
 
 describe('calculatePricing', () => {
   it('uses 100% for buying and 50% for selling at neutral settings', () => {
@@ -14,19 +69,38 @@ describe('calculatePricing', () => {
     expect(result?.sellTotalPercent).toBe(0)
   })
 
-  it('adds market, trade, frequency, and custom percentages', () => {
+  it.each(modifierCases)('applies the configured buy and sell percentages for $name', ({ adjustmentLabel, modifiers, buyPercent, sellPercent }) => {
+    const result = calculatePricing(fixedItem, modifiers)
+
+    expect(result?.buyTotalPercent).toBe(buyPercent)
+    expect(result?.sellTotalPercent).toBe(sellPercent)
+    expect(result?.buyPrice).toBe(4000 * (1 + buyPercent / 100))
+    expect(result?.sellPrice).toBe(2000 * (1 + sellPercent / 100))
+    expect(result?.adjustments).toContainEqual({ label: adjustmentLabel, buyPercent, sellPercent })
+  })
+
+  it('adds independent buy and sell percentages across modifier groups', () => {
     const result = calculatePricing(fixedItem, {
-      economy: 'thriving',
-      market: 'highDemand',
-      reputation: 'celebrated',
-      negotiation: 'skilled',
+      economy: 'prosperous',
+      market: 'competitive',
+      reputation: 'admired',
+      negotiation: 'success',
       magicFrequency: 'rare',
-      custom: [{ id: 'festival', name: 'Festival', percent: 5 }],
+      custom: [],
     })
-    expect(result?.buyTotalPercent).toBe(50)
-    expect(result?.sellTotalPercent).toBe(90)
-    expect(result?.buyPrice).toBe(6000)
-    expect(result?.sellPrice).toBe(3800)
+    expect(result?.buyTotalPercent).toBe(3)
+    expect(result?.sellTotalPercent).toBe(52)
+    expect(result?.buyPrice).toBe(4120)
+    expect(result?.sellPrice).toBe(3040)
+  })
+
+  it('does not apply magic frequency to mundane items', () => {
+    const mundaneItem = { ...fixedItem, type: 'Common' as const }
+    const result = calculatePricing(mundaneItem, { ...DEFAULT_MODIFIERS, magicFrequency: 'rare' })
+
+    expect(result?.buyTotalPercent).toBe(0)
+    expect(result?.sellTotalPercent).toBe(0)
+    expect(result?.adjustments.some((adjustment) => adjustment.label.startsWith('Magic Frequency'))).toBe(false)
   })
 
   it('clamps extreme modifiers while preserving sub-GP prices', () => {

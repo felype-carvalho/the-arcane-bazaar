@@ -285,4 +285,39 @@ describe('Arcane Bazaar app', () => {
     await user.click(screen.getByRole('button', { name: 'Remove Festival tax' }))
     expect(screen.queryByText(/Festival tax/)).not.toBeInTheDocument()
   })
+
+  it('shows the base price card and applies independent buy and sell modifiers', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+    expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
+
+    expect(screen.getByLabelText('Base price')).toHaveTextContent('Base price4,000 GP')
+
+    const economy = screen.getByRole('combobox', { name: 'Economy' })
+    expect(within(economy).getAllByRole('option').map((option) => option.textContent)).toEqual([
+      'Stable Economy · Base (B 0% | S 0%)',
+      'Prosperous Economy · B +20% | S +20%',
+      'Depressed Economy · B -10% | S -10%',
+    ])
+
+    const market = screen.getByRole('combobox', { name: 'Market' })
+    expect(within(market).getAllByRole('option').map((option) => option.textContent)).toEqual([
+      'Regular Market · Base (B 0% | S 0%)',
+      'Competitive Market · B -20% | S -15%',
+      'Black Market · B +35% | S +30%',
+      'Restricted Market · B +25% | S +25%',
+    ])
+
+    await user.selectOptions(market, 'competitive')
+    expect(screen.getByText('3,200 GP')).toBeInTheDocument()
+    expect(screen.getByText('1,700 GP')).toBeInTheDocument()
+
+    await user.click(screen.getByText('Adjustment breakdown'))
+    expect(screen.getByText('B')).toBeInTheDocument()
+    expect(screen.getByText('S')).toBeInTheDocument()
+    const marketAdjustment = screen.getByText('Market · Competitive Market').parentElement!
+    expect(within(marketAdjustment).getByText('-20%')).toBeInTheDocument()
+    expect(within(marketAdjustment).getByText('-15%')).toBeInTheDocument()
+  })
 })

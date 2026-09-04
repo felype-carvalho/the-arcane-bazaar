@@ -1,16 +1,18 @@
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import { ChevronDown, Plus, SlidersHorizontal, Trash2 } from 'lucide-react'
 import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
-import { calculatePricing, signedLabel } from '../../../lib/pricing'
-import type {
-  Economy,
-  Item,
-  MagicFrequency,
-  Market,
-  Negotiation,
-  PricingModifiers,
-  Reputation,
-} from '../../../types'
+import {
+  calculatePricing,
+  ECONOMY_OPTIONS,
+  MAGIC_FREQUENCY_OPTIONS,
+  MARKET_OPTIONS,
+  NEGOTIATION_OPTIONS,
+  pricingModifierOptionLabel,
+  REPUTATION_OPTIONS,
+  signedLabel,
+  type PricingModifierOption,
+} from '../../../lib/pricing'
+import type { Item, PricingModifiers } from '../../../types'
 
 interface PriceCalculatorProps {
   item: Item
@@ -51,12 +53,12 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
         </label>
       )}
 
-      <div className="grid grid-cols-2 gap-3">
-        <SelectField label="Economy" value={modifiers.economy} onChange={(value) => setModifiers((current) => ({ ...current, economy: value as Economy }))} options={[["recession", "Recession · −20%"], ["stable", "Stable · 0%"], ["thriving", "Thriving · +15%"]]} />
-        <SelectField label="Market" value={modifiers.market} onChange={(value) => setModifiers((current) => ({ ...current, market: value as Market }))} options={[["oversupply", "Oversupply · −20%"], ["balanced", "Balanced · 0%"], ["highDemand", "High demand · +25%"]]} />
-        <SelectField label="Reputation" value={modifiers.reputation} onChange={(value) => setModifiers((current) => ({ ...current, reputation: value as Reputation }))} options={[["unknown", "Unknown · 0%"], ["trusted", "Trusted · ±5%"], ["celebrated", "Celebrated · ±10%"]]} />
-        <SelectField label="Negotiation" value={modifiers.negotiation} onChange={(value) => setModifiers((current) => ({ ...current, negotiation: value as Negotiation }))} options={[["poor", "Poor · ±10%"], ["fair", "Fair · 0%"], ["skilled", "Skilled · ±10%"]]} />
-        {item.type === 'Magic' && <div className="col-span-2"><SelectField label="Magic frequency" value={modifiers.magicFrequency} onChange={(value) => setModifiers((current) => ({ ...current, magicFrequency: value as MagicFrequency }))} options={[["rare", "Rare · +25%"], ["standard", "Standard · 0%"], ["abundant", "Abundant · −15%"]]} /></div>}
+      <div className="grid grid-cols-1 gap-3">
+        <SelectField label="Economy" value={modifiers.economy} onChange={(economy) => setModifiers((current) => ({ ...current, economy }))} options={ECONOMY_OPTIONS} />
+        <SelectField label="Market" value={modifiers.market} onChange={(market) => setModifiers((current) => ({ ...current, market }))} options={MARKET_OPTIONS} />
+        <SelectField label="Party Reputation" value={modifiers.reputation} onChange={(reputation) => setModifiers((current) => ({ ...current, reputation }))} options={REPUTATION_OPTIONS} />
+        <SelectField label="NPC Negotiation" value={modifiers.negotiation} onChange={(negotiation) => setModifiers((current) => ({ ...current, negotiation }))} options={NEGOTIATION_OPTIONS} />
+        {item.type === 'Magic' && <SelectField label="Magic Frequency" value={modifiers.magicFrequency} onChange={(magicFrequency) => setModifiers((current) => ({ ...current, magicFrequency }))} options={MAGIC_FREQUENCY_OPTIONS} />}
       </div>
 
       <div className="mt-5 border-t border-border/70 pt-4">
@@ -80,12 +82,18 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
 
       {result ? (
         <div className="mt-5">
-          <div className="mb-2 flex items-center justify-between text-[10px] text-muted"><span>Base price</span><strong className="font-display text-cream"><CurrencyDisplay valueGp={result.basePrice} /></strong></div>
+          <output className="base-price-card" aria-label="Base price">
+            <span>Base price</span>
+            <strong><CurrencyDisplay valueGp={result.basePrice} /></strong>
+          </output>
           <details className="breakdown group">
             <summary>Adjustment breakdown <ChevronDown size={13} /></summary>
             <div className="space-y-1.5 border-t border-border/70 px-3 py-2">
+              <div className="grid grid-cols-[1fr_44px_44px] gap-1 font-display text-[10px] leading-4 uppercase tracking-[.08em] text-muted">
+                <span>Adjustment</span><span className="text-right">B</span><span className="text-right">S</span>
+              </div>
               {result.adjustments.map((adjustment, index) => (
-                <div key={`${adjustment.label}-${index}`} className="grid grid-cols-[1fr_44px_44px] gap-1 text-[9px] text-muted">
+                <div key={`${adjustment.label}-${index}`} className="grid grid-cols-[1fr_44px_44px] gap-1 text-[11px] leading-4 text-muted">
                   <span>{adjustment.label}</span><span className="text-right">{signedLabel(adjustment.buyPercent)}</span><span className="text-right">{signedLabel(adjustment.sellPercent)}</span>
                 </div>
               ))}
@@ -111,12 +119,12 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
   )
 }
 
-function SelectField({ label, value, onChange, options }: { label: string, value: string, onChange: (value: string) => void, options: [string, string][] }) {
+function SelectField<T extends string>({ label, value, onChange, options }: { label: string, value: T, onChange: (value: T) => void, options: readonly PricingModifierOption<T>[] }) {
   return (
     <label className="block min-w-0">
       <span className="field-label">{label}</span>
-      <select className="field mt-1.5 w-full" value={value} onChange={(event) => onChange(event.target.value)}>
-        {options.map(([optionValue, optionLabel]) => <option key={optionValue} value={optionValue}>{optionLabel}</option>)}
+      <select className="field mt-1.5 w-full" value={value} onChange={(event) => onChange(event.target.value as T)}>
+        {options.map((option) => <option key={option.value} value={option.value}>{pricingModifierOptionLabel(option)}</option>)}
       </select>
     </label>
   )
