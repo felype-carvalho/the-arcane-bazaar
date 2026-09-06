@@ -277,6 +277,7 @@ describe('Arcane Bazaar app', () => {
     renderApp()
     await user.click(screen.getByRole('radio', { name: 'Magic' }))
     expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
+    await user.click(screen.getByText('Price modifiers'))
     await user.type(screen.getByLabelText('Modifier name'), 'Festival tax')
     await user.type(screen.getByLabelText('Modifier percent'), '10')
     await user.click(screen.getByRole('button', { name: 'Add custom modifier' }))
@@ -293,6 +294,10 @@ describe('Arcane Bazaar app', () => {
     expect((await screen.findAllByText('Bag of Holding')).length).toBeGreaterThan(0)
 
     expect(screen.getByLabelText('Base price')).toHaveTextContent('Base price4,000 GP')
+    const priceModifiers = screen.getByText('Price modifiers').parentElement!
+    expect(priceModifiers).not.toHaveAttribute('open')
+    await user.click(screen.getByText('Price modifiers'))
+    expect(priceModifiers).toHaveAttribute('open')
 
     const economy = screen.getByRole('combobox', { name: 'Economy' })
     expect(within(economy).getAllByRole('option').map((option) => option.textContent)).toEqual([
@@ -313,11 +318,13 @@ describe('Arcane Bazaar app', () => {
     expect(screen.getByText('3,200 GP')).toBeInTheDocument()
     expect(screen.getByText('1,700 GP')).toBeInTheDocument()
 
-    await user.click(screen.getByText('Adjustment breakdown'))
     expect(screen.getByText('B')).toBeInTheDocument()
     expect(screen.getByText('S')).toBeInTheDocument()
     const marketAdjustment = screen.getByText('Market · Competitive Market').parentElement!
     expect(within(marketAdjustment).getByText('-20%')).toBeInTheDocument()
     expect(within(marketAdjustment).getByText('-15%')).toBeInTheDocument()
+    const adjustmentTotal = screen.getByText('Total').parentElement!
+    expect(within(adjustmentTotal).getByText('-20%')).toHaveClass('negative')
+    expect(within(adjustmentTotal).getByText('-15%')).toHaveClass('negative')
   })
 })
