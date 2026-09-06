@@ -16,17 +16,20 @@ import type { Item, PricingModifiers } from '../../../types'
 
 interface PriceCalculatorProps {
     item: Item
+    effectiveItem?: Item
     modifiers: PricingModifiers
     setModifiers: Dispatch<SetStateAction<PricingModifiers>>
     manualPrice: string
     setManualPrice: (value: string) => void
 }
 
-export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
+export function PriceCalculator({ item, effectiveItem, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
     const [customName, setCustomName] = useState('')
     const [customPercent, setCustomPercent] = useState('')
     const manualValue = manualPrice === '' ? null : Number(manualPrice)
-    const result = calculatePricing(item, modifiers, manualValue)
+    const requiresBaseSelection = Boolean(item.variantOptions)
+    const pricingItem = requiresBaseSelection ? effectiveItem : item
+    const result = pricingItem ? calculatePricing(pricingItem, modifiers, manualValue) : null
 
     const addModifier = () => {
         const percent = Number(customPercent)
@@ -46,14 +49,16 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
                 <SlidersHorizontal size={17} className="text-gold" />
             </div>
 
-            {item.basePriceGp == null && (
+            {pricingItem?.basePriceGp == null && pricingItem && (
                 <label className="mb-4 block">
                     <span className="field-label">Manual base price (GP)</span>
                     <input className="field mt-1.5 w-full" type="number" min="1" value={manualPrice} onChange={(event) => setManualPrice(event.target.value)} placeholder="Enter an agreed value" />
                 </label>
             )}
 
-            {result ? (
+            {!pricingItem ? (
+                <div className="mt-5 rounded border border-gold/20 bg-gold/5 p-3 text-[11px] leading-5 text-amber-100/70">Select a base item to calculate this variant's price.</div>
+            ) : result ? (
                 <div className="mt-5">
                     <output className="base-price-card" aria-label="Base price">
                         <span>Base price</span>
@@ -105,7 +110,7 @@ export function PriceCalculator({ item, modifiers, setModifiers, manualPrice, se
                         <SelectField label="Market" value={modifiers.market} onChange={(market) => setModifiers((current) => ({ ...current, market }))} options={MARKET_OPTIONS} />
                         <SelectField label="Party Reputation" value={modifiers.reputation} onChange={(reputation) => setModifiers((current) => ({ ...current, reputation }))} options={REPUTATION_OPTIONS} />
                         <SelectField label="NPC Negotiation" value={modifiers.negotiation} onChange={(negotiation) => setModifiers((current) => ({ ...current, negotiation }))} options={NEGOTIATION_OPTIONS} />
-                        {item.type === 'Magic' && <SelectField label="Magic Frequency" value={modifiers.magicFrequency} onChange={(magicFrequency) => setModifiers((current) => ({ ...current, magicFrequency }))} options={MAGIC_FREQUENCY_OPTIONS} />}
+                        {pricingItem?.type === 'Magic' && <SelectField label="Magic Frequency" value={modifiers.magicFrequency} onChange={(magicFrequency) => setModifiers((current) => ({ ...current, magicFrequency }))} options={MAGIC_FREQUENCY_OPTIONS} />}
                     </div>
 
                     <div className="mt-4 border-t border-border/70 pt-4">

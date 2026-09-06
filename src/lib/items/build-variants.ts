@@ -3,6 +3,20 @@ import { isJsonRecord } from './raw-types'
 
 const clone = <T>(value: T): T => structuredClone(value)
 
+export type VariantPricingRule = 'expression' | 'multiplier' | 'sum'
+
+export interface BuiltVariantCombination {
+  base: RawItemEntity
+  specific: ProcessedItemEntity
+  pricingRule: VariantPricingRule
+}
+
+export interface BuiltVariantFamily {
+  generic: ProcessedItemEntity
+  variant: RawMagicVariant
+  combinations: BuiltVariantCombination[]
+}
+
 export function recursivelyMatches(actual: unknown, expected: unknown): boolean {
   if (Array.isArray(expected)) {
     if (Array.isArray(actual)) return expected.some((expectedValue) => actual.some((actualValue) => recursivelyMatches(actualValue, expectedValue)))
@@ -21,7 +35,7 @@ export function matchesVariantRequirements(baseItem: RawItemEntity, variant: Raw
   ))
   if (!required) return false
   if (!variant.excludes) return true
-  return !Object.entries(variant.excludes).every(([field, value]) => recursivelyMatches(baseItem[field], value))
+  return !Object.entries(variant.excludes).some(([field, value]) => recursivelyMatches(baseItem[field], value))
 }
 
 export function editionsAreCompatible(baseEdition: unknown, variantEdition: unknown): boolean {
@@ -120,6 +134,32 @@ function canEvaluateItemExpression(expression: string, baseItem: RawItemEntity):
   return references.every((match) => typeof baseItem[match[1]] === 'number' && Number.isFinite(baseItem[match[1]]))
 }
 
+export function variantPricingRule(variant: RawMagicVariant): VariantPricingRule {
+  if (typeof variant.inherits.valueExpression === 'string') return 'expression'
+  if (typeof variant.inherits.valueMult === 'number') return 'multiplier'
+  return 'sum'
+}
+
+export function resolveVariantPriceGp(
+  variant: RawMagicVariant,
+  baseItem: RawItemEntity,
+  baseItemPriceGp: number | null,
+  variantPriceGp: number | null,
+): number | null {
+  const expression = variant.inherits.valueExpression
+  if (typeof expression === 'string') {
+    if (!canEvaluateItemExpression(expression, baseItem)) return null
+    return evaluateItemExpression(expression, baseItem) / 100
+  }
+  const multiplier = variant.inherits.valueMult
+  if (typeof multiplier === 'number') {
+    if (typeof baseItem.value !== 'number' || !Number.isFinite(baseItem.value)) return null
+    return (baseItem.value * multiplier) / 100
+  }
+  if (baseItemPriceGp == null || variantPriceGp == null) return null
+  return baseItemPriceGp + variantPriceGp
+}
+
 function applyArrayChanges(output: JsonRecord, inherits: JsonRecord): void {
   const remove = inherits.propertyRemove
   if (remove !== undefined) {
@@ -191,16 +231,68 @@ function applyInherits(baseItem: RawItemEntity, variant: RawMagicVariant): Proce
   } as ProcessedItemEntity
 }
 
-export function buildSpecificVariants(baseItems: readonly RawItemEntity[], variants: readonly RawMagicVariant[]): ProcessedItemEntity[] {
-  const output: ProcessedItemEntity[] = []
-  for (const baseItem of baseItems) {
-    if (baseItem.packContents !== undefined) continue
-    for (const variant of variants) {
-      if (!isJsonRecord(variant.inherits)) throw new Error(`Magic variant ${variant.name} has no valid inherits object`)
+const GENERIC_TRANSFORM_FIELDS = new Set([
+  'nameRemove',
+  'namePrefix',
+  'nameSuffix',
+  'propertyAdd',
+  'propertyRemove',
+  'valueExpression',
+  'valueMult',
+  'weightExpression',
+  'weightMult',
+])
+
+export function prepareGenericVariant(variant: RawMagicVariant): ProcessedItemEntity {
+  if (!isJsonRecord(variant.inherits)) throw new Error(`Magic variant ${variant.name} has no valid inherits object`)
+  const output = clone(variant) as JsonRecord
+  const inherited = clone(variant.inherits)
+  const ownEntries = Array.isArray(variant.entries) ? clone(variant.entries) : []
+  const inheritedEntries = Array.isArray(inherited.entries) ? clone(inherited.entries) : []
+
+  delete output.requires
+  delete output.excludes
+  delete output.inherits
+  delete output._copy
+  delete inherited.entries
+
+  for (const [field, value] of Object.entries(inherited)) {
+    if (GENERIC_TRANSFORM_FIELDS.has(field)) continue
+    if (value === null) delete output[field]
+    else output[field] = value
+  }
+  output.entries = [...ownEntries, ...inheritedEntries]
+
+  const source = typeof output.source === 'string' ? output.source : variant.source
+  if (!source) throw new Error(`Magic variant ${variant.name} has no source`)
+  return {
+    ...output,
+    name: variant.name,
+    source,
+    _catalogOrigin: 'genericVariant',
+    _catalogEdition: variant.edition === 'classic' ? 'classic' : 'one',
+    _catalogVariant: { name: variant.name, source },
+  } as ProcessedItemEntity
+}
+
+export function buildVariantFamilies(baseItems: readonly RawItemEntity[], variants: readonly RawMagicVariant[]): BuiltVariantFamily[] {
+  return variants.map((variant) => {
+    const combinations: BuiltVariantCombination[] = []
+    for (const baseItem of baseItems) {
+      if (baseItem.packContents !== undefined) continue
       if (!editionsAreCompatible(baseItem.edition, variant.edition)) continue
       if (!matchesVariantRequirements(baseItem, variant)) continue
-      output.push(applyInherits(baseItem, variant))
+      combinations.push({
+        base: clone(baseItem),
+        specific: applyInherits(baseItem, variant),
+        pricingRule: variantPricingRule(variant),
+      })
     }
-  }
-  return output
+    combinations.sort((left, right) => left.base.name.localeCompare(right.base.name) || left.base.source.localeCompare(right.base.source))
+    return { generic: prepareGenericVariant(variant), variant: clone(variant), combinations }
+  })
+}
+
+export function buildSpecificVariants(baseItems: readonly RawItemEntity[], variants: readonly RawMagicVariant[]): ProcessedItemEntity[] {
+  return buildVariantFamilies(baseItems, variants).flatMap((family) => family.combinations.map((combination) => combination.specific))
 }

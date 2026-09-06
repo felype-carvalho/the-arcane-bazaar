@@ -210,6 +210,7 @@ button:disabled { cursor: not-allowed; }
 .base-price-card > span { font-size: 8px; text-transform: uppercase; letter-spacing: .09em; color: var(--color-muted); }
 .base-price-card strong { min-width: 0; margin-top: 6px; font-family: var(--font-display); font-size: 19px; line-height: 1.35; color: var(--color-gold-bright); }
 .base-price-card .currency-display { max-width: 100%; }
+.variant-base-card { margin: 16px 20px 0; border: 1px solid #65522b; border-radius: 5px; padding: 13px; background: radial-gradient(circle at 85% 20%, rgb(205 154 38 / 8%), transparent 55%), #151827; }
 
 .breakdown { overflow: hidden; border: 1px solid var(--color-border); border-radius: 4px; background: rgb(12 14 26 / 25%); }
 .breakdown summary { display: flex; cursor: pointer; list-style: none; align-items: center; justify-content: space-between; padding: 8px 10px; font-size: 11px; color: var(--color-muted); }

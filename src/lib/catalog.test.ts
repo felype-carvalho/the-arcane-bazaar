@@ -8,6 +8,12 @@ describe('filterAndSortItems', () => {
     expect(result.map((item) => item.name)).toEqual(['Pearl of Power'])
   })
 
+  it('searches generic variants by compatible base-item tags', () => {
+    const variant = { ...ITEM_FIXTURES[0], id: 'generic', name: 'Weapon Enchantment', tags: ['longsword'], origin: 'genericVariant' as const }
+    const result = filterAndSortItems([variant], { ...EMPTY_FILTERS, search: 'LONGSWORD' }, 'name', 'asc')
+    expect(result.map((item) => item.name)).toEqual(['Weapon Enchantment'])
+  })
+
   it('uses OR within a group and AND between groups', () => {
     const result = filterAndSortItems(ITEM_FIXTURES, {
       ...EMPTY_FILTERS,

@@ -85,7 +85,7 @@ export interface ItemJsonFiles {
 }
 
 export interface ProcessedItemEntity extends RawItemEntity {
-  _catalogOrigin: 'item' | 'itemGroup' | 'baseitem' | 'specificVariant'
+  _catalogOrigin: 'item' | 'itemGroup' | 'baseitem' | 'genericVariant' | 'specificVariant'
   _catalogEdition: 'classic' | 'one' | 'unspecified'
   _catalogBase?: { name: string; source: string }
   _catalogVariant?: { name: string; source: string }

@@ -31,7 +31,7 @@ export function getAvailableFilterOptions(items: readonly Item[], type: ItemType
 export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey: SortKey, direction: SortDirection): Item[] {
   const query = filters.search.trim().toLocaleLowerCase()
   const filtered = items.filter((item) => {
-    if (query && !item.name.toLocaleLowerCase().includes(query)) return false
+    if (query && !item.name.toLocaleLowerCase().includes(query) && !item.tags.some((tag) => tag.toLocaleLowerCase().includes(query))) return false
     if (filters.types.length && !filters.types.includes(item.type)) return false
     if (filters.rarities.length && !filters.rarities.includes(item.rarity)) return false
     if (filters.categories.length && !filters.categories.includes(item.category)) return false

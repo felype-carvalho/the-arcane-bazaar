@@ -22,6 +22,7 @@ export function CatalogPage() {
   const [direction, setDirection] = useState<SortDirection>('asc')
   const [page, setPage] = useState(1)
   const [selected, setSelected] = useState<Item | null>(null)
+  const [selectedVariantOptionId, setSelectedVariantOptionId] = useState('')
   const [modalOpen, setModalOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [detailsOpen, setDetailsOpen] = useState(false)
@@ -33,7 +34,8 @@ export function CatalogPage() {
   }, [])
 
   useEffect(() => { setPage(1) }, [filters, sortKey, direction])
-  useEffect(() => { setManualPrice(''); setModifiers(DEFAULT_MODIFIERS) }, [selected?.id])
+  useEffect(() => { setManualPrice(''); setModifiers(DEFAULT_MODIFIERS); setSelectedVariantOptionId('') }, [selected?.id])
+  useEffect(() => { setManualPrice('') }, [selectedVariantOptionId])
   useEffect(() => {
     const shouldLock = modalOpen || filtersOpen || detailsOpen
     document.body.style.overflow = shouldLock ? 'hidden' : ''
@@ -46,6 +48,10 @@ export function CatalogPage() {
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const safePage = Math.min(page, Math.max(totalPages, 1))
   const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
+  const selectedVariantOption = useMemo(
+    () => selected?.variantOptions?.find((option) => option.id === selectedVariantOptionId),
+    [selected, selectedVariantOptionId],
+  )
 
   useEffect(() => {
     setSelected((current) => current && filtered.some((item) => item.id === current.id) ? current : filtered[0] ?? null)
@@ -120,7 +126,7 @@ export function CatalogPage() {
         </main>
 
         <div className="hidden w-[360px] shrink-0 border-l border-border xl:block">
-          {selected ? <ItemDetails item={selected} onOpenModal={() => setModalOpen(true)} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /> : <div className="grid h-full place-items-center text-sm text-muted">Select an item</div>}
+          {selected ? <ItemDetails item={selected} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedVariantOptionId} onOpenModal={() => setModalOpen(true)} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /> : <div className="grid h-full place-items-center text-sm text-muted">Select an item</div>}
         </div>
       </div>
 
@@ -132,11 +138,11 @@ export function CatalogPage() {
 
       {detailsOpen && selected && (
         <div className="drawer-backdrop xl:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setDetailsOpen(false) }}>
-          <div className="drawer right"><ItemDetails item={selected} onClose={() => setDetailsOpen(false)} onOpenModal={() => setModalOpen(true)} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /></div>
+          <div className="drawer right"><ItemDetails item={selected} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedVariantOptionId} onClose={() => setDetailsOpen(false)} onOpenModal={() => setModalOpen(true)} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /></div>
         </div>
       )}
 
-      {modalOpen && selected && <ItemModal item={selected} onClose={() => setModalOpen(false)} />}
+      {modalOpen && selected && <ItemModal item={selected} selectedVariantOption={selectedVariantOption} onClose={() => setModalOpen(false)} />}
       <button className="help-button" aria-label="About this prototype" title="Prices are a campaign aid, not official rules"><CircleHelp size={18} /></button>
     </>
   )

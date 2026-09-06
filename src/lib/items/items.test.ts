@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { editionsAreCompatible, evaluateItemExpression, matchesVariantRequirements } from './build-variants'
+import { editionsAreCompatible, evaluateItemExpression, matchesVariantRequirements, prepareGenericVariant, resolveVariantPriceGp } from './build-variants'
 import { resolveCategory } from './categories'
 import { parseUid } from './indexes'
 import { deriveAvailability, deriveBasePriceGp, normalizeRarity } from './normalize-item'
@@ -67,6 +67,7 @@ describe('specific magic variants', () => {
   it('matches scalar, array, and object requirements and exclusions', () => {
     expect(matchesVariantRequirements(base, variant)).toBe(true)
     expect(matchesVariantRequirements({ ...base, net: true }, variant)).toBe(false)
+    expect(matchesVariantRequirements({ ...base, net: true }, { ...variant, excludes: { net: true, name: 'Other weapon' } })).toBe(false)
     expect(matchesVariantRequirements(base, { ...variant, requires: [{ property: 'V' }] })).toBe(true)
     expect(matchesVariantRequirements(base, { ...variant, requires: [{ nested: { enabled: true } }] })).toBe(false)
   })
@@ -83,6 +84,30 @@ describe('specific magic variants', () => {
     expect(evaluateItemExpression('([[baseItem.value]] + 500) * 2', base)).toBe(4000)
     expect(() => evaluateItemExpression('globalThis.alert(1)', base)).toThrow(/unsupported expression/i)
     expect(() => evaluateItemExpression('[[baseItem.missing]] + 1', base)).toThrow(/non-numeric/i)
+  })
+
+  it('prepares a generic display item without applying base-name transformations', () => {
+    const generic = prepareGenericVariant({
+      name: 'Enchanted Weapon',
+      type: 'GV|TST',
+      requires: [{ weapon: true }],
+      entries: ['Generic introduction.'],
+      inherits: { namePrefix: 'Enchanted ', source: 'TST', rarity: 'uncommon', entries: ['Inherited effect.'] },
+    })
+
+    expect(generic.name).toBe('Enchanted Weapon')
+    expect(generic.source).toBe('TST')
+    expect(generic.rarity).toBe('uncommon')
+    expect(generic.entries).toEqual(['Generic introduction.', 'Inherited effect.'])
+    expect(generic.namePrefix).toBeUndefined()
+    expect(generic._catalogOrigin).toBe('genericVariant')
+  })
+
+  it('resolves expression, multiplier, and additive variant prices without double-counting the base', () => {
+    expect(resolveVariantPriceGp({ ...variant, inherits: { ...variant.inherits, valueExpression: '[[baseItem.value]] + 50000' } }, base, 15, 400)).toBe(515)
+    expect(resolveVariantPriceGp({ ...variant, inherits: { ...variant.inherits, valueMult: 4 } }, base, 15, 400)).toBe(60)
+    expect(resolveVariantPriceGp(variant, base, 15, 400)).toBe(415)
+    expect(resolveVariantPriceGp(variant, { ...base, value: undefined }, null, 400)).toBeNull()
   })
 })
 

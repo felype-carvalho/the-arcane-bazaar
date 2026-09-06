@@ -1,14 +1,15 @@
 import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { BookOpen, Coins, Tag, X } from 'lucide-react'
-import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
-import { CATEGORY_ICONS } from '../../../lib/items/categories'
-import type { Item, PricingModifiers } from '../../../types'
+import type { Item, PricingModifiers, VariantBaseOption } from '../../../types'
+import { BaseItemSelector } from './BaseItemSelector'
 import { itemTypeLabel, RarityBadge } from './ItemBadges'
 import { PriceCalculator } from './PriceCalculator'
 import { SourceChip } from './SourceChip'
 
 interface ItemDetailsProps {
     item: Item
+    selectedVariantOption?: VariantBaseOption
+    onVariantOptionSelect: (optionId: string) => void
     onOpenModal: () => void
     onClose?: () => void
     modifiers: PricingModifiers
@@ -17,7 +18,7 @@ interface ItemDetailsProps {
     setManualPrice: (value: string) => void
 }
 
-export function ItemDetails({ item, onOpenModal, onClose, modifiers, setModifiers, manualPrice, setManualPrice }: ItemDetailsProps) {
+export function ItemDetails({ item, selectedVariantOption, onVariantOptionSelect, onOpenModal, onClose, modifiers, setModifiers, manualPrice, setManualPrice }: ItemDetailsProps) {
     return (
         <aside className="arcane-scrollbar h-full overflow-y-auto bg-panel" aria-label={`${item.name} details`}>
             <div className="border-b border-border px-5 py-5">
@@ -40,28 +41,13 @@ export function ItemDetails({ item, onOpenModal, onClose, modifiers, setModifier
                 {/* <p className="mt-4 font-display text-[11px] leading-6 text-gold-bright/90">{item.description}</p> */}
             </div>
 
-            {/* <div className="grid grid-cols-2 gap-x-5 gap-y-4 border-b border-border px-5 py-4">
-        <DetailFact label="Category" value={`${CATEGORY_ICONS[item.category]} ${item.category}`} />
-        <DetailFact label="Subtype" value={item.subtype} />
-        <DetailFact label="Weight" value={item.weight} />
-        <DetailFact label="Attunement" value={item.attunement ? 'Required' : 'Not required'} />
-      </div> */}
-
-            {/* <div className="border-b border-border px-5 py-4">
-        <p className="eyebrow">Availability &amp; price</p>
-        <div className="mt-2 grid grid-cols-2 gap-2">
-          <div className="detail-box"><Coins size={15} className="text-gold" /><span>{item.basePriceGp == null ? 'Variable price' : <CurrencyDisplay valueGp={item.basePriceGp} />}</span></div>
-          <div className="detail-box"><Tag size={14} className="text-violet-300" /><span>{item.availability}</span></div>
-        </div>
-      </div> */}
+            {item.variantOptions && <BaseItemSelector item={item} selectedOption={selectedVariantOption} onSelect={onVariantOptionSelect} />}
 
             <div className="border-b border-border px-5 py-4">
-                <p className="eyebrow">Tags</p>
-                <div className="mt-2 flex flex-wrap gap-2">{item.tags.map((tag) => <span key={tag} className="tag-pill">{tag}</span>)}</div>
                 <button className="primary-button mt-4 w-full" onClick={onOpenModal}><BookOpen size={15} /> View full item sheet</button>
             </div>
 
-            <PriceCalculator item={item} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />
+            <PriceCalculator item={item} effectiveItem={selectedVariantOption?.resolvedItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />
         </aside>
     )
 }

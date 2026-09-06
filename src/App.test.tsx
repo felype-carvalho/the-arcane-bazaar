@@ -46,7 +46,34 @@ vi.mock('./services/catalog', async () => {
     tags: [...ITEM_FIXTURES[2].tags],
     properties: [...ITEM_FIXTURES[2].properties],
   }
-  const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, ...filler]
+  const resolvedVariant = {
+    ...ITEM_FIXTURES[2],
+    id: 'enchanted-longsword',
+    name: 'Enchanted Longsword',
+    basePriceGp: 415,
+    source: 'TST',
+    origin: 'specificVariant' as const,
+  }
+  const genericVariant = {
+    ...ITEM_FIXTURES[2],
+    id: 'test-weapon-variant',
+    name: 'Test Weapon Variant',
+    basePriceGp: null,
+    source: 'TST',
+    origin: 'genericVariant' as const,
+    variantPriceGp: 400,
+    variantOptions: [{
+      id: resolvedVariant.id,
+      baseItemId: 'longsword-base',
+      baseName: 'Longsword',
+      baseSource: 'PHB',
+      basePriceGp: 15,
+      variantPriceGp: 400,
+      effectivePriceGp: 415,
+      resolvedItem: resolvedVariant,
+    }],
+  }
+  const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, genericVariant, ...filler]
   return { getItems: () => Promise.resolve(catalog.map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
 
@@ -326,5 +353,32 @@ describe('Arcane Bazaar app', () => {
     const adjustmentTotal = screen.getByText('Total').parentElement!
     expect(within(adjustmentTotal).getByText('-20%')).toHaveClass('negative')
     expect(within(adjustmentTotal).getByText('-15%')).toHaveClass('negative')
+  })
+
+  it('lists a generic variant once and prices it from the selected base item', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+    const search = screen.getAllByLabelText('Search items')[0]
+    await user.type(search, 'Test Weapon Variant')
+
+    const row = await screen.findByRole('row', { name: /Test Weapon Variant/i })
+    expect(within(row).getByText('◇ Variable')).toBeInTheDocument()
+    await user.click(row)
+
+    const details = (await screen.findAllByLabelText('Test Weapon Variant details'))[0]
+    expect(within(details).getByText("Select a base item to calculate this variant's price.")).toBeInTheDocument()
+    const baseSelector = within(details).getByRole('combobox', { name: 'Compatible base item' })
+    await user.selectOptions(baseSelector, 'enchanted-longsword')
+
+    const baseCard = within(details).getByRole('region', { name: 'Base item' })
+    expect(within(baseCard).getByText('15 GP')).toBeInTheDocument()
+    expect(within(baseCard).getByText('400 GP')).toBeInTheDocument()
+    expect(within(baseCard).getByText('415 GP')).toBeInTheDocument()
+    expect(within(details).getByLabelText('Base price')).toHaveTextContent('415 GP')
+
+    await user.clear(search)
+    await user.click(screen.getByRole('row', { name: /Bag of Holding/i }))
+    await waitFor(() => expect(screen.queryAllByRole('combobox', { name: 'Compatible base item' })).toHaveLength(0))
   })
 })

@@ -1,17 +1,22 @@
 import { useEffect, useRef } from 'react'
 import { Coins, Shield, Sparkles, Swords, X } from 'lucide-react'
 import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
-import type { Item } from '../../../types'
+import type { Item, VariantBaseOption } from '../../../types'
 import { DetailFact } from './ItemDetails'
 import { itemTypeLabel, RarityBadge } from './ItemBadges'
 
 interface ItemModalProps {
   item: Item
+  selectedVariantOption?: VariantBaseOption
   onClose: () => void
 }
 
-export function ItemModal({ item, onClose }: ItemModalProps) {
+export function ItemModal({ item, selectedVariantOption, onClose }: ItemModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
+  const displayedPrice = selectedVariantOption?.effectivePriceGp ?? item.basePriceGp
+  const basePriceFact = item.variantOptions && !selectedVariantOption
+    ? 'Select a base item'
+    : displayedPrice == null ? 'Variable' : <CurrencyDisplay valueGp={displayedPrice} />
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null
@@ -48,9 +53,10 @@ export function ItemModal({ item, onClose }: ItemModalProps) {
           <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="sheet-fact"><Swords size={17} /><DetailFact label="Category" value={item.category} /></div>
             <div className="sheet-fact"><Shield size={17} /><DetailFact label="Subtype" value={item.subtype} /></div>
-            <div className="sheet-fact"><Coins size={17} /><DetailFact label="Base price" value={item.basePriceGp == null ? 'Variable' : <CurrencyDisplay valueGp={item.basePriceGp} />} /></div>
+            <div className="sheet-fact"><Coins size={17} /><DetailFact label="Base price" value={basePriceFact} /></div>
             <div className="sheet-fact"><Sparkles size={17} /><DetailFact label="Attunement" value={item.attunement ? 'Required' : 'Not required'} /></div>
           </div>
+          {selectedVariantOption && <p className="mt-4 text-xs text-muted">Configured with <span className="font-display text-gold">{selectedVariantOption.baseName}</span> from {selectedVariantOption.baseSource}.</p>}
           <section className="mt-8 border-t border-border pt-6">
             <h3 className="font-display text-sm uppercase tracking-[0.12em] text-gold">Properties</h3>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">{item.properties.map((property) => <li key={property} className="flex gap-3 rounded border border-border bg-surface p-3 text-xs leading-5 text-cream"><Sparkles size={14} className="mt-0.5 shrink-0 text-gold" />{property}</li>)}</ul>

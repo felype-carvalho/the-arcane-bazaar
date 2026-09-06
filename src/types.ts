@@ -1,7 +1,7 @@
 export type ItemType = 'Magic' | 'Common'
 export type Rarity = 'None' | 'Common' | 'Uncommon' | 'Rare' | 'Very Rare' | 'Legendary' | 'Artifact' | 'Varies' | 'Unknown'
 export type ItemEdition = 'classic' | 'one' | 'unspecified'
-export type ItemOrigin = 'item' | 'itemGroup' | 'baseitem' | 'specificVariant'
+export type ItemOrigin = 'item' | 'itemGroup' | 'baseitem' | 'genericVariant' | 'specificVariant'
 export type Category =
   | 'Consumable'
   | 'Potion'
@@ -51,6 +51,19 @@ export interface Item {
   source: string
   edition: ItemEdition
   origin: ItemOrigin
+  variantPriceGp?: number | null
+  variantOptions?: VariantBaseOption[]
+}
+
+export interface VariantBaseOption {
+  id: string
+  baseItemId: string
+  baseName: string
+  baseSource: string
+  basePriceGp: number | null
+  variantPriceGp: number | null
+  effectivePriceGp: number | null
+  resolvedItem: Item
 }
 
 export interface ItemFilters {
