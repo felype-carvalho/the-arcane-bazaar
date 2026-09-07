@@ -13,10 +13,8 @@ interface ItemModalProps {
 
 export function ItemModal({ item, selectedVariantOption, onClose }: ItemModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
-  const displayedPrice = selectedVariantOption?.effectivePriceGp ?? item.basePriceGp
-  const basePriceFact = item.variantOptions && !selectedVariantOption
-    ? 'Select a base item'
-    : displayedPrice == null ? 'Variable' : <CurrencyDisplay valueGp={displayedPrice} />
+  const displayedPrice = item.basePriceGp ?? item.variantPriceGp
+  const basePriceFact = displayedPrice == null ? 'Variable' : <CurrencyDisplay valueGp={displayedPrice} />
 
   useEffect(() => {
     const previous = document.activeElement as HTMLElement | null

@@ -10,7 +10,7 @@ interface ItemDetailsProps {
     item: Item
     selectedVariantOption?: VariantBaseOption
     onVariantOptionSelect: (optionId: string) => void
-    onOpenModal: () => void
+    onOpenModal: (item: Item) => void
     onClose?: () => void
     modifiers: PricingModifiers
     setModifiers: Dispatch<SetStateAction<PricingModifiers>>
@@ -19,6 +19,8 @@ interface ItemDetailsProps {
 }
 
 export function ItemDetails({ item, selectedVariantOption, onVariantOptionSelect, onOpenModal, onClose, modifiers, setModifiers, manualPrice, setManualPrice }: ItemDetailsProps) {
+    const sheetItem = selectedVariantOption?.resolvedItem ?? item
+
     return (
         <aside className="arcane-scrollbar h-full overflow-y-auto bg-panel" aria-label={`${item.name} details`}>
             <div className="border-b border-border px-5 py-5">
@@ -44,7 +46,7 @@ export function ItemDetails({ item, selectedVariantOption, onVariantOptionSelect
             {item.variantOptions && <BaseItemSelector item={item} selectedOption={selectedVariantOption} onSelect={onVariantOptionSelect} />}
 
             <div className="border-b border-border px-5 py-4">
-                <button className="primary-button mt-4 w-full" onClick={onOpenModal}><BookOpen size={15} /> View full item sheet</button>
+                <button className="primary-button mt-4 w-full" onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> View full item sheet</button>
             </div>
 
             <PriceCalculator item={item} effectiveItem={selectedVariantOption?.resolvedItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />

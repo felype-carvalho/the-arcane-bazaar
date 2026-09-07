@@ -51,6 +51,11 @@ vi.mock('./services/catalog', async () => {
     id: 'enchanted-longsword',
     name: 'Enchanted Longsword',
     basePriceGp: 415,
+    subtype: 'Enchanted blade',
+    description: 'A longsword empowered by the selected variant.',
+    tags: ['resolved-variant'],
+    properties: ['Combined base and variant property'],
+    attunement: true,
     source: 'TST',
     origin: 'specificVariant' as const,
   }
@@ -59,6 +64,9 @@ vi.mock('./services/catalog', async () => {
     id: 'test-weapon-variant',
     name: 'Test Weapon Variant',
     basePriceGp: null,
+    description: 'The magic available before choosing a base weapon.',
+    tags: ['generic-variant'],
+    properties: ['Variant-only property'],
     source: 'TST',
     origin: 'genericVariant' as const,
     variantPriceGp: 400,
@@ -368,6 +376,15 @@ describe('Arcane Bazaar app', () => {
 
     const details = (await screen.findAllByLabelText('Test Weapon Variant details'))[0]
     expect(within(details).getByText("Select a base item to calculate this variant's price.")).toBeInTheDocument()
+    await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
+
+    const genericDialog = screen.getByRole('dialog', { name: 'Test Weapon Variant' })
+    expect(within(genericDialog).getByText('The magic available before choosing a base weapon.')).toBeInTheDocument()
+    expect(within(genericDialog).getByText('Variant-only property')).toBeInTheDocument()
+    expect(within(genericDialog).getByText('generic-variant')).toBeInTheDocument()
+    expect(within(genericDialog).getByText('400 GP')).toBeInTheDocument()
+    await user.click(within(genericDialog).getByRole('button', { name: 'Close item sheet' }))
+
     const baseSelector = within(details).getByRole('combobox', { name: 'Compatible base item' })
     await user.selectOptions(baseSelector, 'enchanted-longsword')
 
@@ -376,6 +393,17 @@ describe('Arcane Bazaar app', () => {
     expect(within(baseCard).getByText('400 GP')).toBeInTheDocument()
     expect(within(baseCard).getByText('415 GP')).toBeInTheDocument()
     expect(within(details).getByLabelText('Base price')).toHaveTextContent('415 GP')
+
+    await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
+    const resolvedDialog = screen.getByRole('dialog', { name: 'Enchanted Longsword' })
+    expect(within(resolvedDialog).getByText('A longsword empowered by the selected variant.')).toBeInTheDocument()
+    expect(within(resolvedDialog).getByText('Enchanted blade')).toBeInTheDocument()
+    expect(within(resolvedDialog).getByText('Combined base and variant property')).toBeInTheDocument()
+    expect(within(resolvedDialog).getByText('resolved-variant')).toBeInTheDocument()
+    expect(within(resolvedDialog).getByText('Required')).toBeInTheDocument()
+    expect(within(resolvedDialog).getByText('415 GP')).toBeInTheDocument()
+    expect(within(resolvedDialog).getByText(/Configured with/)).toHaveTextContent('Configured with Longsword from PHB.')
+    await user.click(within(resolvedDialog).getByRole('button', { name: 'Close item sheet' }))
 
     await user.clear(search)
     await user.click(screen.getByRole('row', { name: /Bag of Holding/i }))
