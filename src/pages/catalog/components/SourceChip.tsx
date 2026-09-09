@@ -1,4 +1,6 @@
 import type { CSSProperties } from 'react'
+import adventures from '../../../data/adventures.json'
+import books from '../../../data/books.json'
 
 export interface SourceChipProps {
   source: string
@@ -13,9 +15,38 @@ const SOURCE_LABELS = {
   XMM: "MM'25",
 } as const
 
+interface SourceEntry {
+  id: string
+  name: string
+  source: string
+}
+
+function createSourceNames(entries: SourceEntry[]): ReadonlyMap<string, string> {
+  const sourceNames = new Map<string, string>()
+
+  for (const { id, name, source } of entries) {
+    for (const key of [source, id]) {
+      const normalizedKey = key.trim().toLocaleUpperCase('en-US')
+      if (!sourceNames.has(normalizedKey)) sourceNames.set(normalizedKey, name)
+    }
+  }
+
+  return sourceNames
+}
+
+const SOURCE_NAMES = createSourceNames([...books.book, ...adventures.adventure])
+
 export function formatSourceLabel(source: string): string {
   const normalizedSource = source.trim().toLocaleUpperCase('en-US')
   return SOURCE_LABELS[normalizedSource as keyof typeof SOURCE_LABELS] ?? source
+}
+
+export function formatSourceTitle(source: string): string {
+  const normalizedSource = source.trim().toLocaleUpperCase('en-US')
+  const sourceName = SOURCE_NAMES.get(normalizedSource)
+  const sourceLabel = formatSourceLabel(source)
+
+  return `Source:${sourceName ? ` ${sourceName}` : ''}`
 }
 
 export function getSourceChipColors(source: string): CSSProperties {
@@ -37,5 +68,5 @@ export function getSourceChipColors(source: string): CSSProperties {
 }
 
 export function SourceChip({ source }: SourceChipProps) {
-  return <span className="source-chip" style={getSourceChipColors(source)} title={`Source: ${formatSourceLabel(source)}`}>{formatSourceLabel(source)}</span>
+  return <span className="source-chip" style={getSourceChipColors(source)} title={formatSourceTitle(source)}>{formatSourceLabel(source)}</span>
 }

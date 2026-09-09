@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatSourceLabel, getSourceChipColors } from './SourceChip'
+import { formatSourceLabel, formatSourceTitle, getSourceChipColors } from './SourceChip'
 
 describe('formatSourceLabel', () => {
   it.each([
@@ -15,6 +15,20 @@ describe('formatSourceLabel', () => {
 
   it('keeps other source labels unchanged', () => {
     expect(formatSourceLabel('TCE')).toBe('TCE')
+  })
+})
+
+describe('formatSourceTitle', () => {
+  it('includes the source name from the books catalog', () => {
+    expect(formatSourceTitle('TCE')).toBe("Source: TCE Tasha's Cauldron of Everything")
+  })
+
+  it('includes the source name from the adventures catalog', () => {
+    expect(formatSourceTitle('LMoP')).toBe('Source: LMoP Lost Mine of Phandelver')
+  })
+
+  it('keeps an unknown source without a name', () => {
+    expect(formatSourceTitle('Homebrew')).toBe('Source: Homebrew')
   })
 })
 
