@@ -38,7 +38,7 @@ export function Toolbar() {
 
   return (
     <>
-      <header className="flex h-[60px] shrink-0 items-center justify-between border-b border-gold/35 bg-header px-4 md:px-5">
+      <header className="flex h-15 shrink-0 items-center justify-between border-b border-gold/35 bg-header px-4 md:px-5">
         <div>
           <h1 className="font-display text-sm font-semibold tracking-wide text-gold-bright md:text-base">The Arcane Bazaar</h1>
           <p className="mt-0.5 hidden text-[9px] tracking-wide text-violet-300/70 sm:block">Magic Item Market & Pricing Guide</p>
