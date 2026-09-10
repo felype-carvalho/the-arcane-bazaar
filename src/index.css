@@ -244,6 +244,7 @@ button:disabled { cursor: not-allowed; }
 
 .modal-backdrop { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 16px; background: rgb(3 4 10 / 84%); backdrop-filter: blur(5px); }
 .modal-card { display: flex; width: min(920px, 100%); max-height: min(760px, calc(100dvh - 32px)); flex-direction: column; overflow: hidden; border: 1px solid #80662c; border-radius: 8px; background: #17192a; box-shadow: 0 30px 90px rgb(0 0 0 / 65%), 0 0 30px rgb(178 127 24 / 10%); outline: none; animation: modal-in 160ms ease-out; }
+.toolbar-modal { width: min(480px, 100%); }
 .modal-header { display: flex; min-height: 82px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--color-border); padding: 16px 20px; background: linear-gradient(90deg, #271724, #1a1b2d 65%); }
 .sheet-fact { display: flex; min-height: 78px; align-items: center; gap: 12px; border: 1px solid var(--color-border); border-radius: 5px; padding: 14px; color: var(--color-gold); background: #1c1e30; }
 @keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.985); } to { opacity: 1; transform: translateY(0) scale(1); } }
