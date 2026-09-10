@@ -1,9 +1,9 @@
 import { Search } from 'lucide-react'
-import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
-import { CATEGORY_ICONS } from '../../../lib/items/categories'
-import type { Item, SortDirection, SortKey } from '../../../types'
-import { RarityBadge, TypeMark } from './ItemBadges'
-import { SourceChip } from './SourceChip'
+import { CATEGORY_ICONS } from '../../model/items/categories'
+import type { Item, SortDirection, SortKey } from '../../types'
+import { RarityBadge, TypeMark } from '../item/ItemBadges'
+import { SourceChip } from '../item/SourceChip'
+import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 
 interface CatalogListProps {
   items: Item[]

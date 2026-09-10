@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Coins, Shield, Sparkles, Swords, X } from 'lucide-react'
-import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
-import type { Item, VariantBaseOption } from '../../../types'
+import type { Item, VariantBaseOption } from '../../types'
+import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 import { DetailFact } from './ItemDetails'
 import { itemTypeLabel, RarityBadge } from './ItemBadges'
 

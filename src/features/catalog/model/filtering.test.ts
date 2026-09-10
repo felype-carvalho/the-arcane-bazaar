@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { ITEM_FIXTURES } from '../test/fixtures/items'
-import { EMPTY_FILTERS, filterAndSortItems, getAvailableFilterOptions } from './catalog'
+import { EMPTY_FILTERS, filterAndSortItems, getAvailableFilterOptions } from './filtering'
 
 describe('filterAndSortItems', () => {
   it('searches by item name without case sensitivity', () => {

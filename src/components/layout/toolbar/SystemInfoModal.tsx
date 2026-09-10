@@ -1,5 +1,5 @@
 import { ExternalLink, Github, Info } from 'lucide-react'
-import packageMetadata from '../../../package.json'
+import packageMetadata from '../../../../package.json'
 import { ToolbarDialog } from './ToolbarDialog'
 
 const GITHUB_URL = 'https://github.com/felype-carvalho/the-arcane-bazaar'

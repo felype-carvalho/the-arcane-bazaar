@@ -1,6 +1,6 @@
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import { ChevronDown, Plus, SlidersHorizontal, Trash2 } from 'lucide-react'
-import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
+import { CurrencyDisplay } from './CurrencyDisplay'
 import {
     calculatePricing,
     ECONOMY_OPTIONS,
@@ -11,8 +11,8 @@ import {
     REPUTATION_OPTIONS,
     signedLabel,
     type PricingModifierOption,
-} from '../../../lib/pricing'
-import type { Item, PricingModifiers } from '../../../types'
+} from '../../model/pricing'
+import type { Item, PricingModifiers } from '../../types'
 
 interface PriceCalculatorProps {
     item: Item

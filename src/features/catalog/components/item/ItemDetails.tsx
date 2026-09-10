@@ -1,9 +1,9 @@
 import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { BookOpen, Coins, Tag, X } from 'lucide-react'
-import type { Item, PricingModifiers, VariantBaseOption } from '../../../types'
+import type { Item, PricingModifiers, VariantBaseOption } from '../../types'
 import { BaseItemSelector } from './BaseItemSelector'
 import { itemTypeLabel, RarityBadge } from './ItemBadges'
-import { PriceCalculator } from './PriceCalculator'
+import { PriceCalculator } from '../pricing/PriceCalculator'
 import { SourceChip } from './SourceChip'
 
 interface ItemDetailsProps {

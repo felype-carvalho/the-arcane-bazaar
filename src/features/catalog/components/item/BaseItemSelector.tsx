@@ -1,7 +1,7 @@
 import { useId } from 'react'
 import { Layers3 } from 'lucide-react'
-import { CurrencyDisplay } from '../../../components/currency/CurrencyDisplay'
-import type { Item, VariantBaseOption } from '../../../types'
+import type { Item, VariantBaseOption } from '../../types'
+import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 import { formatSourceLabel, SourceChip } from './SourceChip'
 
 interface BaseItemSelectorProps {

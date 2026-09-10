@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react'
-import adventures from '../../../data/adventures.json'
-import books from '../../../data/books.json'
+import adventures from '../../data/adventures.json'
+import books from '../../data/books.json'
 
 export interface SourceChipProps {
   source: string
@@ -45,8 +45,11 @@ export function formatSourceTitle(source: string): string {
   const normalizedSource = source.trim().toLocaleUpperCase('en-US')
   const sourceName = SOURCE_NAMES.get(normalizedSource)
   const sourceLabel = formatSourceLabel(source)
+  const sourceDescription = sourceName && sourceLabel === source
+    ? `${sourceLabel} ${sourceName}`
+    : sourceLabel
 
-  return `Source:${sourceName ? ` ${sourceName}` : ''}`
+  return `Source: ${sourceDescription}`
 }
 
 export function getSourceChipColors(source: string): CSSProperties {

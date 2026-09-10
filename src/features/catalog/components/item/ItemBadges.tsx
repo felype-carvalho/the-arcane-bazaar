@@ -1,4 +1,4 @@
-import type { ItemType, Rarity } from '../../../types'
+import type { ItemType, Rarity } from '../../types'
 
 const rarityClass: Record<Rarity, string> = {
   None: 'rarity-none',

@@ -1,8 +1,8 @@
 import { useId, useState } from 'react'
 import { ChevronDown, Search, X } from 'lucide-react'
-import { CATEGORY_ICONS } from '../../../lib/items/categories'
-import type { /* Availability, */ Category, ItemFilters, ItemType, Rarity } from '../../../types'
-import { TypeMark } from './ItemBadges'
+import { CATEGORY_ICONS } from '../../model/items/categories'
+import type { /* Availability, */ Category, ItemFilters, ItemType, Rarity } from '../../types'
+import { TypeMark } from '../item/ItemBadges'
 
 const TYPES: ItemType[] = ['Common', 'Magic']
 // const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']

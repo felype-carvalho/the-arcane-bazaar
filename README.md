@@ -6,9 +6,9 @@ A responsive D&D 5.5e item market and pricing guide built with React, TypeScript
 
 The catalog is built at runtime from three local 5etools-format sources:
 
-- `src/data/items.json`;
-- `src/data/items-base.json`;
-- `src/data/magicvariants.json`.
+- `src/features/catalog/data/items.json`;
+- `src/features/catalog/data/items-base.json`;
+- `src/features/catalog/data/magicvariants.json`.
 
 These files are immutable inputs. Application code, tests, builds, and maintenance scripts must never format, reorder, complete, or overwrite them. Derived data belongs in memory, test fixtures, or a separate report.
 

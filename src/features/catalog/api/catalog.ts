@@ -1,5 +1,5 @@
-import { buildCatalog, type CatalogDiagnostics } from '../lib/items/build-catalog'
-import { loadItemJsonFiles, resetItemJsonCacheForTests } from '../lib/items/load-json'
+import { buildCatalog, type CatalogDiagnostics } from '../model/items/build-catalog'
+import { loadItemJsonFiles, resetItemJsonCacheForTests } from '../model/items/load-json'
 import type { Item } from '../types'
 
 let catalogPromise: Promise<Item[]> | undefined

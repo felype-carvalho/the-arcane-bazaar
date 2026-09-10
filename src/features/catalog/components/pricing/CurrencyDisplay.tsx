@@ -1,4 +1,4 @@
-import { CurrencyConverter } from '../../lib/currency'
+import { CurrencyConverter } from '../../model/currency'
 
 interface CurrencyDisplayProps {
   valueGp: number

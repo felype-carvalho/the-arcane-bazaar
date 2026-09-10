@@ -18,8 +18,8 @@ function renderApp(initialEntries = ['/catalog']) {
   )
 }
 
-vi.mock('./services/catalog', async () => {
-  const { ITEM_FIXTURES } = await import('./test/fixtures/items')
+vi.mock('@/features/catalog/api/catalog', async () => {
+  const { ITEM_FIXTURES } = await import('@/features/catalog/test/fixtures/items')
   const filler = Array.from({ length: 18 }, (_, index) => ({
     ...ITEM_FIXTURES[1],
     id: `test-relic-${index + 1}`,

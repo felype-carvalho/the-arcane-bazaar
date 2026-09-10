@@ -1,7 +1,7 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
-import { ITEM_FIXTURES } from '../../../test/fixtures/items'
-import type { VariantBaseOption } from '../../../types'
+import { ITEM_FIXTURES } from '../../test/fixtures/items'
+import type { VariantBaseOption } from '../../types'
 import { BaseItemSelector } from './BaseItemSelector'
 
 function option(id: string, baseName: string, baseSource: string): VariantBaseOption {
