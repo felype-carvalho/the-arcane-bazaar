@@ -22,7 +22,7 @@ export function ToolbarDialog({ children, eyebrow, icon, onClose, title, titleId
       if (event.key === 'Escape') onClose()
       if (event.key !== 'Tab' || !dialog) return
 
-      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button, [href], [tabindex]:not([tabindex="-1"])'))
+      const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
         .filter((element) => !element.hasAttribute('disabled'))
       if (!focusable.length) return
 
@@ -46,7 +46,7 @@ export function ToolbarDialog({ children, eyebrow, icon, onClose, title, titleId
           </div>
           <button className="icon-button" onClick={onClose} aria-label={`Close ${title.toLocaleLowerCase('en-US')}`}><X size={20} /></button>
         </div>
-        {children && <div className="p-6 md:p-8">{children}</div>}
+        {children && <div className="min-h-0 overflow-y-auto p-6 md:p-8">{children}</div>}
       </div>
     </div>
   )

@@ -1,5 +1,8 @@
+import { createElement } from 'react'
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { formatSourceLabel, formatSourceTitle, getSourceChipColors } from './SourceChip'
+import { formatSourceLabel, formatSourceTitle, getSourceChipColors, SourceChip } from './SourceChip'
 
 describe('formatSourceLabel', () => {
   it.each([
@@ -40,5 +43,25 @@ describe('getSourceChipColors', () => {
       .map((source) => JSON.stringify(getSourceChipColors(source)))
 
     expect(new Set(expansionColors).size).toBe(expansionColors.length)
+  })
+})
+
+describe('SourceChip', () => {
+  it('keeps static chips non-interactive', () => {
+    render(createElement(SourceChip, { source: 'TCE' }))
+
+    expect(screen.getByTitle("Source: TCE Tasha's Cauldron of Everything").tagName).toBe('SPAN')
+  })
+
+  it('exposes a selectable chip as a pressed button', async () => {
+    const user = userEvent.setup()
+    let selected = true
+    const onSelectedChange = (next: boolean) => { selected = next }
+    render(createElement(SourceChip, { source: 'TCE', selected, onSelectedChange }))
+    const chip = screen.getByRole('button', { name: "Source: TCE Tasha's Cauldron of Everything" })
+
+    expect(chip).toHaveAttribute('aria-pressed', 'true')
+    await user.click(chip)
+    expect(selected).toBe(false)
   })
 })

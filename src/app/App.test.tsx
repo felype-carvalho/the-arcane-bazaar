@@ -56,7 +56,7 @@ vi.mock('@/features/catalog/api/catalog', async () => {
     tags: ['resolved-variant'],
     properties: ['Combined base and variant property'],
     attunement: true,
-    source: 'TST',
+    source: 'XDMG',
     origin: 'specificVariant' as const,
   }
   const genericVariant = {
@@ -67,7 +67,7 @@ vi.mock('@/features/catalog/api/catalog', async () => {
     description: 'The magic available before choosing a base weapon.',
     tags: ['generic-variant'],
     properties: ['Variant-only property'],
-    source: 'TST',
+    source: 'XDMG',
     origin: 'genericVariant' as const,
     variantPriceGp: 400,
     variantOptions: [{
@@ -81,7 +81,16 @@ vi.mock('@/features/catalog/api/catalog', async () => {
       resolvedItem: resolvedVariant,
     }],
   }
-  const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, genericVariant, ...filler]
+  const modernItem = {
+    ...ITEM_FIXTURES[0],
+    id: 'modern-satchel',
+    name: 'Modern Satchel',
+    source: 'XDMG',
+    edition: 'one' as const,
+    tags: [...ITEM_FIXTURES[0].tags],
+    properties: [...ITEM_FIXTURES[0].properties],
+  }
+  const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, modernItem, genericVariant, ...filler]
   return { getItems: () => Promise.resolve(catalog.map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
 
@@ -408,5 +417,43 @@ describe('Arcane Bazaar app', () => {
     await user.clear(search)
     await user.click(screen.getByRole('row', { name: /Bag of Holding/i }))
     await waitFor(() => expect(screen.queryAllByRole('combobox', { name: 'Compatible base item' })).toHaveLength(0))
+  })
+
+  it('persists a source selection and restores every source when local data is reset', async () => {
+    const user = userEvent.setup()
+    const firstRender = renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+    expect(await screen.findByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
+    expect(screen.getByRole('row', { name: /Modern Satchel/i })).toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Open system menu' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+    const dmgChip = screen.getByRole('button', { name: "Source: DMG'14" })
+    await waitFor(() => expect(dmgChip).toBeEnabled())
+    await user.click(dmgChip)
+
+    await waitFor(() => expect(dmgChip).toBeEnabled())
+    expect(dmgChip).toHaveAttribute('aria-pressed', 'false')
+    expect(screen.queryByRole('row', { name: /Bag of Holding/i })).not.toBeInTheDocument()
+    expect(screen.getByRole('row', { name: /Modern Satchel/i })).toBeInTheDocument()
+
+    firstRender.unmount()
+    renderApp()
+    await user.click(screen.getByRole('radio', { name: 'Magic' }))
+    expect(await screen.findByRole('row', { name: /Modern Satchel/i })).toBeInTheDocument()
+    expect(screen.queryByRole('row', { name: /Bag of Holding/i })).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Open system menu' }))
+    await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+    const persistedChip = screen.getByRole('button', { name: "Source: DMG'14" })
+    await waitFor(() => expect(persistedChip).toBeEnabled())
+    expect(persistedChip).toHaveAttribute('aria-pressed', 'false')
+
+    await user.click(screen.getByRole('button', { name: 'Reset local data' }))
+    await user.click(screen.getByRole('button', { name: 'Reset IndexedDB' }))
+
+    await waitFor(() => expect(persistedChip).toHaveAttribute('aria-pressed', 'true'))
+    expect(await screen.findByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
+    expect(screen.getByText('Local data reset to defaults.')).toBeInTheDocument()
   })
 })

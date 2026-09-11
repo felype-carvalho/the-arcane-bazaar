@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { CircleHelp, Filter, Menu, Sparkles } from 'lucide-react'
 import { getItems } from '../api/catalog'
+import { applySourceSelection } from '../model/content-visibility'
+import { ALL_SOURCE_CODES } from '../model/sources'
 import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '../model/filtering'
 import { DEFAULT_MODIFIERS } from '../model/pricing'
 import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../types'
@@ -13,7 +15,12 @@ import { Pagination } from './listing/Pagination'
 const PAGE_SIZE = 20
 const INITIAL_FILTERS: ItemFilters = { ...EMPTY_FILTERS, types: ['Common'] }
 
-export function Catalog() {
+export interface CatalogProps {
+  selectedSources?: readonly string[]
+  settingsReady?: boolean
+}
+
+export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = true }: CatalogProps) {
   const [items, setItems] = useState<Item[]>([])
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState(false)
@@ -42,9 +49,10 @@ export function Catalog() {
     return () => { document.body.style.overflow = '' }
   }, [modalItem, filtersOpen, detailsOpen])
 
+  const visibleItems = useMemo(() => applySourceSelection(items, selectedSources), [items, selectedSources])
   const selectedType = filters.types[0] ?? 'Common'
-  const availableFilterOptions = useMemo(() => getAvailableFilterOptions(items, selectedType), [items, selectedType])
-  const filtered = useMemo(() => filterAndSortItems(items, filters, sortKey, direction), [items, filters, sortKey, direction])
+  const availableFilterOptions = useMemo(() => getAvailableFilterOptions(visibleItems, selectedType), [selectedType, visibleItems])
+  const filtered = useMemo(() => filterAndSortItems(visibleItems, filters, sortKey, direction), [visibleItems, filters, sortKey, direction])
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE)
   const safePage = Math.min(page, Math.max(totalPages, 1))
   const pageItems = filtered.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE)
@@ -54,8 +62,29 @@ export function Catalog() {
   )
 
   useEffect(() => {
-    setSelected((current) => current && filtered.some((item) => item.id === current.id) ? current : filtered[0] ?? null)
+    setSelected((current) => {
+      const matchingItem = current && filtered.find((item) => item.id === current.id)
+      return matchingItem ?? filtered[0] ?? null
+    })
   }, [filtered])
+
+  useEffect(() => {
+    if (selectedVariantOptionId && !selected?.variantOptions?.some((option) => option.id === selectedVariantOptionId)) {
+      setSelectedVariantOptionId('')
+    }
+  }, [selected, selectedVariantOptionId])
+
+  useEffect(() => {
+    const availableRarities = new Set(availableFilterOptions.rarities)
+    const availableCategories = new Set(availableFilterOptions.categories)
+
+    setFilters((current) => {
+      const rarities = current.rarities.filter((rarity) => availableRarities.has(rarity))
+      const categories = current.categories.filter((category) => availableCategories.has(category))
+      if (rarities.length === current.rarities.length && categories.length === current.categories.length) return current
+      return { ...current, rarities, categories }
+    })
+  }, [availableFilterOptions])
 
   const toggleFilter = (group: FilterGroup, value: string) => {
     setFilters((current) => {
@@ -65,7 +94,7 @@ export function Catalog() {
   }
 
   const selectType = (type: ItemType) => {
-    const available = getAvailableFilterOptions(items, type)
+    const available = getAvailableFilterOptions(visibleItems, type)
     const rarities = new Set(available.rarities)
     const categories = new Set(available.categories)
 
@@ -113,7 +142,7 @@ export function Catalog() {
           </div>
 
           <div className="min-h-0 flex-1">
-            {loading ? (
+            {loading || !settingsReady ? (
               <div className="flex h-full items-center justify-center"><div className="text-center"><Sparkles className="mx-auto animate-pulse text-gold" /><p className="mt-3 font-display text-xs text-muted">Consulting the bazaar ledger...</p></div></div>
             ) : loadError ? (
               <div className="flex h-full items-center justify-center p-6 text-center"><div><h2 className="font-display text-lg text-cream">The ledger could not be opened</h2><p className="mt-2 text-sm text-muted">Refresh the page to try loading the catalog again.</p></div></div>

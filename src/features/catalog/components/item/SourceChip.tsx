@@ -1,10 +1,21 @@
 import type { CSSProperties } from 'react'
-import adventures from '../../data/adventures.json'
-import books from '../../data/books.json'
+import { getSourceName, normalizeSource } from '../../model/sources'
 
-export interface SourceChipProps {
+interface StaticSourceChipProps {
   source: string
+  selected?: never
+  disabled?: never
+  onSelectedChange?: never
 }
+
+interface SelectableSourceChipProps {
+  source: string
+  selected: boolean
+  disabled?: boolean
+  onSelectedChange: (selected: boolean) => void
+}
+
+export type SourceChipProps = StaticSourceChipProps | SelectableSourceChipProps
 
 const SOURCE_LABELS = {
   DMG: "DMG'14",
@@ -15,35 +26,13 @@ const SOURCE_LABELS = {
   XMM: "MM'25",
 } as const
 
-interface SourceEntry {
-  id: string
-  name: string
-  source: string
-}
-
-function createSourceNames(entries: SourceEntry[]): ReadonlyMap<string, string> {
-  const sourceNames = new Map<string, string>()
-
-  for (const { id, name, source } of entries) {
-    for (const key of [source, id]) {
-      const normalizedKey = key.trim().toLocaleUpperCase('en-US')
-      if (!sourceNames.has(normalizedKey)) sourceNames.set(normalizedKey, name)
-    }
-  }
-
-  return sourceNames
-}
-
-const SOURCE_NAMES = createSourceNames([...books.book, ...adventures.adventure])
-
 export function formatSourceLabel(source: string): string {
-  const normalizedSource = source.trim().toLocaleUpperCase('en-US')
+  const normalizedSource = normalizeSource(source)
   return SOURCE_LABELS[normalizedSource as keyof typeof SOURCE_LABELS] ?? source
 }
 
 export function formatSourceTitle(source: string): string {
-  const normalizedSource = source.trim().toLocaleUpperCase('en-US')
-  const sourceName = SOURCE_NAMES.get(normalizedSource)
+  const sourceName = getSourceName(source)
   const sourceLabel = formatSourceLabel(source)
   const sourceDescription = sourceName && sourceLabel === source
     ? `${sourceLabel} ${sourceName}`
@@ -54,7 +43,7 @@ export function formatSourceTitle(source: string): string {
 
 export function getSourceChipColors(source: string): CSSProperties {
   let hash = 2166136261
-  for (const character of source.trim().toLocaleUpperCase('en-US')) {
+  for (const character of normalizeSource(source)) {
     hash ^= character.charCodeAt(0)
     hash = Math.imul(hash, 16777619)
   }
@@ -70,6 +59,28 @@ export function getSourceChipColors(source: string): CSSProperties {
   }
 }
 
-export function SourceChip({ source }: SourceChipProps) {
-  return <span className="source-chip" style={getSourceChipColors(source)} title={formatSourceTitle(source)}>{formatSourceLabel(source)}</span>
+export function SourceChip(props: SourceChipProps) {
+  const { source } = props
+  const title = formatSourceTitle(source)
+  const content = formatSourceLabel(source)
+  const style = getSourceChipColors(source)
+
+  if (typeof props.onSelectedChange === 'function') {
+    return (
+      <button
+        type="button"
+        className="source-chip selectable"
+        style={style}
+        title={title}
+        aria-label={title}
+        aria-pressed={props.selected}
+        disabled={props.disabled}
+        onClick={() => props.onSelectedChange(!props.selected)}
+      >
+        {content}
+      </button>
+    )
+  }
+
+  return <span className="source-chip" style={style} title={title}>{content}</span>
 }

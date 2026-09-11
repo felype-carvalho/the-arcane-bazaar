@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Info, Settings, Shield, Swords } from 'lucide-react'
-import { SettingsModal } from './SettingsModal'
+import { SettingsModal } from '@/features/settings'
 import { SystemInfoModal } from './SystemInfoModal'
 
 type ToolbarModal = 'settings' | 'about' | null
