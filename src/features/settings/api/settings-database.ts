@@ -37,6 +37,11 @@ function normalizeSettings(value: unknown): AppSettings {
   return createDefaultSettings()
 }
 
+function settingsMatch(left: AppSettings, right: AppSettings): boolean {
+  return left.selectedSources.length === right.selectedSources.length
+    && left.selectedSources.every((source, index) => source === right.selectedSources[index])
+}
+
 function browserIndexedDb(): IDBFactory {
   const factory = globalThis.indexedDB
   if (!factory) throw new Error('IndexedDB is not available in this browser')
@@ -98,7 +103,7 @@ export function createSettingsStorage(factory?: IDBFactory): SettingsStorage {
     const storedValue = await requestResult(request)
     await completed
     const settings = normalizeSettings(storedValue)
-    if (!isStoredSettings(storedValue)) await save(settings)
+    if (!isStoredSettings(storedValue) || !settingsMatch(storedValue, settings)) await save(settings)
     return settings
   }
 

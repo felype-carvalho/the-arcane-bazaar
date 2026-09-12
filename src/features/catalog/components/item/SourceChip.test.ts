@@ -23,11 +23,11 @@ describe('formatSourceLabel', () => {
 
 describe('formatSourceTitle', () => {
   it('includes the source name from the books catalog', () => {
-    expect(formatSourceTitle('TCE')).toBe("Source: TCE Tasha's Cauldron of Everything")
+    expect(formatSourceTitle('TCE')).toBe("Source: Tasha's Cauldron of Everything")
   })
 
   it('includes the source name from the adventures catalog', () => {
-    expect(formatSourceTitle('LMoP')).toBe('Source: LMoP Lost Mine of Phandelver')
+    expect(formatSourceTitle('LMoP')).toBe('Source: Lost Mine of Phandelver')
   })
 
   it('keeps an unknown source without a name', () => {
@@ -50,7 +50,7 @@ describe('SourceChip', () => {
   it('keeps static chips non-interactive', () => {
     render(createElement(SourceChip, { source: 'TCE' }))
 
-    expect(screen.getByTitle("Source: TCE Tasha's Cauldron of Everything").tagName).toBe('SPAN')
+    expect(screen.getByTitle("Source: Tasha's Cauldron of Everything").tagName).toBe('SPAN')
   })
 
   it('exposes a selectable chip as a pressed button', async () => {
@@ -58,7 +58,7 @@ describe('SourceChip', () => {
     let selected = true
     const onSelectedChange = (next: boolean) => { selected = next }
     render(createElement(SourceChip, { source: 'TCE', selected, onSelectedChange }))
-    const chip = screen.getByRole('button', { name: "Source: TCE Tasha's Cauldron of Everything" })
+    const chip = screen.getByRole('button', { name: "Source: Tasha's Cauldron of Everything" })
 
     expect(chip).toHaveAttribute('aria-pressed', 'true')
     await user.click(chip)

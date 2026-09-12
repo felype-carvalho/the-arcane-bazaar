@@ -44,6 +44,27 @@ describe('settings IndexedDB storage', () => {
     await secondStorage.close?.()
   })
 
+  it('discards excluded sources from an existing stored selection', async () => {
+    const factory = new IDBFactory()
+    const storage = createSettingsStorage(factory)
+    await storage.load()
+    await storage.close?.()
+
+    const database = await openDatabase(factory)
+    const transaction = database.transaction(SETTINGS_STORE_NAME, 'readwrite')
+    transaction.objectStore(SETTINGS_STORE_NAME).put({ selectedSources: ['DMG', 'HF', 'CaBoMP'] }, SETTINGS_RECORD_KEY)
+    await new Promise<void>((resolve, reject) => {
+      transaction.oncomplete = () => resolve()
+      transaction.onerror = () => reject(transaction.error)
+    })
+    database.close()
+
+    const reloadedStorage = createSettingsStorage(factory)
+    await expect(reloadedStorage.load()).resolves.toEqual({ selectedSources: ['DMG'] })
+    await reloadedStorage.close?.()
+    expect(await readStoredSettings(factory)).toEqual({ selectedSources: ['DMG'] })
+  })
+
   it('discards and rewrites a legacy stored record with the new defaults', async () => {
     const factory = new IDBFactory()
     const storage = createSettingsStorage(factory)

@@ -2,11 +2,25 @@ import { RotateCcw, Settings, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { ToolbarDialog } from '@/components/layout/toolbar/ToolbarDialog'
 import { SourceChip } from '@/features/catalog/components/item/SourceChip'
-import { normalizeSource, SOURCES_BY_EDITION, type SourceEdition } from '@/features/catalog/model/sources'
+import {
+  normalizeSource,
+  SOURCE_GROUPS,
+  SOURCES_BY_EDITION,
+  type SourceEdition,
+  type SourceGroup,
+} from '@/features/catalog/model/sources'
 import { useSettings } from '../model/SettingsProvider'
 
 interface SettingsModalProps {
   onClose: () => void
+}
+
+const SOURCE_GROUP_LABELS: Readonly<Record<SourceGroup, string>> = {
+  core: 'Core',
+  setting: 'Setting',
+  'setting-alt': 'Setting Alt',
+  supplement: 'Supplement',
+  'supplement-alt': 'Supplement Alt',
 }
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
@@ -26,6 +40,10 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
     const sourceCodes = sources.map(({ source }) => source)
     const selectedCount = sourceCodes.filter((source) => selectedSources.has(normalizeSource(source))).length
     const titleId = `content-sources-${edition.replace('.', '-')}`
+    const populatedGroups = SOURCE_GROUPS.map((group) => ({
+      group,
+      sources: sources.filter((source) => source.group === group),
+    })).filter(({ sources: groupedSources }) => groupedSources.length > 0)
 
     return (
       <fieldset className="rounded-md border border-border bg-black/10 p-4">
@@ -49,20 +67,33 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
             Clear
           </button>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {sources.map(({ source }) => {
-            const selected = selectedSources.has(normalizeSource(source))
+        <div className="mt-4 grid gap-4">
+          {populatedGroups.map(({ group, sources: groupedSources }) => {
+            const groupTitleId = `${titleId}-${group}`
+
             return (
-              <SourceChip
-                key={source}
-                source={source}
-                selected={selected}
-                disabled={sourceSelectionDisabled}
-                onSelectedChange={(enabled) => {
-                  setSuccessMessage('')
-                  void setSourceEnabled(source, enabled)
-                }}
-              />
+              <div key={group} role="group" aria-labelledby={groupTitleId}>
+                <h4 id={groupTitleId} className="mb-2 text-[10px] uppercase tracking-[0.12em] text-muted">
+                  {SOURCE_GROUP_LABELS[group]}
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {groupedSources.map(({ source }) => {
+                    const selected = selectedSources.has(normalizeSource(source))
+                    return (
+                      <SourceChip
+                        key={source}
+                        source={source}
+                        selected={selected}
+                        disabled={sourceSelectionDisabled}
+                        onSelectedChange={(enabled) => {
+                          setSuccessMessage('')
+                          void setSourceEnabled(source, enabled)
+                        }}
+                      />
+                    )
+                  })}
+                </div>
+              </div>
             )
           })}
         </div>

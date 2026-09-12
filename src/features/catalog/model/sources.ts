@@ -3,11 +3,16 @@ import books from '../data/books.json'
 
 export type SourceEdition = '5.5e' | '5e'
 
+export const SOURCE_GROUPS = ['core', 'setting', 'setting-alt', 'supplement', 'supplement-alt'] as const
+
+export type SourceGroup = typeof SOURCE_GROUPS[number]
+
 export interface SourceDefinition {
   source: string
   name: string
   published?: string
   edition: SourceEdition
+  group: SourceGroup
 }
 
 interface SourceEntry {
@@ -28,8 +33,14 @@ const SUPPLEMENTAL_5E_SOURCES = [
   { source: 'TftYP', name: 'Tales from the Yawning Portal' },
 ] as const
 
+const SOURCE_GROUP_SET: ReadonlySet<string> = new Set(SOURCE_GROUPS)
+
 export function normalizeSource(source: string): string {
   return source.trim().toLocaleUpperCase('en-US')
+}
+
+function isSourceGroup(group: string): group is SourceGroup {
+  return SOURCE_GROUP_SET.has(group)
 }
 
 function createSourceRegistry(entries: SourceEntry[]): {
@@ -45,7 +56,7 @@ function createSourceRegistry(entries: SourceEntry[]): {
       if (!names.has(normalizedKey)) names.set(normalizedKey, name)
     }
 
-    if (group === 'screen') continue
+    if (!isSourceGroup(group)) continue
 
     const normalizedSource = normalizeSource(source)
     if (!definitionsBySource.has(normalizedSource)) {
@@ -54,6 +65,7 @@ function createSourceRegistry(entries: SourceEntry[]): {
         name,
         published,
         edition: published > EDITION_CUTOFF ? '5.5e' : '5e',
+        group,
       })
     }
   }
@@ -61,7 +73,7 @@ function createSourceRegistry(entries: SourceEntry[]): {
   for (const { source, name } of SUPPLEMENTAL_5E_SOURCES) {
     const normalizedSource = normalizeSource(source)
     names.set(normalizedSource, name)
-    definitionsBySource.set(normalizedSource, { source, name, edition: '5e' })
+    definitionsBySource.set(normalizedSource, { source, name, edition: '5e', group: 'supplement' })
   }
 
   const definitions = [...definitionsBySource.values()].sort((left, right) => {

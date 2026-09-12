@@ -2,7 +2,8 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { StrictMode } from 'react'
-import { ALL_SOURCE_CODES, SOURCES_BY_EDITION } from '@/features/catalog/model/sources'
+import { formatSourceTitle } from '@/features/catalog/components/item/SourceChip'
+import { ALL_SOURCE_CODES, SOURCE_GROUPS, SOURCES_BY_EDITION } from '@/features/catalog/model/sources'
 import type { AppSettings, SettingsStorage } from '../types'
 import { SettingsProvider } from '../model/SettingsProvider'
 import { SettingsModal } from './SettingsModal'
@@ -32,7 +33,7 @@ function renderModal(storage: SettingsStorage) {
 }
 
 function dmgChip() {
-  return screen.getByRole('button', { name: "Source: DMG'14" })
+  return screen.getByRole('button', { name: formatSourceTitle('DMG') })
 }
 
 describe('SettingsModal', () => {
@@ -55,7 +56,7 @@ describe('SettingsModal', () => {
     renderModal(storage)
 
     const legacyGroup = screen.getByRole('group', { name: '5e' })
-    const sourceChip = within(legacyGroup).getByRole('button', { name: "Source: DMG'14" })
+    const sourceChip = within(legacyGroup).getByRole('button', { name: formatSourceTitle('DMG') })
     await waitFor(() => expect(sourceChip).toBeEnabled())
     expect(sourceChip).toHaveAttribute('aria-pressed', 'true')
 
@@ -65,6 +66,24 @@ describe('SettingsModal', () => {
       selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG'),
     }))
     expect(sourceChip).toHaveAttribute('aria-pressed', 'false')
+  })
+
+  it('separates each edition into ordered, accessible source subgroups', () => {
+    renderModal(memoryStorage())
+    const groupLabels = ['Core', 'Setting', 'Setting Alt', 'Supplement', 'Supplement Alt']
+
+    for (const edition of ['5.5e', '5e'] as const) {
+      const editionGroup = screen.getByRole('group', { name: edition })
+      const subgroupHeadings = within(editionGroup).getAllByRole('heading', { level: 4 })
+      expect(subgroupHeadings.map(({ textContent }) => textContent)).toEqual(groupLabels)
+
+      for (const [index, group] of SOURCE_GROUPS.entries()) {
+        const subgroup = within(editionGroup).getByRole('group', { name: groupLabels[index] })
+        const source = SOURCES_BY_EDITION[edition].find((definition) => definition.group === group)
+        expect(source).toBeDefined()
+        expect(within(subgroup).getByRole('button', { name: formatSourceTitle(source!.source) })).toBeInTheDocument()
+      }
+    }
   })
 
   it('selects and clears a complete edition with one persisted update', async () => {
@@ -139,7 +158,7 @@ describe('SettingsModal', () => {
     const storage = memoryStorage({ selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG') })
     renderModal(storage)
     const dialog = screen.getByRole('dialog', { name: 'Settings' })
-    const sourceChip = within(dialog).getByRole('button', { name: "Source: DMG'14" })
+    const sourceChip = within(dialog).getByRole('button', { name: formatSourceTitle('DMG') })
     await waitFor(() => expect(sourceChip).toBeEnabled())
 
     await user.click(within(dialog).getByRole('button', { name: 'Reset local data' }))

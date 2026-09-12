@@ -2,6 +2,7 @@ import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
 import { MemoryRouter, useLocation } from 'react-router-dom'
+import { formatSourceTitle } from '@/features/catalog/components/item/SourceChip'
 import App from './App'
 
 function LocationDisplay() {
@@ -126,8 +127,8 @@ describe('Arcane Bazaar app', () => {
     expect(within(table).getByRole('columnheader', { name: 'Item type' })).toBeInTheDocument()
     expect(within(table).getByRole('columnheader', { name: 'Category' })).toBeInTheDocument()
     expect(within(cells[0]).getByText('Bag of Holding')).toBeInTheDocument()
-    expect(within(cells[0]).getByTitle("Source: DMG'14")).toHaveTextContent(/^DMG'14$/)
-    expect(within(cells[0]).getByTitle("Source: DMG'14")).toHaveClass('source-chip')
+    expect(within(cells[0]).getByTitle(formatSourceTitle('DMG'))).toHaveTextContent(/^DMG'14$/)
+    expect(within(cells[0]).getByTitle(formatSourceTitle('DMG'))).toHaveClass('source-chip')
     expect(cells[0].querySelector('[aria-hidden="true"]')).not.toBeInTheDocument()
     expect(cells[1]).toHaveTextContent('✨Magic')
     expect(cells[1]).not.toHaveTextContent('Bag/Container')
@@ -428,7 +429,7 @@ describe('Arcane Bazaar app', () => {
 
     await user.click(screen.getByRole('button', { name: 'Open system menu' }))
     await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
-    const dmgChip = screen.getByRole('button', { name: "Source: DMG'14" })
+    const dmgChip = screen.getByRole('button', { name: formatSourceTitle('DMG') })
     await waitFor(() => expect(dmgChip).toBeEnabled())
     await user.click(dmgChip)
 
@@ -445,7 +446,7 @@ describe('Arcane Bazaar app', () => {
 
     await user.click(screen.getByRole('button', { name: 'Open system menu' }))
     await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
-    const persistedChip = screen.getByRole('button', { name: "Source: DMG'14" })
+    const persistedChip = screen.getByRole('button', { name: formatSourceTitle('DMG') })
     await waitFor(() => expect(persistedChip).toBeEnabled())
     expect(persistedChip).toHaveAttribute('aria-pressed', 'false')
 

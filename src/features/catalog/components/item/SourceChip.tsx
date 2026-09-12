@@ -33,9 +33,7 @@ export function formatSourceLabel(source: string): string {
 
 export function formatSourceTitle(source: string): string {
   const sourceName = getSourceName(source)
-  const sourceLabel = formatSourceLabel(source)
-  const sourceDescription = sourceName && sourceLabel === source
-    ? `${sourceName}` : sourceLabel
+  const sourceDescription = sourceName ?? formatSourceLabel(source)
 
   return `Source: ${sourceDescription}`
 }
