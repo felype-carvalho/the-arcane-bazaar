@@ -5,19 +5,29 @@ import magicVariants from '../data/magicvariants.json'
 import { ALL_SOURCE_CODES, normalizeSource, SOURCE_DEFINITIONS, SOURCES_BY_EDITION } from './sources'
 
 describe('source registry', () => {
-  it('deduplicates and sorts every selectable source', () => {
-    expect(SOURCE_DEFINITIONS).toHaveLength(168)
-    expect(new Set(ALL_SOURCE_CODES.map(normalizeSource)).size).toBe(168)
-    expect(ALL_SOURCE_CODES).toEqual([...ALL_SOURCE_CODES].sort((left, right) => (
-      left.localeCompare(right, 'en-US', { sensitivity: 'base' })
-    )))
+  it('deduplicates sources and sorts each edition from oldest to newest', () => {
+    expect(SOURCE_DEFINITIONS).toHaveLength(162)
+    expect(new Set(ALL_SOURCE_CODES.map(normalizeSource)).size).toBe(162)
+
+    for (const sources of Object.values(SOURCES_BY_EDITION)) {
+      expect(sources).toEqual([...sources].sort((left, right) => {
+        const publishedComparison = (left.published ?? '\uffff').localeCompare(right.published ?? '\uffff')
+        return publishedComparison || left.source.localeCompare(right.source, 'en-US', { sensitivity: 'base' })
+      }))
+    }
   })
 
   it('classifies sources around the edition cutoff', () => {
-    expect(SOURCES_BY_EDITION['5.5e']).toHaveLength(34)
-    expect(SOURCES_BY_EDITION['5e']).toHaveLength(134)
+    expect(SOURCES_BY_EDITION['5.5e']).toHaveLength(32)
+    expect(SOURCES_BY_EDITION['5e']).toHaveLength(130)
     expect(SOURCES_BY_EDITION['5.5e'].every(({ published }) => published != null && published > '2024-09-16')).toBe(true)
     expect(SOURCES_BY_EDITION['5e'].every(({ published }) => published == null || published <= '2024-09-16')).toBe(true)
+  })
+
+  it('excludes dungeon master screen products', () => {
+    const selectable = new Set(ALL_SOURCE_CODES)
+    expect(['Screen', 'ScreenDungeonKit', 'ScreenWildernessKit', 'ScreenSpelljammer', 'XScreen', 'XScreenRHW']
+      .filter((source) => selectable.has(source))).toEqual([])
   })
 
   it('includes the five supplemental catalog sources as 5e', () => {

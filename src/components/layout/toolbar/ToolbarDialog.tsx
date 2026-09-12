@@ -1,8 +1,9 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 
 interface ToolbarDialogProps {
   children?: ReactNode
+  dialogWidth?: CSSProperties['width']
   eyebrow: string
   icon: ReactNode
   onClose: () => void
@@ -10,7 +11,7 @@ interface ToolbarDialogProps {
   titleId: string
 }
 
-export function ToolbarDialog({ children, eyebrow, icon, onClose, title, titleId }: ToolbarDialogProps) {
+export function ToolbarDialog({ children, dialogWidth, eyebrow, icon, onClose, title, titleId }: ToolbarDialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export function ToolbarDialog({ children, eyebrow, icon, onClose, title, titleId
 
   return (
     <div className="modal-backdrop" onMouseDown={(event) => { if (event.currentTarget === event.target) onClose() }}>
-      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className="modal-card toolbar-modal">
+      <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className="modal-card toolbar-modal" style={dialogWidth ? { width: dialogWidth } : undefined}>
         <div className="modal-header">
           <div className="flex items-center gap-4">
             <div className="item-icon-tile small" aria-hidden="true">{icon}</div>

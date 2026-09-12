@@ -11,6 +11,7 @@ export interface SourceDefinition {
 }
 
 interface SourceEntry {
+  group: string
   id: string
   name: string
   source: string
@@ -38,11 +39,13 @@ function createSourceRegistry(entries: SourceEntry[]): {
   const definitionsBySource = new Map<string, SourceDefinition>()
   const names = new Map<string, string>()
 
-  for (const { id, name, published, source } of entries) {
+  for (const { group, id, name, published, source } of entries) {
     for (const key of [source, id]) {
       const normalizedKey = normalizeSource(key)
       if (!names.has(normalizedKey)) names.set(normalizedKey, name)
     }
+
+    if (group === 'screen') continue
 
     const normalizedSource = normalizeSource(source)
     if (!definitionsBySource.has(normalizedSource)) {
@@ -61,9 +64,10 @@ function createSourceRegistry(entries: SourceEntry[]): {
     definitionsBySource.set(normalizedSource, { source, name, edition: '5e' })
   }
 
-  const definitions = [...definitionsBySource.values()].sort((left, right) => (
-    left.source.localeCompare(right.source, 'en-US', { sensitivity: 'base' })
-  ))
+  const definitions = [...definitionsBySource.values()].sort((left, right) => {
+    const publishedComparison = (left.published ?? '\uffff').localeCompare(right.published ?? '\uffff')
+    return publishedComparison || left.source.localeCompare(right.source, 'en-US', { sensitivity: 'base' })
+  })
 
   return { definitions, names }
 }

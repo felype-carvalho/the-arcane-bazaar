@@ -83,6 +83,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
 
   return (
     <ToolbarDialog
+      dialogWidth="min(1080px, 100%)"
       eyebrow="System"
       icon={<Settings size={20} />}
       onClose={onClose}
