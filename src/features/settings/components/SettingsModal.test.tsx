@@ -161,7 +161,9 @@ describe('SettingsModal', () => {
     const sourceChip = within(dialog).getByRole('button', { name: formatSourceTitle('DMG') })
     await waitFor(() => expect(sourceChip).toBeEnabled())
 
-    await user.click(within(dialog).getByRole('button', { name: 'Reset local data' }))
+    const resetButton = within(dialog).getByRole('button', { name: 'Reset local data' })
+    expect(resetButton).toHaveClass('primary-button')
+    await user.click(resetButton)
     await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
     expect(storage.reset).not.toHaveBeenCalled()
 

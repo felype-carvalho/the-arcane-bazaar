@@ -136,15 +136,15 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
           <p className="mt-2 text-[11px] leading-5 text-muted">Delete this application's IndexedDB database and restore every setting to its default value.</p>
 
           {!confirmReset ? (
-            <button className="secondary-button mt-4 border-red-900/70 text-red-300 hover:border-red-700 hover:text-red-200" disabled={isSaving} onClick={() => { setSuccessMessage(''); setConfirmReset(true) }}>
+            <button className="primary-button mt-4" disabled={isSaving} onClick={() => { setSuccessMessage(''); setConfirmReset(true) }}>
               <Trash2 size={14} /> Reset local data
             </button>
           ) : (
             <div className="mt-4 rounded-md border border-red-900/70 bg-red-950/20 p-4">
-              <p className="text-xs leading-5 text-red-200">Reset the IndexedDB database and select every content source?</p>
+              <p className="text-xs leading-5 text-red-200">Reset the IndexedDB database and all configuration?</p>
               <div className="mt-3 flex flex-wrap gap-2">
                 <button className="secondary-button" disabled={isSaving} onClick={() => setConfirmReset(false)}>Cancel</button>
-                <button className="primary-button" disabled={isSaving} onClick={() => void reset()}><RotateCcw size={14} /> Reset IndexedDB</button>
+                <button className="primary-button" disabled={isSaving} onClick={() => void reset()}><RotateCcw size={14} /> Reset All Configuration</button>
               </div>
             </div>
           )}
