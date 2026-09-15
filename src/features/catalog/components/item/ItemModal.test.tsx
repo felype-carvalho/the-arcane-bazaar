@@ -1,0 +1,28 @@
+import { render, screen, within } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
+import { ITEM_FIXTURES } from '../../test/fixtures/items'
+import { ItemModal } from './ItemModal'
+
+describe('ItemModal', () => {
+    it('renders every property with an icon inside a single card', () => {
+        render(<ItemModal item={ITEM_FIXTURES[0]} onClose={vi.fn()} />)
+
+        const dialog = screen.getByRole('dialog', { name: 'Bag of Holding' })
+        const heading = within(dialog).getByRole('heading', { name: 'Properties' })
+        const section = heading.closest('section')
+        const firstProperty = within(section as HTMLElement).getByText('Carries up to 500 lb')
+        const secondProperty = within(section as HTMLElement).getByText('Interior volume of 64 cubic feet')
+        const propertyCard = firstProperty.closest('ul')
+
+        expect(propertyCard).toBe(secondProperty.closest('ul'))
+        expect(propertyCard).toHaveClass('rounded', 'border', 'bg-surface')
+        expect(propertyCard?.querySelectorAll('.lucide-sparkles')).toHaveLength(2)
+    })
+
+    it('hides the properties section when the item has no properties', () => {
+        render(<ItemModal item={{ ...ITEM_FIXTURES[0], properties: [] }} onClose={vi.fn()} />)
+
+        const dialog = screen.getByRole('dialog', { name: 'Bag of Holding' })
+        expect(within(dialog).queryByRole('heading', { name: 'Properties' })).not.toBeInTheDocument()
+    })
+})

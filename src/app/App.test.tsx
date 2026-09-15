@@ -281,7 +281,11 @@ describe('Arcane Bazaar app', () => {
     expect(within(details).getByText('Mundane')).toBeInTheDocument()
 
     await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
-    expect(within(screen.getByRole('dialog', { name: 'Hempen Rope' })).getByText('Mundane')).toBeInTheDocument()
+    const dialog = screen.getByRole('dialog', { name: 'Hempen Rope' })
+    const typeMark = within(dialog).getByText('Mundane')
+    expect(typeMark).toHaveClass('font-medium', 'uppercase', 'tracking-[0.15em]', 'text-slate-400')
+    expect(typeMark.closest('.type-pill')).toBeInTheDocument()
+    expect(within(dialog).queryByText('Available')).not.toBeInTheDocument()
   })
 
   it('loads the catalog and shows an empty state for an unmatched search', async () => {
