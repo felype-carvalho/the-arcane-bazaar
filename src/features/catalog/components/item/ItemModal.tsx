@@ -4,6 +4,7 @@ import type { Item, VariantBaseOption } from '../../types'
 import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 import { DetailFact } from './ItemDetails'
 import { RarityBadge, TypeMark } from './ItemBadges'
+import { ItemCategories } from './ItemCategories'
 
 interface ItemModalProps {
     item: Item
@@ -53,7 +54,7 @@ export function ItemModal({ item, selectedVariantOption, onClose }: ItemModalPro
                         <span className="type-pill"><TypeMark type={item.type} /></span>
                     </div>
                     <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                        <div className="sheet-fact"><Swords size={17} /><DetailFact label="Category" value={item.category} /></div>
+                        <div className="sheet-fact"><Swords size={17} /><DetailFact label="Categories" value={<ItemCategories categories={item.categories} />} /></div>
                         <div className="sheet-fact"><Shield size={17} /><DetailFact label="Subtype" value={item.subtype} /></div>
                         <div className="sheet-fact"><Coins size={17} /><DetailFact label="Base price" value={basePriceFact} /></div>
                         <div className="sheet-fact"><Sparkles size={17} /><DetailFact label="Attunement" value={item.attunement ? 'Required' : 'Not required'} /></div>

@@ -30,6 +30,7 @@ export const CATEGORIES: Category[] = [
     "Trade Good",
     "Vehicle",
     "Weapon",
+    "Wondrous",
 ];
 
 export const CATEGORY_ICONS: Record<Category, string> = {
@@ -60,7 +61,8 @@ export const CATEGORY_ICONS: Record<Category, string> = {
     Service: "🤝",
     "Trade Good": "⚖️",
     Vehicle: "🧭",
-    Other: "🌟",
+    Other: "🧩",
+    Wondrous: "🌟",
 };
 
 const STRUCTURED_TYPES: Array<[Category, ReadonlySet<string>]> = [
@@ -104,6 +106,28 @@ const containsWord = (text: string, words: readonly string[]) =>
 
 export function typeAbbreviation(type: unknown): string {
     return typeof type === "string" ? type.split("|")[0].toUpperCase() : "";
+}
+
+export function orderCategories(primary: Category, categories: Iterable<Category>): Category[] {
+    const memberships = new Set(categories);
+    return [primary, ...CATEGORIES.filter((category) => category !== primary && memberships.has(category))];
+}
+
+export function resolveCategories(entity: JsonRecord, description = ""): Category[] {
+    const primary = resolveCategory(entity, description);
+    const categories = new Set<Category>([primary]);
+    const abbreviation = typeAbbreviation(entity.type);
+    if (entity.tattoo === true) categories.add("Tattoo");
+    if (entity.poison === true) categories.add("Poison");
+    if (entity.staff === true || abbreviation === "RD") categories.add("Staff / Rod");
+    if (entity.weapon === true) categories.add("Weapon");
+    if (entity.armor === true) categories.add("Armor");
+    for (const [category, types] of STRUCTURED_TYPES) {
+        if (types.has(abbreviation)) categories.add(category);
+    }
+    if (Array.isArray(entity.miscTags) && entity.miscTags.includes("CNS")) categories.add("Consumable");
+    if (entity.wondrous === true) categories.add("Wondrous");
+    return orderCategories(primary, categories);
 }
 
 export function resolveCategory(

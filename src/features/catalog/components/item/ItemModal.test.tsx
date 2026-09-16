@@ -4,6 +4,14 @@ import { ITEM_FIXTURES } from '../../test/fixtures/items'
 import { ItemModal } from './ItemModal'
 
 describe('ItemModal', () => {
+    it('shows every category in the complete sheet', () => {
+        render(<ItemModal item={{ ...ITEM_FIXTURES[0], categories: ['Bag/Container', 'Consumable', 'Wondrous'] }} onClose={vi.fn()} />)
+        const categories = screen.getByLabelText('Item categories')
+        expect(within(categories).getByText('Bag/Container')).toBeInTheDocument()
+        expect(within(categories).getByText('Consumable')).toBeInTheDocument()
+        expect(within(categories).getByText('Wondrous')).toBeInTheDocument()
+    })
+
     it('renders every property with an icon inside a single card', () => {
         render(<ItemModal item={ITEM_FIXTURES[0]} onClose={vi.fn()} />)
 
