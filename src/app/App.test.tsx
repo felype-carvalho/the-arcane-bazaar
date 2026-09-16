@@ -145,10 +145,11 @@ describe('Arcane Bazaar app', () => {
         expect(screen.getByLabelText('Search items')).toHaveClass('search-field')
 
         const toggles = [
-            'Item type', 'Rarity', 'Category',
+            'Item type', 'Category',
             // 'Availability',
         ].map((name) => screen.getByRole('button', { name }))
-        expect(toggles.map((toggle) => toggle.getAttribute('aria-expanded'))).toEqual(['true', 'false', 'false'])
+        expect(toggles.map((toggle) => toggle.getAttribute('aria-expanded'))).toEqual(['true', 'false'])
+        expect(screen.queryByRole('button', { name: 'Rarity' })).not.toBeInTheDocument()
 
         await user.click(screen.getByRole('button', { name: 'Category' }))
         expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'true')
@@ -161,11 +162,9 @@ describe('Arcane Bazaar app', () => {
         expect(categoryNames).toEqual(['All', 'Adventuring Gear', 'Weapon'])
         expect(new Set(categoryNames).size).toBe(categoryNames.length)
 
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
         await user.click(screen.getByRole('button', { name: 'Rarity' }))
         const rarityFilter = screen.getByRole('group', { name: 'Rarity' })
-        expect(within(rarityFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.textContent)).toEqual(['None', 'Common'])
-
-        await user.click(screen.getByRole('radio', { name: 'Magic' }))
 
         expect(within(categoryFilter).getAllByRole('button')
             .filter((button) => button.hasAttribute('aria-pressed'))
@@ -214,10 +213,8 @@ describe('Arcane Bazaar app', () => {
         const user = userEvent.setup()
         renderApp()
         await screen.findByRole('table')
-        await user.click(screen.getByRole('button', { name: 'Rarity' }))
         await user.click(screen.getByRole('button', { name: 'Category' }))
 
-        await user.click(screen.getByRole('checkbox', { name: 'None' }))
         await user.click(screen.getByRole('button', { name: 'Adventuring Gear' }))
         expect(screen.getByRole('row', { name: /Hempen Rope/i })).toBeInTheDocument()
 
@@ -228,7 +225,10 @@ describe('Arcane Bazaar app', () => {
         expect(screen.getByRole('button', { name: 'All' })).toHaveAttribute('aria-pressed', 'true')
         expect(screen.getByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
 
+        await user.click(screen.getByRole('button', { name: 'Rarity' }))
+        await user.click(screen.getByRole('checkbox', { name: 'Uncommon' }))
         await user.click(screen.getByRole('radio', { name: 'Mundane' }))
+        expect(screen.queryByRole('button', { name: 'Rarity' })).not.toBeInTheDocument()
         await user.click(screen.getByRole('button', { name: 'Weapon' }))
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
 
@@ -320,6 +320,25 @@ describe('Arcane Bazaar app', () => {
         const row = await screen.findByRole('row', { name: /Vicious Longsword/i })
         await user.click(row)
         expect((await screen.findAllByText('Vicious Longsword')).length).toBeGreaterThan(0)
+    })
+
+    it('changes the number of rows per page and returns to the first page', async () => {
+        const user = userEvent.setup()
+        renderApp()
+        await screen.findByRole('table')
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        const pageSize = screen.getByRole('combobox', { name: 'Items per page' })
+        expect(pageSize).toHaveValue('20')
+        await user.selectOptions(pageSize, '10')
+        expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(11)
+        await user.click(screen.getByRole('button', { name: 'Next page' }))
+        expect(screen.getByRole('button', { name: 'Page 2, current page' })).toBeInTheDocument()
+        await user.selectOptions(pageSize, '50')
+        expect(screen.getByRole('button', { name: 'Page 1, current page' })).toBeInTheDocument()
+        expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(25)
+        expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled()
+        await user.selectOptions(pageSize, '100')
+        expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(25)
     })
 
     it('adds and removes a custom percentage modifier', async () => {

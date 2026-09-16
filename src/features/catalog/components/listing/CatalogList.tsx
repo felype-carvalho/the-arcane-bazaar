@@ -20,6 +20,7 @@ export function formatCatalogItemName(name: string): string {
 }
 
 export function CatalogList({ items, selectedId, sortKey, direction, onSort, onSelect }: CatalogListProps) {
+    const showRarity = items.some((item) => item.type === 'Magic')
     const SortHeader = ({ label, column, className = '' }: { label: string, column: SortKey, className?: string }) => (
         <th className={className} scope="col">
             <button className="table-sort" onClick={() => onSort(column)} aria-label={`Sort by ${label}`}>
@@ -44,10 +45,10 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                 <table className="w-full border-collapse text-left">
                     <thead className="sticky top-0 z-10 bg-panel-strong shadow-[0_1px_0_var(--color-border)]">
                         <tr>
-                            <SortHeader label="Name" column="name" className="w-[40%]" />
+                            <SortHeader label="Name" column="name" className={showRarity ? 'w-[40%]' : 'w-[50%]'} />
                             <SortHeader label="Item type" column="type" className="w-[10%]" />
-                            <SortHeader label="Category" column="category" className="w-[20%]" />
-                            <SortHeader label="Rarity" column="rarity" className="w-[15%]" />
+                            <SortHeader label="Category" column="category" className={showRarity ? 'w-[20%]' : 'w-[25%]'} />
+                            {showRarity && <SortHeader label="Rarity" column="rarity" className="w-[15%]" />}
                             <SortHeader label="Price" column="price" className="w-[15%]" />
                         </tr>
                     </thead>
@@ -69,7 +70,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                                 </td>
                                 <td><TypeMark type={item.type} /></td>
                                 <td className="text-[12px] font-semibold"><ItemCategories categories={item.categories} /></td>
-                                <td><RarityBadge rarity={item.rarity} /></td>
+                                {showRarity && <td><RarityBadge rarity={item.rarity} /></td>}
                                 <td className="font-display text-xs font-semibold text-gold-bright">{item.variantOptions || item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : <CurrencyDisplay valueGp={item.basePriceGp} />}</td>
                             </tr>
                         ))}
@@ -92,7 +93,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                             </span>
                         </span>
                         <span className="flex flex-col items-end gap-2">
-                            <RarityBadge rarity={item.rarity} />
+                            {item.type === 'Magic' && <RarityBadge rarity={item.rarity} />}
                             <span className="font-display text-[10px] font-semibold text-gold-bright">{item.variantOptions || item.basePriceGp == null ? 'Variable' : <CurrencyDisplay valueGp={item.basePriceGp} />}</span>
                         </span>
                     </button>
