@@ -1,14 +1,19 @@
 import type { Category, Item, ItemOrigin, VariantBaseOption } from '../../types'
+import { buildItemGroups } from './build-item-groups'
 import { CATEGORIES, CATEGORY_ICONS, orderCategories } from './categories'
 import { buildVariantFamilies, resolveVariantPriceGp } from './build-variants'
 import { buildEntityIndex, parseUid } from './indexes'
 import { validateItemsBaseFile, validateItemsFile, validateMagicVariantsFile } from './load-json'
-import { normalizeItem, type NormalizationIndexes } from './normalize-item'
+import { normalizeItem, withEffectiveRarity, type NormalizationIndexes } from './normalize-item'
 import type { ItemJsonFiles, ProcessedItemEntity, RawItemEntity, RawItemType } from './raw-types'
 import { createItemEntryIndex } from './resolve-entries'
 import { resolveCopies } from './resolve-copy'
 
 export interface CatalogDiagnostics {
+    groupedMembers: number
+    inferredEvolutionStages: number
+    groupsWithoutOptions: string[]
+    unknownEvolutionStages: string[]
     total: number
     byOrigin: Record<ItemOrigin, number>
     byCategory: Record<Category, number>
@@ -75,6 +80,10 @@ function createDiagnostics(items: Item[], processed: ProcessedItemEntity[], spec
     }))].sort()
 
     return {
+        groupedMembers: 0,
+        inferredEvolutionStages: 0,
+        groupsWithoutOptions: [],
+        unknownEvolutionStages: [],
         total: items.length,
         byOrigin,
         byCategory,
@@ -94,6 +103,7 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
         base: validateItemsBaseFile(input.base),
         variants: validateMagicVariantsFile(input.variants),
     }
+    const resolvedGroups = resolveCopies(files.items.itemGroup, { collectionName: 'itemGroup' })
     const resolvedItems = resolveCopies(files.items.item, { collectionName: 'item' })
     const resolvedTypes = resolveCopies(files.base.itemType, { identityField: 'abbreviation', collectionName: 'itemType' })
     const variantsWithSources = files.variants.magicvariant.map((variant) => ({ ...structuredClone(variant), source: magicVariantSource(variant) }))
@@ -102,7 +112,7 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
     const specificVariants = variantFamilies.flatMap((family) => family.combinations.map((combination) => combination.specific))
     const primaryProcessed: ProcessedItemEntity[] = [
         ...resolvedItems.map((entity) => processEntity(entity, 'item')),
-        ...files.items.itemGroup.map((entity) => processEntity(entity, 'itemGroup')),
+        ...resolvedGroups.map((entity) => processEntity(entity, 'itemGroup')),
         ...files.base.baseitem.map((entity) => processEntity(entity, 'baseitem')),
     ]
     const indexes = buildIndexes(files, resolvedTypes)
@@ -150,24 +160,44 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
             tags: [...new Set([...normalizedGeneric.tags, ...searchableBaseTags])],
         }
     })
-    const items = [...primaryItems, ...genericItems]
+    const candidates = [...primaryItems.filter((item) => item.origin !== 'itemGroup'), ...genericItems]
+    const groups = primaryItems.filter((item) => item.origin === 'itemGroup').map((item, index) => ({ item, entity: resolvedGroups[index] }))
+    const familiesById = new Map(genericItems.map((item, index) => [item.id, variantFamilies[index]]))
+    const grouped = buildItemGroups(groups, candidates, indexes.itemProperties, (item, rarity) => {
+        const family = familiesById.get(item.id)
+        if (!family || !item.variantOptions) return withEffectiveRarity(item, rarity)
+        const repriced = withEffectiveRarity({ ...item, basePriceGp: item.variantPriceGp ?? null }, rarity)
+        const variantPriceGp = repriced.basePriceGp
+        const variantOptions = item.variantOptions.map((option, index): VariantBaseOption => {
+            const effectivePriceGp = resolveVariantPriceGp(family.variant, family.combinations[index].base, option.basePriceGp, variantPriceGp)
+            return {
+                ...option,
+                variantPriceGp: effectivePriceGp != null && option.basePriceGp != null ? effectivePriceGp - option.basePriceGp : variantPriceGp,
+                effectivePriceGp,
+                resolvedItem: { ...withEffectiveRarity(option.resolvedItem, rarity), basePriceGp: effectivePriceGp },
+            }
+        })
+        return { ...repriced, basePriceGp: null, variantPriceGp, variantOptions }
+    })
+    const items = [...candidates.filter((item) => !grouped.incorporatedIds.has(item.id)), ...grouped.items]
 
     const ids = new Map<string, string>()
-    const optionIds = new Set<string>()
     for (const item of items) {
         const existing = ids.get(item.id)
         if (existing) throw new Error(`Catalog ID collision: ${item.id} (${existing} and ${item.name}|${item.source})`)
         ids.set(item.id, `${item.name}|${item.source}`)
-        validateItemCategories(item)
-        for (const option of item.variantOptions ?? []) {
-            validateItemCategories(option.resolvedItem)
-            if (optionIds.has(option.id)) throw new Error(`Variant option ID collision: ${option.id}`)
-            optionIds.add(option.id)
-        }
+        validateItemOptions(item)
     }
 
     const diagnosticProcessed = [...primaryProcessed, ...variantFamilies.map((family) => family.generic), ...specificVariants]
-    options.onDiagnostics?.(createDiagnostics(items, diagnosticProcessed, specificVariants.length, files, options))
+    options.onDiagnostics?.({
+        ...createDiagnostics(items, diagnosticProcessed, specificVariants.length, files, options),
+        groupedMembers: grouped.groupedMembers,
+        inferredEvolutionStages: grouped.inferredEvolutionStages,
+        groupsWithoutOptions: grouped.groupsWithoutOptions,
+        unresolvedReferences: grouped.unresolvedReferences,
+        unknownEvolutionStages: grouped.unknownEvolutionStages,
+    })
     return items
 }
 
@@ -179,5 +209,18 @@ function validateItemCategories(item: Item): void {
         || new Set(item.categories).size !== item.categories.length
         || item.categories.some((category) => !CATEGORIES.includes(category))) {
         throw new Error(`Invalid categories for ${item.name}|${item.source}`)
+    }
+}
+
+function validateItemOptions(item: Item, depth = 0): void {
+    validateItemCategories(item)
+    if (depth > 2 || (depth > 0 && item.groupOptions)) throw new Error('Invalid catalog option depth')
+    for (const options of [item.groupOptions ?? [], item.variantOptions ?? []]) {
+        const ids = new Set<string>()
+        for (const option of options) {
+            if (ids.has(option.id)) throw new Error('Catalog option ID collision: ' + option.id)
+            ids.add(option.id)
+            validateItemOptions(option.resolvedItem, depth + 1)
+        }
     }
 }

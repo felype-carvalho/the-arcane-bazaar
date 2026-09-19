@@ -174,6 +174,7 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         subtype,
         availability: deriveAvailability(rarity),
         basePriceGp: deriveBasePriceGp(entity, rarity),
+        hasExplicitPrice: typeof entity.value === 'number' && Number.isFinite(entity.value) && entity.value >= 0,
         weight: formatWeight(entity.weight),
         description,
         properties: unique([...entryLines.slice(1), ...auxiliary.properties]),
@@ -182,5 +183,14 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         source: entity.source,
         edition: entity._catalogEdition as ItemEdition,
         origin: entity._catalogOrigin,
+    }
+}
+
+export function withEffectiveRarity(item: Item, rarity: Rarity): Item {
+    return {
+        ...item,
+        rarity,
+        availability: deriveAvailability(rarity),
+        basePriceGp: item.hasExplicitPrice ? item.basePriceGp : FALLBACK_PRICE_GP[rarity] ?? null,
     }
 }

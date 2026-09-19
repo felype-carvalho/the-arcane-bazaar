@@ -18,6 +18,7 @@ import { SourceChip } from '../item/SourceChip'
 interface PriceCalculatorProps {
     item: Item
     effectiveItem?: Item
+    pendingSelection?: 'groupOption' | 'baseItem'
     selectedOption?: VariantBaseOption
     modifiers: PricingModifiers
     setModifiers: Dispatch<SetStateAction<PricingModifiers>>
@@ -29,12 +30,12 @@ function PriceValue({ value }: { value: number | null | undefined }) {
     return value == null ? <span className="text-muted">Variable</span> : <CurrencyDisplay valueGp={value} />
 }
 
-export function PriceCalculator({ item, effectiveItem, selectedOption, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
+export function PriceCalculator({ item, effectiveItem, pendingSelection, selectedOption, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
     const [customName, setCustomName] = useState('')
     const [customPercent, setCustomPercent] = useState('')
     const manualValue = manualPrice === '' ? null : Number(manualPrice)
-    const requiresBaseSelection = Boolean(item.variantOptions)
-    const pricingItem = requiresBaseSelection ? effectiveItem : item
+    const pending = pendingSelection ?? (!effectiveItem && item.variantOptions ? 'baseItem' : undefined)
+    const pricingItem = pending ? undefined : effectiveItem ?? item
     const result = pricingItem ? calculatePricing(pricingItem, modifiers, manualValue) : null
 
     const addModifier = () => {
@@ -77,7 +78,7 @@ export function PriceCalculator({ item, effectiveItem, selectedOption, modifiers
             )}
 
             {!pricingItem ? (
-                <div className="mt-5 rounded border border-gold/20 bg-gold/5 p-3 text-[11px] leading-5 text-amber-100/70">Select a base item to calculate this variant's price.</div>
+                <div className="mt-5 rounded border border-gold/20 bg-gold/5 p-3 text-[11px] leading-5 text-amber-100/70">{pending === 'groupOption' ? 'Select an item version to calculate its price.' : "Select a base item to calculate this variant's price."}</div>
             ) : result ? (
                 <div className="mt-5">
                     <output className="base-price-card" aria-label="Base price">

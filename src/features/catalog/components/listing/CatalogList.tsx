@@ -71,7 +71,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                                 <td><TypeMark type={item.type} /></td>
                                 <td className="text-[12px] font-semibold"><ItemCategories categories={item.categories} /></td>
                                 {showRarity && <td><RarityBadge rarity={item.rarity} /></td>}
-                                <td className="font-display text-xs font-semibold text-gold-bright">{item.variantOptions || item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : <CurrencyDisplay valueGp={item.basePriceGp} />}</td>
+                                <td className="font-display text-xs font-semibold text-gold-bright">{item.groupOptions || item.variantOptions || item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : <CurrencyDisplay valueGp={item.basePriceGp} />}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -94,7 +94,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                         </span>
                         <span className="flex flex-col items-end gap-2">
                             {item.type === 'Magic' && <RarityBadge rarity={item.rarity} />}
-                            <span className="font-display text-[10px] font-semibold text-gold-bright">{item.variantOptions || item.basePriceGp == null ? 'Variable' : <CurrencyDisplay valueGp={item.basePriceGp} />}</span>
+                            <span className="font-display text-[10px] font-semibold text-gold-bright">{item.groupOptions || item.variantOptions || item.basePriceGp == null ? 'Variable' : <CurrencyDisplay valueGp={item.basePriceGp} />}</span>
                         </span>
                     </button>
                 ))}

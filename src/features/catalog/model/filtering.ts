@@ -22,6 +22,7 @@ export function getAvailableFilterOptions(items: readonly Item[], type: ItemType
     for (const item of items) {
         if (item.type !== type) continue
         rarities.add(item.rarity)
+        for (const rarity of item.availableRarities ?? []) rarities.add(rarity)
         sources.add(normalizeSource(item.source))
         for (const category of item.categories) categories.add(category)
     }
@@ -39,7 +40,7 @@ export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey:
     const filtered = items.filter((item) => {
         if (query && !item.name.toLocaleLowerCase().includes(query) && !item.tags.some((tag) => tag.toLocaleLowerCase().includes(query))) return false
         if (filters.types.length && !filters.types.includes(item.type)) return false
-        if (filters.rarities.length && !filters.rarities.includes(item.rarity)) return false
+        if (filters.rarities.length && !filters.rarities.includes(item.rarity) && !item.availableRarities?.some((rarity) => filters.rarities.includes(rarity))) return false
         if (filters.categories.length && !item.categories.some((category) => filters.categories.includes(category))) return false
         if (sources.size && !sources.has(normalizeSource(item.source))) return false
         // if (filters.availabilities.length && !filters.availabilities.includes(item.availability)) return false

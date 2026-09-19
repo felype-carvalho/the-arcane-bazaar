@@ -4,70 +4,86 @@ import type { Item, VariantBaseOption } from '../types'
 import { applySourceSelection } from './content-visibility'
 
 const modernItem: Item = {
-  ...ITEM_FIXTURES[0],
-  id: 'modern-item',
-  name: 'Modern Item',
-  source: 'XDMG',
-  edition: 'one',
+    ...ITEM_FIXTURES[0],
+    id: 'modern-item',
+    name: 'Modern Item',
+    source: 'XDMG',
+    edition: 'one',
 }
 
 function variantOption(id: string, baseSource: string): VariantBaseOption {
-  return {
-    id,
-    baseItemId: `${id}-base`,
-    baseName: `${id} base`,
-    baseSource,
-    basePriceGp: 10,
-    variantPriceGp: 100,
-    effectivePriceGp: 110,
-    resolvedItem: { ...modernItem, id: `${id}-resolved` },
-  }
+    return {
+        id,
+        baseItemId: `${id}-base`,
+        baseName: `${id} base`,
+        baseSource,
+        basePriceGp: 10,
+        variantPriceGp: 100,
+        effectivePriceGp: 110,
+        resolvedItem: { ...modernItem, id: `${id}-resolved` },
+    }
 }
 
 describe('source selection visibility', () => {
-  it('keeps only selected item sources without case sensitivity', () => {
-    const legacyItem = { ...ITEM_FIXTURES[0], id: 'legacy-item', source: 'DMG' }
+    it('keeps only selected item sources without case sensitivity', () => {
+        const legacyItem = { ...ITEM_FIXTURES[0], id: 'legacy-item', source: 'DMG' }
 
-    expect(applySourceSelection([legacyItem, modernItem], ['xdmg'])).toEqual([modernItem])
-    expect(applySourceSelection([legacyItem, modernItem], ['DMG', 'XDMG'])).toHaveLength(2)
-    expect(applySourceSelection([legacyItem, modernItem], [])).toEqual([])
-  })
+        expect(applySourceSelection([legacyItem, modernItem], ['xdmg'])).toEqual([modernItem])
+        expect(applySourceSelection([legacyItem, modernItem], ['DMG', 'XDMG'])).toHaveLength(2)
+        expect(applySourceSelection([legacyItem, modernItem], [])).toEqual([])
+    })
 
-  it('filters base options without mutating the original variant', () => {
-    const variant: Item = {
-      ...modernItem,
-      id: 'mixed-variant',
-      origin: 'genericVariant',
-      variantOptions: [variantOption('legacy', 'PHB'), variantOption('modern', 'XPHB')],
-    }
-    const snapshot = structuredClone(variant)
+    it('filters base options without mutating the original variant', () => {
+        const variant: Item = {
+            ...modernItem,
+            id: 'mixed-variant',
+            origin: 'genericVariant',
+            variantOptions: [variantOption('legacy', 'PHB'), variantOption('modern', 'XPHB')],
+        }
+        const snapshot = structuredClone(variant)
 
-    const result = applySourceSelection([variant], ['XDMG', 'XPHB'])
+        const result = applySourceSelection([variant], ['XDMG', 'XPHB'])
 
-    expect(result[0].variantOptions?.map((option) => option.id)).toEqual(['modern'])
-    expect(result[0]).not.toBe(variant)
-    expect(variant).toEqual(snapshot)
-  })
+        expect(result[0].variantOptions?.map((option) => option.id)).toEqual(['modern'])
+        expect(result[0]).not.toBe(variant)
+        expect(variant).toEqual(snapshot)
+    })
 
-  it('removes a generic variant when every compatible base is deselected', () => {
-    const variant: Item = {
-      ...modernItem,
-      id: 'unavailable-variant',
-      origin: 'genericVariant',
-      variantOptions: [variantOption('legacy', 'PHB')],
-    }
+    it('removes a generic variant when every compatible base is deselected', () => {
+        const variant: Item = {
+            ...modernItem,
+            id: 'unavailable-variant',
+            origin: 'genericVariant',
+            variantOptions: [variantOption('legacy', 'PHB')],
+        }
 
-    expect(applySourceSelection([variant], ['XDMG'])).toEqual([])
-  })
+        expect(applySourceSelection([variant], ['XDMG'])).toEqual([])
+    })
 
-  it('removes a variant when its own source is deselected even if a base remains selected', () => {
-    const variant: Item = {
-      ...modernItem,
-      id: 'deselected-variant',
-      origin: 'genericVariant',
-      variantOptions: [variantOption('modern', 'XPHB')],
-    }
+    it('removes a variant when its own source is deselected even if a base remains selected', () => {
+        const variant: Item = {
+            ...modernItem,
+            id: 'deselected-variant',
+            origin: 'genericVariant',
+            variantOptions: [variantOption('modern', 'XPHB')],
+        }
 
-    expect(applySourceSelection([variant], ['XPHB'])).toEqual([])
-  })
+        expect(applySourceSelection([variant], ['XPHB'])).toEqual([])
+    })
+})
+
+
+it('filters group members and compatible bases immutably at both levels', () => {
+    const group: Item = { ...modernItem, groupOptions: [
+        { id: 'variant', label: 'Variant', source: 'DMG', kind: 'member', rarityOrigin: 'explicit', resolvedItem: { ...modernItem, source: 'DMG', rarity: 'Rare', variantOptions: [variantOption('legacy', 'PHB'), variantOption('modern', 'XPHB')] } },
+        { id: 'member', label: 'Member', source: 'AU', kind: 'member', rarityOrigin: 'explicit', resolvedItem: { ...modernItem, source: 'AU' } },
+    ] }
+    const before = structuredClone(group)
+    const visible = applySourceSelection([group], ['XDMG', 'DMG', 'XPHB'])
+    expect(visible[0].groupOptions).toHaveLength(1)
+    expect(visible[0].groupOptions?.[0].resolvedItem.variantOptions?.map((option) => option.id)).toEqual(['modern'])
+    expect(visible[0].availableRarities).toEqual(['Rare'])
+    expect(applySourceSelection([group], ['XDMG', 'DMG'])).toEqual([])
+    expect(applySourceSelection([group], ['DMG', 'XPHB'])).toEqual([])
+    expect(group).toEqual(before)
 })

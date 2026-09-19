@@ -116,3 +116,12 @@ describe('filterAndSortItems', () => {
         expect(items).toEqual(snapshot)
     })
 })
+
+
+it('discovers a group through member names and rarities without duplicating rows or facets', () => {
+    const group: Item = { ...ITEM_FIXTURES[0], rarity: 'Varies', availableRarities: ['Common', 'Rare'], tags: ['cantrip', '5th level'] }
+    expect(filterAndSortItems([group], { ...EMPTY_FILTERS, search: 'Cantrip', rarities: ['Common'] }, 'name', 'asc')).toEqual([group])
+    expect(filterAndSortItems([group], { ...EMPTY_FILTERS, rarities: ['Varies'] }, 'name', 'asc')).toEqual([group])
+    expect(filterAndSortItems([group], { ...EMPTY_FILTERS, rarities: ['Legendary'] }, 'name', 'asc')).toEqual([])
+    expect(getAvailableFilterOptions([group, group], 'Magic').rarities).toEqual(['Common', 'Rare', 'Varies'])
+})

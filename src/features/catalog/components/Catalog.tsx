@@ -4,6 +4,7 @@ import { getItems } from '../api/catalog'
 import { applySourceSelection } from '../model/content-visibility'
 import { ALL_SOURCE_CODES, normalizeSource } from '../model/sources'
 import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '../model/filtering'
+import { resolveItemSelection } from '../model/items/resolve-item-selection'
 import { DEFAULT_MODIFIERS } from '../model/pricing'
 import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../types'
 import { FilterPanel, type FilterGroup } from './filters/FilterPanel'
@@ -30,7 +31,8 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     const [page, setPage] = useState(1)
     const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
     const [selected, setSelected] = useState<Item | null>(null)
-    const [selectedVariantOptionId, setSelectedVariantOptionId] = useState('')
+    const [selectedGroupOptionId, setSelectedGroupOptionId] = useState('')
+    const [selectedBaseOptionId, setSelectedBaseOptionId] = useState('')
     const [modalItem, setModalItem] = useState<Item | null>(null)
     const [filtersOpen, setFiltersOpen] = useState(false)
     const [detailsOpen, setDetailsOpen] = useState(false)
@@ -42,8 +44,8 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }, [])
 
     useEffect(() => { setPage(1) }, [filters, sortKey, direction])
-    useEffect(() => { setManualPrice(''); setModifiers(DEFAULT_MODIFIERS); setSelectedVariantOptionId('') }, [selected?.id])
-    useEffect(() => { setManualPrice('') }, [selectedVariantOptionId])
+    useEffect(() => { setManualPrice(''); setModifiers(DEFAULT_MODIFIERS); setSelectedGroupOptionId(''); setSelectedBaseOptionId('') }, [selected?.id])
+    useEffect(() => { setManualPrice('') }, [selectedGroupOptionId, selectedBaseOptionId])
     useEffect(() => {
         const shouldLock = Boolean(modalItem) || filtersOpen || detailsOpen
         document.body.style.overflow = shouldLock ? 'hidden' : ''
@@ -57,10 +59,13 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     const totalPages = Math.ceil(filtered.length / pageSize)
     const safePage = Math.min(page, Math.max(totalPages, 1))
     const pageItems = filtered.slice((safePage - 1) * pageSize, safePage * pageSize)
-    const selectedVariantOption = useMemo(
-        () => selected?.variantOptions?.find((option) => option.id === selectedVariantOptionId),
-        [selected, selectedVariantOptionId],
-    )
+    const selection = selected ? resolveItemSelection(selected, selectedGroupOptionId, selectedBaseOptionId) : undefined
+    const selectedVariantOption = selection?.selectedBaseOption
+    const selectGroupOption = (optionId: string) => {
+        setSelectedGroupOptionId(optionId)
+        setSelectedBaseOptionId('')
+        setManualPrice('')
+    }
 
     useEffect(() => {
         setSelected((current) => {
@@ -70,10 +75,14 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }, [filtered])
 
     useEffect(() => {
-        if (selectedVariantOptionId && !selected?.variantOptions?.some((option) => option.id === selectedVariantOptionId)) {
-            setSelectedVariantOptionId('')
+        if (selectedGroupOptionId && !selection?.selectedGroupOption) {
+            setSelectedGroupOptionId('')
+            setSelectedBaseOptionId('')
+        } else if (selectedBaseOptionId && !selection?.selectedBaseOption) {
+            setSelectedBaseOptionId('')
         }
-    }, [selected, selectedVariantOptionId])
+        setModalItem(null)
+    }, [selected, selectedGroupOptionId, selectedBaseOptionId, selection?.selectedGroupOption, selection?.selectedBaseOption])
 
     useEffect(() => {
         const availableRarities = new Set(availableFilterOptions.rarities)
@@ -176,7 +185,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
                 </main>
 
                 <div className="hidden w-[360px] shrink-0 border-l border-border xl:block">
-                    {selected ? <ItemDetails item={selected} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedVariantOptionId} onOpenModal={setModalItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /> : <div className="grid h-full place-items-center text-sm text-muted">Select an item</div>}
+                    {selected ? <ItemDetails item={selected} selectedGroupOption={selection?.selectedGroupOption} onGroupOptionSelect={selectGroupOption} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedBaseOptionId} onOpenModal={setModalItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /> : <div className="grid h-full place-items-center text-sm text-muted">Select an item</div>}
                 </div>
             </div>
 
@@ -188,11 +197,11 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
 
             {detailsOpen && selected && (
                 <div className="drawer-backdrop xl:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setDetailsOpen(false) }}>
-                    <div className="drawer right"><ItemDetails item={selected} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedVariantOptionId} onClose={() => setDetailsOpen(false)} onOpenModal={setModalItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /></div>
+                    <div className="drawer right"><ItemDetails item={selected} selectedGroupOption={selection?.selectedGroupOption} onGroupOptionSelect={selectGroupOption} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedBaseOptionId} onClose={() => setDetailsOpen(false)} onOpenModal={setModalItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /></div>
                 </div>
             )}
 
-            {modalItem && <ItemModal item={modalItem} selectedVariantOption={selectedVariantOption} onClose={() => setModalItem(null)} />}
+            {modalItem && <ItemModal configurationSummary={selection?.configurationSummary} item={modalItem} selectedVariantOption={selectedVariantOption} onClose={() => setModalItem(null)} />}
             <button className="help-button" aria-label="About this prototype" title="Prices are a campaign aid, not official rules"><CircleHelp size={18} /></button>
         </>
     )

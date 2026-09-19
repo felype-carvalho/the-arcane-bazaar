@@ -34,3 +34,13 @@ describe('ItemModal', () => {
         expect(within(dialog).queryByRole('heading', { name: 'Properties' })).not.toBeInTheDocument()
     })
 })
+
+
+it('shows a neutral configuration summary and the effective stage data', () => {
+    render(<ItemModal item={{ ...ITEM_FIXTURES[0], name: 'Pulverizing Staff of Skulls', rarity: 'Very Rare', basePriceGp: 40000 }} configurationSummary="Pulverizing" onClose={vi.fn()} />)
+    const dialog = screen.getByRole('dialog', { name: 'Pulverizing Staff of Skulls' })
+    expect(within(dialog).getByText('Very Rare')).toBeInTheDocument()
+    expect(within(dialog).getByText('Configuration: Pulverizing')).toBeInTheDocument()
+    expect(within(dialog).queryByText(/Configured with/)).not.toBeInTheDocument()
+    expect(within(dialog).getByText('40,000 GP')).toBeInTheDocument()
+})

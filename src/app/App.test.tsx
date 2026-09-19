@@ -1,9 +1,10 @@
 import { render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter, useLocation } from 'react-router-dom'
 import { formatSourceTitle } from '@/features/catalog/components/item/SourceChip'
 import App from './App'
+import { Catalog } from '@/features/catalog/components/Catalog'
 
 function LocationDisplay() {
     const location = useLocation()
@@ -18,6 +19,8 @@ function renderApp(initialEntries = ['/catalog']) {
         </MemoryRouter>,
     )
 }
+
+const testCatalogState = vi.hoisted(() => ({ includeGroups: false }))
 
 vi.mock('@/features/catalog/api/catalog', async () => {
     const { ITEM_FIXTURES } = await import('@/features/catalog/test/fixtures/items')
@@ -92,8 +95,14 @@ vi.mock('@/features/catalog/api/catalog', async () => {
         tags: [...ITEM_FIXTURES[0].tags],
         properties: [...ITEM_FIXTURES[0].properties],
     }
+    const { buildCatalog } = await import('@/features/catalog/model/items/build-catalog')
+    const { default: items } = await import('@/features/catalog/data/items.json')
+    const { default: base } = await import('@/features/catalog/data/items-base.json')
+    const { default: variants } = await import('@/features/catalog/data/magicvariants.json')
+    const groups = buildCatalog({ items, base, variants } as unknown as import('@/features/catalog/model/items/raw-types').ItemJsonFiles)
+        .filter((item) => item.origin === 'itemGroup' && ['Spellwrought Tattoo', 'Staff of Skulls', "Dragon's Wrath Weapon"].includes(item.name))
     const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, modernItem, genericVariant, ...filler]
-    return { getItems: () => Promise.resolve(catalog.map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
+    return { getItems: () => Promise.resolve([...catalog, ...(testCatalogState.includeGroups ? groups : [])].map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
 
 describe('Arcane Bazaar app', () => {
@@ -410,14 +419,7 @@ describe('Arcane Bazaar app', () => {
 
         const details = (await screen.findAllByLabelText('Test Weapon Variant details'))[0]
         expect(within(details).getByText("Select a base item to calculate this variant's price.")).toBeInTheDocument()
-        await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
-
-        const genericDialog = screen.getByRole('dialog', { name: 'Test Weapon Variant' })
-        expect(within(genericDialog).getByText('The magic available before choosing a base weapon.')).toBeInTheDocument()
-        expect(within(genericDialog).getByText('Variant-only property')).toBeInTheDocument()
-        expect(within(genericDialog).getByText('generic-variant')).toBeInTheDocument()
-        expect(within(genericDialog).getByText('400 GP')).toBeInTheDocument()
-        await user.click(within(genericDialog).getByRole('button', { name: 'Close item sheet' }))
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
 
         const baseSelector = within(details).getByRole('combobox', { name: 'Compatible base item' })
         await user.selectOptions(baseSelector, 'enchanted-longsword')
@@ -443,7 +445,7 @@ describe('Arcane Bazaar app', () => {
         expect(within(resolvedDialog).getByText('resolved-variant')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText('Required')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText('415 GP')).toBeInTheDocument()
-        expect(within(resolvedDialog).getByText(/Configured with/)).toHaveTextContent('Configured with Longsword from PHB.')
+        expect(within(resolvedDialog).getByText(/Configuration:/)).toHaveTextContent('Longsword (PHB)')
         await user.click(within(resolvedDialog).getByRole('button', { name: 'Close item sheet' }))
 
         await user.clear(search)
@@ -487,5 +489,88 @@ describe('Arcane Bazaar app', () => {
         await waitFor(() => expect(persistedChip).toHaveAttribute('aria-pressed', 'true'))
         expect(await screen.findByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
         expect(screen.getByText('Local data reset to defaults.')).toBeInTheDocument()
+    })
+})
+
+
+describe('group configuration flows', () => {
+    beforeEach(() => { testCatalogState.includeGroups = true })
+    afterEach(() => { testCatalogState.includeGroups = false })
+
+    it('clears a hidden base selection and does not restore it when its source returns', async () => {
+        const user = userEvent.setup()
+        const { rerender } = render(<Catalog selectedSources={['FTD', 'PHB', 'XPHB']} />)
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        const details = (await screen.findAllByLabelText("Dragon's Wrath Weapon details"))[0]
+        const selector = within(details).getByRole('combobox', { name: 'Item version' })
+        await user.selectOptions(selector, (within(selector).getByRole('option', { name: /Wakened/ }) as HTMLOptionElement).value)
+        const baseSelector = within(details).getByRole('combobox', { name: 'Compatible base item' })
+        const longsword = within(baseSelector).getByRole('option', { name: /Longsword.*PHB'24/ }) as HTMLOptionElement
+        await user.selectOptions(baseSelector, longsword.value)
+        expect(within(details).getByLabelText('Base price')).toBeInTheDocument()
+        rerender(<Catalog selectedSources={['FTD', 'PHB']} />)
+        await waitFor(() => expect(screen.queryAllByLabelText('Base price')).toHaveLength(0))
+        rerender(<Catalog selectedSources={['FTD', 'PHB', 'XPHB']} />)
+        await waitFor(() => expect(screen.getAllByRole('combobox', { name: 'Item version' })[0]).toHaveValue(''))
+        expect(screen.queryAllByRole('combobox', { name: 'Compatible base item' })).toHaveLength(0)
+        expect(screen.queryAllByLabelText('Base price')).toHaveLength(0)
+    })
+    it('updates tattoo rarity, price and sheet in both detail panels and clears choices when changing groups', async () => {
+        const user = userEvent.setup()
+        renderApp()
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        const search = screen.getAllByLabelText('Search items')[0]
+        await user.type(search, 'Spellwrought Tattoo')
+        const row = await screen.findByRole('row', { name: /Spellwrought Tattoo/i })
+        await user.click(row)
+        const details = screen.getAllByLabelText('Spellwrought Tattoo details')[0]
+        expect(within(details).getByText('Varies')).toBeInTheDocument()
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
+        expect(within(details).queryByLabelText('Manual base price (GP)')).not.toBeInTheDocument()
+        const selector = within(details).getByRole('combobox', { name: 'Item version' })
+        const option = within(selector).getByRole('option', { name: /5th Level/ }) as HTMLOptionElement
+        await user.selectOptions(selector, option.value)
+        for (const panel of screen.getAllByLabelText('Spellwrought Tattoo (5th Level) details')) {
+            expect(within(panel).getByText('Rare')).toBeInTheDocument()
+            expect(within(panel).getByLabelText('Base price')).toHaveTextContent('4,000 GP')
+        }
+        await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
+        const dialog = screen.getByRole('dialog', { name: 'Spellwrought Tattoo (5th Level)' })
+        expect(within(dialog).getByText('Rare')).toBeInTheDocument()
+        expect(within(dialog).getByText(/Configuration:/)).toHaveTextContent('5th Level')
+        await user.keyboard('{Escape}')
+        await user.clear(search)
+        await user.type(search, 'Staff of Skulls')
+        const staff = screen.getAllByLabelText('Staff of Skulls details')[0]
+        const stages = within(staff).getByRole('combobox', { name: 'Evolution stage' })
+        expect(stages).toHaveValue('')
+        expect(within(stages).getByRole('option', { name: /Initial.*Common.*inferred/ })).toBeInTheDocument()
+        await user.selectOptions(stages, (within(stages).getByRole('option', { name: /Pulverizing/ }) as HTMLOptionElement).value)
+        expect(within(staff).getByText('Very Rare')).toBeInTheDocument()
+    })
+
+    it('requires a dragon stage and base and resets the base when switching stages', async () => {
+        const user = userEvent.setup()
+        renderApp()
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        await user.type(screen.getAllByLabelText('Search items')[0], "Dragon's Wrath Weapon")
+        const details = (await screen.findAllByLabelText("Dragon's Wrath Weapon details"))[0]
+        const selector = within(details).getByRole('combobox', { name: 'Item version' })
+        expect(within(details).queryByRole('combobox', { name: 'Compatible base item' })).not.toBeInTheDocument()
+        await user.selectOptions(selector, (within(selector).getByRole('option', { name: /Wakened/ }) as HTMLOptionElement).value)
+        const baseSelector = within(details).getByRole('combobox', { name: 'Compatible base item' })
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
+        const longsword = within(baseSelector).getAllByRole('option', { name: /^Longsword/ })[0] as HTMLOptionElement
+        await user.selectOptions(baseSelector, longsword.value)
+        expect(within(details).getByRole('heading', { name: "Wakened Dragon's Wrath Longsword" })).toBeInTheDocument()
+        expect(within(details).getByLabelText('Base price')).toBeInTheDocument()
+        await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
+        expect(within(screen.getByRole('dialog')).getByText(/Configuration:/)).toHaveTextContent('Longsword')
+        await user.keyboard('{Escape}')
+        await user.selectOptions(selector, (within(selector).getByRole('option', { name: /Stirring/ }) as HTMLOptionElement).value)
+        expect(baseSelector).toHaveValue('')
+        expect(within(details).queryByLabelText('Base price')).not.toBeInTheDocument()
+        expect(within(details).getByText('Rare')).toBeInTheDocument()
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
     })
 })

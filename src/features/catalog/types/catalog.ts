@@ -53,8 +53,23 @@ export interface Item {
     source: string
     edition: ItemEdition
     origin: ItemOrigin
+    groupOptions?: ItemGroupOption[]
+    availableRarities?: Rarity[]
+    hasExplicitPrice?: boolean
     variantPriceGp?: number | null
     variantOptions?: VariantBaseOption[]
+}
+
+export type GroupOptionKind = 'member' | 'inferredInitialStage'
+export type RarityOrigin = 'explicit' | 'inherited' | 'inferred' | 'unknown'
+
+export interface ItemGroupOption {
+    id: string
+    label: string
+    source: string
+    kind: GroupOptionKind
+    rarityOrigin: RarityOrigin
+    resolvedItem: Item
 }
 
 export interface VariantBaseOption {

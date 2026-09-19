@@ -8,17 +8,16 @@ import { ItemCategories } from './ItemCategories'
 
 interface ItemModalProps {
     item: Item
+    configurationSummary?: string
     selectedVariantOption?: VariantBaseOption
     onClose: () => void
 }
 
-export function ItemModal({ item, selectedVariantOption, onClose }: ItemModalProps) {
+export function ItemModal({ item, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
     const dialogRef = useRef<HTMLDivElement>(null)
     const displayedPrice = item.basePriceGp ?? item.variantPriceGp
     const basePriceFact = displayedPrice == null ? 'Variable' : <CurrencyDisplay valueGp={displayedPrice} />
 
-    console.log(item)
-    console.log(selectedVariantOption)
 
     useEffect(() => {
         const previous = document.activeElement as HTMLElement | null
@@ -60,7 +59,8 @@ export function ItemModal({ item, selectedVariantOption, onClose }: ItemModalPro
                         <div className="sheet-fact"><Sparkles size={17} /><DetailFact label="Attunement" value={item.attunement ? 'Required' : 'Not required'} /></div>
                     </div>
                     <p className="mt-6 w-full text-sm leading-7 text-cream">{item.description}</p>
-                    {selectedVariantOption && <p className="mt-4 text-xs text-muted">Configured with <span className="font-display text-gold">{selectedVariantOption.baseName}</span> from {selectedVariantOption.baseSource}.</p>}
+                    {configurationSummary && <p className="mt-4 text-xs text-muted">Configuration: {configurationSummary}</p>}
+                    {!configurationSummary && selectedVariantOption && <p className="mt-4 text-xs text-muted">Configured with <span className="font-display text-gold">{selectedVariantOption.baseName}</span> from {selectedVariantOption.baseSource}.</p>}
                     {item.properties.length > 0 && (
                         <section className="mt-8 border-t border-border pt-6">
                             <h3 className="font-display text-sm uppercase tracking-[0.12em] text-gold">Properties</h3>

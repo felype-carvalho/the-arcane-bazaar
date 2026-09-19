@@ -13,6 +13,11 @@ function reportDiagnostics(diagnostics: CatalogDiagnostics): void {
         byCategoryMembership: diagnostics.byCategoryMembership,
         otherPercent: Number(diagnostics.otherPercent.toFixed(2)),
         unknownTypes: diagnostics.unknownTypes,
+        groupedMembers: diagnostics.groupedMembers,
+        inferredEvolutionStages: diagnostics.inferredEvolutionStages,
+        groupsWithoutOptions: diagnostics.groupsWithoutOptions,
+        unresolvedReferences: diagnostics.unresolvedReferences,
+        unknownEvolutionStages: diagnostics.unknownEvolutionStages,
     })
 }
 
