@@ -60,7 +60,7 @@ export const CATEGORY_ICONS: Record<Category, string> = {
     Poison: "⚗️",
     Service: "🤝",
     "Trade Good": "⚖️",
-    Vehicle: "🧭",
+    Vehicle: "🚂",
     Other: "🧩",
     Wondrous: "🌟",
 };

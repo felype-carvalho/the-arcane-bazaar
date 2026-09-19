@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { CircleHelp, Filter, Menu, Sparkles } from 'lucide-react'
 import { getItems } from '../api/catalog'
 import { applySourceSelection } from '../model/content-visibility'
-import { ALL_SOURCE_CODES } from '../model/sources'
+import { ALL_SOURCE_CODES, normalizeSource } from '../model/sources'
 import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '../model/filtering'
 import { DEFAULT_MODIFIERS } from '../model/pricing'
 import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../types'
@@ -78,12 +78,14 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     useEffect(() => {
         const availableRarities = new Set(availableFilterOptions.rarities)
         const availableCategories = new Set(availableFilterOptions.categories)
+        const availableSources = new Set(availableFilterOptions.sources)
 
         setFilters((current) => {
             const rarities = current.rarities.filter((rarity) => availableRarities.has(rarity))
             const categories = current.categories.filter((category) => availableCategories.has(category))
-            if (rarities.length === current.rarities.length && categories.length === current.categories.length) return current
-            return { ...current, rarities, categories }
+            const sources = current.sources.filter((source) => availableSources.has(normalizeSource(source)))
+            if (rarities.length === current.rarities.length && categories.length === current.categories.length && sources.length === current.sources.length) return current
+            return { ...current, rarities, categories, sources }
         })
     }, [availableFilterOptions])
 
@@ -98,12 +100,14 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
         const available = getAvailableFilterOptions(visibleItems, type)
         const rarities = new Set(available.rarities)
         const categories = new Set(available.categories)
+        const sources = new Set(available.sources)
 
         setFilters((current) => ({
             ...current,
             types: [type],
             rarities: current.rarities.filter((rarity) => rarities.has(rarity)),
             categories: current.categories.filter((category) => categories.has(category)),
+            sources: current.sources.filter((source) => sources.has(normalizeSource(source))),
         }))
     }
 
@@ -123,6 +127,17 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
         if (window.innerWidth < 1280) setDetailsOpen(true)
     }
 
+    const selectSource = (source: string) => {
+        setFilters((current) => {
+            if (source === 'All') return current.sources.length ? { ...current, sources: [] } : current
+            const normalizedSource = normalizeSource(source)
+            const sources = current.sources.some((entry) => normalizeSource(entry) === normalizedSource)
+                ? current.sources.filter((entry) => normalizeSource(entry) !== normalizedSource)
+                : [...current.sources, normalizedSource]
+            return { ...current, sources }
+        })
+    }
+
     const sort = (key: SortKey) => {
         if (key === sortKey) setDirection((current) => current === 'asc' ? 'desc' : 'asc')
         else { setSortKey(key); setDirection('asc') }
@@ -137,7 +152,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
         <>
             <div className="flex min-h-0 flex-1">
                 <div className="hidden w-[242px] shrink-0 border-r border-border lg:block">
-                    <FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onClear={() => setFilters(INITIAL_FILTERS)} />
+                    <FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => setFilters(INITIAL_FILTERS)} />
                 </div>
 
                 <main className="flex min-w-0 flex-1 flex-col bg-catalog">
@@ -167,7 +182,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
 
             {filtersOpen && (
                 <div className="drawer-backdrop lg:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setFiltersOpen(false) }}>
-                    <div className="drawer left"><FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onClear={() => setFilters(INITIAL_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
+                    <div className="drawer left"><FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => setFilters(INITIAL_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
                 </div>
             )}
 

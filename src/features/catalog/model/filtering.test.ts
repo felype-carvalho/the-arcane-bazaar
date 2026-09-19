@@ -4,6 +4,31 @@ import { EMPTY_FILTERS, filterAndSortItems, getAvailableFilterOptions } from './
 import type { Item } from '../types'
 
 describe('filterAndSortItems', () => {
+    it('deduplicates and sorts normalized sources for the selected item type', () => {
+        const items: Item[] = [
+            { ...ITEM_FIXTURES[0], source: ' xdmg ' },
+            { ...ITEM_FIXTURES[1], source: 'dmg' },
+            { ...ITEM_FIXTURES[2], source: ' DMG ' },
+            { ...ITEM_FIXTURES[3], type: 'Common', source: 'PHB' },
+        ]
+        expect(getAvailableFilterOptions(items, 'Magic').sources).toEqual(['DMG', 'XDMG'])
+        expect(getAvailableFilterOptions(items, 'Common').sources).toEqual(['PHB'])
+    })
+
+    it('uses OR between sources and AND with other filters without matching variant bases', () => {
+        const variant: Item = {
+            ...ITEM_FIXTURES[2], id: 'variant', source: 'DMG', origin: 'genericVariant',
+            variantOptions: [{ id: 'option', baseItemId: 'base', baseName: 'Blade', baseSource: 'PHB', basePriceGp: 15, variantPriceGp: 100, effectivePriceGp: 115, resolvedItem: ITEM_FIXTURES[2] }],
+        }
+        const modern = { ...ITEM_FIXTURES[0], source: 'XDMG' }
+        const items = [variant, modern]
+        expect(filterAndSortItems(items, { ...EMPTY_FILTERS, sources: [' dmg ', 'XDMG'] }, 'name', 'asc')).toHaveLength(2)
+        expect(filterAndSortItems(items, { ...EMPTY_FILTERS, sources: ['DMG', 'XDMG'], categories: ['Weapon'], rarities: ['Rare'], search: 'vicious' }, 'name', 'asc')).toEqual([variant])
+        expect(filterAndSortItems(items, { ...EMPTY_FILTERS, sources: ['PHB'] }, 'name', 'asc')).toEqual([])
+        expect(filterAndSortItems(items, { ...EMPTY_FILTERS, sources: ['DMG'] }, 'name', 'asc')[0].variantOptions).toBe(variant.variantOptions)
+        expect(filterAndSortItems(items, EMPTY_FILTERS, 'name', 'asc')).toHaveLength(2)
+    })
+
     it('filters additional categories using OR without duplicating items and preserves primary sorting', () => {
         const items: Item[] = [
             { ...ITEM_FIXTURES[0], categories: ['Bag/Container', 'Consumable', 'Wondrous'] },
@@ -74,10 +99,12 @@ describe('filterAndSortItems', () => {
         expect(getAvailableFilterOptions(items, 'Common')).toEqual({
             rarities: ['None', 'Rare'],
             categories: ['Bag/Container', 'Weapon'],
+            sources: ['DMG'],
         })
         expect(getAvailableFilterOptions(items, 'Magic')).toEqual({
             rarities: ['Uncommon', 'Rare', 'Legendary'],
             categories: ['Bag/Container', 'Gem', 'Weapon'],
+            sources: ['DMG'],
         })
     })
 
@@ -85,7 +112,7 @@ describe('filterAndSortItems', () => {
         const items = ITEM_FIXTURES.map((item) => ({ ...item }))
         const snapshot = items.map((item) => ({ ...item }))
 
-        expect(getAvailableFilterOptions(items, 'Common')).toEqual({ rarities: [], categories: [] })
+        expect(getAvailableFilterOptions(items, 'Common')).toEqual({ rarities: [], categories: [], sources: [] })
         expect(items).toEqual(snapshot)
     })
 })

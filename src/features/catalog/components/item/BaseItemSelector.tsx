@@ -1,8 +1,7 @@
 import { useId } from 'react'
 import { Layers3 } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
-import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
-import { formatSourceLabel, SourceChip } from './SourceChip'
+import { formatSourceLabel } from './SourceChip'
 
 interface BaseItemSelectorProps {
     item: Item
@@ -35,10 +34,6 @@ function compareBaseOptions(left: VariantBaseOption, right: VariantBaseOption): 
     return left.baseName.localeCompare(right.baseName)
 }
 
-function PriceValue({ value }: { value: number | null | undefined }) {
-    return value == null ? <span className="text-muted">Variable</span> : <CurrencyDisplay valueGp={value} />
-}
-
 export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSelectorProps) {
     const options = [...(item.variantOptions ?? [])].sort(compareBaseOptions)
     const titleId = useId()
@@ -65,20 +60,8 @@ export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSel
                         </select>
                     </label>
 
-                    {selectedOption ? (
-                        <div className="mt-3 border-t border-border/70 pt-3">
-                            <div className="mb-2 flex min-w-0 items-center justify-between gap-3">
-                                <span className="truncate font-display text-xs text-cream">{selectedOption.baseName}</span>
-                                <SourceChip source={selectedOption.baseSource} />
-                            </div>
-                            <dl className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 text-[11px]">
-                                <dt className="text-muted">Base item</dt><dd className="font-display text-cream"><PriceValue value={selectedOption.basePriceGp} /></dd>
-                                <dt className="text-muted">Variant</dt><dd className="font-display text-cream"><PriceValue value={selectedOption.variantPriceGp} /></dd>
-                                <dt className="border-t border-gold/20 pt-2 font-display text-gold">Combined</dt><dd className="border-t border-gold/20 pt-2 font-display text-gold-bright"><PriceValue value={selectedOption.effectivePriceGp} /></dd>
-                            </dl>
-                        </div>
-                    ) : (
-                        <p className="mt-3 text-[11px] leading-5 text-muted">Choose a compatible base item to determine this variant's price.</p>
+                    {!selectedOption && (
+                        <p className="mt-3 text-[11px] leading-5 text-muted">Choose a compatible base item to determine this variant's price and full item sheet.</p>
                     )}
                 </>
             ) : (

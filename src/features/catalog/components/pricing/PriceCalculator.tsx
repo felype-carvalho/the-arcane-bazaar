@@ -12,18 +12,24 @@ import {
     signedLabel,
     type PricingModifierOption,
 } from '../../model/pricing'
-import type { Item, PricingModifiers } from '../../types'
+import type { Item, PricingModifiers, VariantBaseOption } from '../../types'
+import { SourceChip } from '../item/SourceChip'
 
 interface PriceCalculatorProps {
     item: Item
     effectiveItem?: Item
+    selectedOption?: VariantBaseOption
     modifiers: PricingModifiers
     setModifiers: Dispatch<SetStateAction<PricingModifiers>>
     manualPrice: string
     setManualPrice: (value: string) => void
 }
 
-export function PriceCalculator({ item, effectiveItem, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
+function PriceValue({ value }: { value: number | null | undefined }) {
+    return value == null ? <span className="text-muted">Variable</span> : <CurrencyDisplay valueGp={value} />
+}
+
+export function PriceCalculator({ item, effectiveItem, selectedOption, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
     const [customName, setCustomName] = useState('')
     const [customPercent, setCustomPercent] = useState('')
     const manualValue = manualPrice === '' ? null : Number(manualPrice)
@@ -48,6 +54,20 @@ export function PriceCalculator({ item, effectiveItem, modifiers, setModifiers, 
                 </div>
                 <SlidersHorizontal size={17} className="text-gold" />
             </div>
+
+            {selectedOption && (
+                <div className="selected-base-price-card mb-4">
+                    <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
+                        <span className="truncate font-display text-xs text-cream">{selectedOption.baseName}</span>
+                        <SourceChip source={selectedOption.baseSource} />
+                    </div>
+                    <dl className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 text-[11px]">
+                        <dt className="text-muted">Base item</dt><dd className="font-display text-cream"><PriceValue value={selectedOption.basePriceGp} /></dd>
+                        <dt className="text-muted">Variant</dt><dd className="font-display text-cream"><PriceValue value={selectedOption.variantPriceGp} /></dd>
+                        <dt className="border-t border-gold/20 pt-2 font-display text-gold">Combined</dt><dd className="border-t border-gold/20 pt-2 font-display text-gold-bright"><PriceValue value={selectedOption.effectivePriceGp} /></dd>
+                    </dl>
+                </div>
+            )}
 
             {pricingItem?.basePriceGp == null && pricingItem && (
                 <label className="mb-4 block">

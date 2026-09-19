@@ -74,6 +74,7 @@ export interface ItemFilters {
     rarities: Rarity[]
     categories: Category[]
     availabilities: Availability[]
+    sources: string[]
 }
 
 export type SortKey = 'name' | 'type' | 'category' | 'rarity' | 'price'

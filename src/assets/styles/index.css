@@ -217,6 +217,7 @@ button:disabled { cursor: not-allowed; }
 .base-price-card strong { min-width: 0; margin-top: 6px; font-family: var(--font-display); font-size: 19px; line-height: 1.35; color: var(--color-gold-bright); }
 .base-price-card .currency-display { max-width: 100%; }
 .variant-base-card { margin: 16px 20px 0; border: 1px solid #65522b; border-radius: 5px; padding: 13px; background: radial-gradient(circle at 85% 20%, rgb(205 154 38 / 8%), transparent 55%), #151827; }
+.selected-base-price-card { border: 1px solid #65522b; border-radius: 5px; padding: 11px 13px; background: radial-gradient(circle at 85% 50%, rgb(205 154 38 / 10%), transparent 60%), #151827; box-shadow: inset 0 0 18px rgb(205 154 38 / 4%); }
 
 .breakdown { overflow: hidden; border: 1px solid var(--color-border); border-radius: 4px; background: rgb(12 14 26 / 25%); }
 .breakdown summary { display: flex; cursor: pointer; list-style: none; align-items: center; justify-content: space-between; padding: 8px 10px; font-size: 11px; color: var(--color-muted); }
@@ -233,8 +234,8 @@ button:disabled { cursor: not-allowed; }
 .price-result > span { font-size: 10px; text-transform: uppercase; letter-spacing: .07em; color: var(--color-muted); }
 .price-result strong { margin-top: 5px; font-family: var(--font-display); font-size: 17px; color: var(--color-gold-bright); }
 .price-result small { margin-top: 4px; font-size: 10px; color: #777994; }
-.price-result.buy { border-color: #3f8f61; box-shadow: inset 0 0 18px rgb(74 222 128 / 5%); }
-.price-result.sell { border-color: #a84b4b; box-shadow: inset 0 0 18px rgb(248 113 113 / 5%); }
+.price-result.buy { border-color: #3f8f61; background: radial-gradient(circle at 85% 50%, rgb(74 222 128 / 10%), transparent 60%), #151827; box-shadow: inset 0 0 18px rgb(74 222 128 / 4%); }
+.price-result.sell { border-color: #a84b4b; background: radial-gradient(circle at 85% 50%, rgb(248 113 113 / 10%), transparent 60%), #151827; box-shadow: inset 0 0 18px rgb(248 113 113 / 4%); }
 
 .page-button { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid #37384d; border-radius: 4px; color: #9192a9; background: #202134; }
 .page-button:hover:not(:disabled) { color: var(--color-gold-bright); border-color: #6d592d; }

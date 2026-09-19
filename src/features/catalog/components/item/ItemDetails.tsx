@@ -49,7 +49,7 @@ export function ItemDetails({ item, selectedVariantOption, onVariantOptionSelect
                 <button className="primary-button mt-4 w-full" onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> View full item sheet</button>
             </div>
 
-            <PriceCalculator item={item} effectiveItem={selectedVariantOption?.resolvedItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />
+            <PriceCalculator item={item} effectiveItem={selectedVariantOption?.resolvedItem} selectedOption={selectedVariantOption} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />
         </aside>
     )
 }

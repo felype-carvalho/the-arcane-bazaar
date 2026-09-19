@@ -423,9 +423,16 @@ describe('Arcane Bazaar app', () => {
         await user.selectOptions(baseSelector, 'enchanted-longsword')
 
         const baseCard = within(details).getByRole('region', { name: 'Base item' })
-        expect(within(baseCard).getByText('15 GP')).toBeInTheDocument()
-        expect(within(baseCard).getByText('400 GP')).toBeInTheDocument()
-        expect(within(baseCard).getByText('415 GP')).toBeInTheDocument()
+        expect(baseCard.querySelector('dl')).toBeNull()
+        expect(within(baseCard).queryByText('Longsword')).not.toBeInTheDocument()
+        const calculator = within(details).getByRole('region', { name: 'Price this item' })
+        const selectedBasePriceCard = calculator.querySelector<HTMLElement>('.selected-base-price-card')!
+        const priceBreakdown = within(selectedBasePriceCard)
+        expect(priceBreakdown.getByText('Longsword')).toBeInTheDocument()
+        expect(priceBreakdown.getByText("PHB'14")).toBeInTheDocument()
+        expect(priceBreakdown.getByText('15 GP')).toBeInTheDocument()
+        expect(priceBreakdown.getByText('400 GP')).toBeInTheDocument()
+        expect(priceBreakdown.getByText('415 GP')).toBeInTheDocument()
         expect(within(details).getByLabelText('Base price')).toHaveTextContent('415 GP')
 
         await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
