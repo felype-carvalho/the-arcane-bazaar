@@ -10,6 +10,7 @@ export const CATEGORIES: Category[] = [
     "Bag/Container",
     "Clockwork",
     "Consumable",
+    "Cursed",
     "Explosive",
     "Food and Drink",
     "Gem",
@@ -34,6 +35,7 @@ export const CATEGORIES: Category[] = [
 ];
 
 export const CATEGORY_ICONS: Record<Category, string> = {
+    Cursed: "☠️",
     Consumable: "🍎",
     Potion: "🧪",
     Scroll: "📜",
@@ -126,6 +128,7 @@ export function resolveCategories(entity: JsonRecord, description = ""): Categor
         if (types.has(abbreviation)) categories.add(category);
     }
     if (Array.isArray(entity.miscTags) && entity.miscTags.includes("CNS")) categories.add("Consumable");
+    if (entity.curse === true) categories.add("Cursed");
     if (entity.wondrous === true) categories.add("Wondrous");
     return orderCategories(primary, categories);
 }

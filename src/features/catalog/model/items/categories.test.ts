@@ -14,6 +14,13 @@ describe('multiple item categories', () => {
         expect(resolveCategories({ name: 'Portable Hole', source: 'XDMG', wondrous: true })).toEqual(['Bag/Container', 'Wondrous'])
     })
 
+    it('adds Cursed to items with an explicit curse flag', () => {
+        expect(resolveCategories({ name: 'Armor of Vulnerability', type: 'HA', curse: true }))
+            .toEqual(['Armor', 'Cursed'])
+        expect(resolveCategories({ name: 'Cursed Ring', type: 'RG', curse: false }))
+            .toEqual(['Ring'])
+    })
+
     it('does not infer additional categories from incidental text or non-boolean flags', () => {
         expect(resolveCategories({ name: 'Ring', type: 'RG', wondrous: false }, 'A gem in a bottle that summons a beast and is destroyed.')).toEqual(['Ring'])
         expect(resolveCategories({ name: 'Relic', tattoo: false, poison: false, staff: false, weapon: false, armor: false, wondrous: 'true' })).toEqual(['Other'])

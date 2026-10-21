@@ -5,6 +5,7 @@ import magicVariantsJson from '../../data/magicvariants.json'
 import { buildCatalog, type CatalogDiagnostics } from './build-catalog'
 import type { ItemJsonFiles } from './raw-types'
 import { CATEGORIES } from './categories'
+import { EMPTY_FILTERS, filterAndSortItems, getAvailableFilterOptions } from '../filtering'
 
 describe('catalog integration with the real corpus', () => {
     it('builds direct, base, group, and grouped generic-variant products without mutating its sources', () => {
@@ -33,6 +34,15 @@ describe('catalog integration with the real corpus', () => {
             && new Set(item.categories).size === item.categories.length
             && item.categories.every((category) => CATEGORIES.includes(category)))).toBe(true)
         expect(catalog.some((item) => item.categories.includes('Wondrous'))).toBe(true)
+        const cursedItems = catalog.filter((item) => item.categories.includes('Cursed'))
+        expect(cursedItems.length).toBeGreaterThan(0)
+        expect(cursedItems.every((item) => item.type === 'Magic')).toBe(true)
+        const armorOfVulnerability = catalog.filter((item) => item.name === 'Armor of Vulnerability' && ['DMG', 'XDMG'].includes(item.source))
+        expect(armorOfVulnerability).toHaveLength(2)
+        expect(armorOfVulnerability.every((item) => item.categories.includes('Cursed'))).toBe(true)
+        expect(getAvailableFilterOptions(catalog, 'Magic').categories).toContain('Cursed')
+        expect(filterAndSortItems(catalog, { ...EMPTY_FILTERS, types: ['Magic'], categories: ['Cursed'] }, 'name', 'asc'))
+            .toEqual(expect.arrayContaining(armorOfVulnerability))
         expect(Object.values(diagnostics!.byCategoryMembership).reduce((sum, count) => sum + count, 0)).toBe(catalog.reduce((sum, item) => sum + item.categories.length, 0))
 
         const adamantine2024 = catalog.filter((item) => item.name === 'Adamantine Armor' && item.source === 'XDMG')

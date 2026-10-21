@@ -4,6 +4,7 @@ export type ItemEdition = 'classic' | 'one' | 'unspecified'
 export type ItemOrigin = 'item' | 'itemGroup' | 'baseitem' | 'genericVariant' | 'specificVariant'
 export type Category =
     | 'Consumable'
+    | 'Cursed'
     | 'Potion'
     | 'Scroll'
     | 'Apparel'

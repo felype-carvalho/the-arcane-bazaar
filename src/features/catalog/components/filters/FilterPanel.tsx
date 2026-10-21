@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import { ChevronDown, Search, X } from 'lucide-react'
 import { CATEGORY_ICONS } from '../../model/items/categories'
 import type { /* Availability, */ Category, ItemFilters, ItemType, Rarity } from '../../types'
@@ -47,7 +47,7 @@ export function FilterPanel({ filters, availableRarities, availableCategories, a
 
                 <FilterGroupSection title="Item type" group="types" options={TYPES} selected={filters.types} onToggle={onToggle} onSingleSelect={(value) => onTypeSelect(value as ItemType)} selectionMode="single" showTypeMarks defaultOpen />
                 {filters.types[0] === 'Magic' && <FilterGroupSection title="Rarity" group="rarities" options={availableRarities} selected={filters.rarities} onToggle={onToggle} colorize />}
-                <CategoryFilterSection options={availableCategories} selected={filters.categories} onSelect={onCategorySelect} />
+                <CategoryFilterSection options={availableCategories} selected={filters.categories} onSelect={onCategorySelect} itemType={filters.types[0] ?? 'Common'} />
                 <SourceFilterSection options={availableSources} selected={filters.sources} onSelect={onSourceSelect} />
                 {/* <FilterGroupSection title="Availability" group="availabilities" options={AVAILABILITIES} selected={filters.availabilities} onToggle={onToggle} /> */}
             </div>
@@ -148,14 +148,19 @@ function FilterGroupSection({ title, group, options, selected, onToggle, onSingl
     )
 }
 
-function CategoryFilterSection({ options, selected, onSelect }: {
+function CategoryFilterSection({ options, selected, onSelect, itemType }: {
     options: readonly Category[]
     selected: readonly Category[]
     onSelect: (value: Category | 'All') => void
+    itemType: ItemType
 }) {
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(itemType === 'Magic')
     const instanceId = useId()
     const optionsId = `filter-categories-${instanceId}-options`
+
+    useEffect(() => {
+        if (itemType === 'Magic') setIsOpen(true)
+    }, [itemType])
 
     return (
         <fieldset className="mt-5 border-b border-border/70 pb-4 last:border-b-0">
