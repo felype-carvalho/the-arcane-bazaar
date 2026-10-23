@@ -314,7 +314,7 @@ describe('Arcane Bazaar app', () => {
         const button = await screen.findByRole('button', { name: /view full item sheet/i })
         await user.click(button)
         const dialog = screen.getByRole('dialog', { name: 'Bag of Holding' })
-        expect(within(dialog).getByText('Complete item sheet')).toBeInTheDocument()
+        expect(within(dialog).getByRole('heading', { name: 'Bag of Holding' })).toBeInTheDocument()
         await user.keyboard('{Escape}')
         await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
     })

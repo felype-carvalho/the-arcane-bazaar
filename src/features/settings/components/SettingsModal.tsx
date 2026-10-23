@@ -1,14 +1,14 @@
 import { RotateCcw, Settings, Trash2 } from 'lucide-react'
 import { useState } from 'react'
-import { ToolbarDialog } from '@/components/layout/toolbar/ToolbarDialog'
-import { SourceChip } from '@/features/catalog/components/item/SourceChip'
+import { ModalDialog } from '@/components/ui/ModalDialog'
 import {
+  SourceChip,
   normalizeSource,
   SOURCE_GROUPS,
   SOURCES_BY_EDITION,
   type SourceEdition,
   type SourceGroup,
-} from '@/features/catalog/model/sources'
+} from '@/features/catalog'
 import { useSettings } from '../model/SettingsProvider'
 
 interface SettingsModalProps {
@@ -113,7 +113,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
   }
 
   return (
-    <ToolbarDialog
+    <ModalDialog
       dialogWidth="min(1080px, 100%)"
       eyebrow="System"
       icon={<Settings size={20} />}
@@ -154,6 +154,6 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
         {successMessage && <p role="status" className="text-xs text-emerald-400">{successMessage}</p>}
         {error && <p role="alert" className="text-xs leading-5 text-red-300">{error}</p>}
       </div>
-    </ToolbarDialog>
+    </ModalDialog>
   )
 }

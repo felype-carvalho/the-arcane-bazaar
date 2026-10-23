@@ -35,6 +35,11 @@ export type Category =
     | 'Wondrous'
 export type Availability = 'Available' | 'Limited' | 'Unavailable'
 
+export interface ItemInformation {
+    label: string
+    value: string
+}
+
 export interface Item {
     id: string
     name: string
@@ -59,6 +64,11 @@ export interface Item {
     hasExplicitPrice?: boolean
     variantPriceGp?: number | null
     variantOptions?: VariantBaseOption[]
+    sourcePage?: number
+    attunementRequirement?: string
+    weaponInformation?: ItemInformation[]
+    armorInformation?: ItemInformation[]
+    characteristics?: string[]
 }
 
 export type GroupOptionKind = 'member' | 'inferredInitialStage'

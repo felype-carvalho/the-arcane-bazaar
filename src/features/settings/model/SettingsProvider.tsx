@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { createSettingsStorage } from '../api/settings-database'
 import { createDefaultSettings } from './defaults'
 import type { AppSettings, SettingsContextValue, SettingsStorage } from '../types'
-import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog/model/sources'
+import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
 

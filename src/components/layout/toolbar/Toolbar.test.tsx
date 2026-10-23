@@ -2,7 +2,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { SettingsProvider, type SettingsStorage } from '@/features/settings'
-import { ALL_SOURCE_CODES } from '@/features/catalog/model/sources'
+import { ALL_SOURCE_CODES } from '@/features/catalog'
 import { Toolbar } from './Toolbar'
 
 const storage: SettingsStorage = {

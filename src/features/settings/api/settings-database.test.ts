@@ -1,6 +1,6 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { describe, expect, it } from 'vitest'
-import { ALL_SOURCE_CODES } from '@/features/catalog/model/sources'
+import { ALL_SOURCE_CODES } from '@/features/catalog'
 import { createSettingsStorage, SETTINGS_DATABASE_NAME, SETTINGS_DATABASE_VERSION, SETTINGS_RECORD_KEY, SETTINGS_STORE_NAME } from './settings-database'
 
 function openDatabase(factory: IDBFactory): Promise<IDBDatabase> {

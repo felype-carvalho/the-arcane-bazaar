@@ -1,5 +1,5 @@
 import type { AppSettings } from '../types'
-import { ALL_SOURCE_CODES } from '@/features/catalog/model/sources'
+import { ALL_SOURCE_CODES } from '@/features/catalog'
 
 export const DEFAULT_SETTINGS: Readonly<AppSettings> = Object.freeze({
   selectedSources: ALL_SOURCE_CODES,

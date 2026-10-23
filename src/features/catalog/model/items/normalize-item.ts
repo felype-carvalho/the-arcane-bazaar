@@ -1,7 +1,8 @@
 import type { Availability, Item, ItemEdition, Rarity } from '../../types'
+import type { ItemInformation } from '../../types/catalog'
 import { CATEGORY_ICONS, resolveCategories } from './categories'
 import { lookupUid } from './indexes'
-import { renderEntryTree, resolveEntityEntries } from './resolve-entries'
+import { cleanInlineTags, renderEntryTree, resolveEntityEntries } from './resolve-entries'
 import type { ProcessedItemEntity, RawItemEntry, RawItemProperty, RawItemType, RawNamedEntity } from './raw-types'
 import { isJsonRecord } from './raw-types'
 
@@ -118,7 +119,7 @@ function auxiliaryProperties(entity: ProcessedItemEntity, indexes: Normalization
         const name = propertyName(definition)
         tags.push(name)
         const rendered = renderEntryTree(definition.entries, entity, indexes.itemEntries)
-        if (rendered.length) properties.push(`${name}: ${rendered[0]}`)
+        if (rendered.length) properties.push(`${name}: ${rendered[0]}`, ...rendered.slice(1))
     }
 
     const masteries = Array.isArray(entity.mastery) ? entity.mastery.filter((value): value is string => typeof value === 'string') : []
@@ -127,7 +128,7 @@ function auxiliaryProperties(entity: ProcessedItemEntity, indexes: Normalization
         if (!mastery) continue
         tags.push(mastery.name)
         const rendered = renderEntryTree(mastery.entries, entity, indexes.itemEntries)
-        if (rendered.length) properties.push(`Mastery — ${mastery.name}: ${rendered[0]}`)
+        if (rendered.length) properties.push(`Mastery — ${mastery.name}: ${rendered[0]}`, ...rendered.slice(1))
     }
 
     if (typeof entity.type === 'string') {
@@ -137,6 +138,55 @@ function auxiliaryProperties(entity: ProcessedItemEntity, indexes: Normalization
     if (typeof entity.dmg1 === 'string') properties.push(`${entity.dmg1} ${DAMAGE_TYPES[String(entity.dmgType)] ?? String(entity.dmgType ?? '').toLocaleLowerCase()} damage`.trim())
     if (typeof entity.ac === 'number') properties.push(`Armor Class ${entity.ac}`)
     return { properties, tags }
+}
+
+function informationText(value: unknown): string | undefined {
+    if (typeof value === 'number') return Number.isFinite(value) && value >= 0 ? String(value) : undefined
+    if (typeof value !== 'string') return undefined
+    return cleanInlineTags(value).trim() || undefined
+}
+
+function equipmentInformation(entity: ProcessedItemEntity, indexes: NormalizationIndexes, type: RawItemType | undefined): Pick<Item, 'weaponInformation' | 'armorInformation'> {
+    const typeCode = entity.type?.split('|')[0]
+    const weapon = entity.weapon === true || ['M', 'R'].includes(typeCode ?? '') || typeof entity.dmg1 === 'string'
+    const armor = entity.armor === true || ['LA', 'MA', 'HA', 'S'].includes(typeCode ?? '')
+    const properties = (entity.property ?? []).flatMap((uid) => {
+        if (typeof uid !== 'string') return []
+        const definition = propertyDefinition(entity, uid, indexes.itemProperties)
+        if (!definition) return []
+        const name = propertyName(definition)
+        return [uid.split('|')[0] === 'V' && informationText(entity.dmg2) ? `${name} (${informationText(entity.dmg2)})` : name]
+    })
+    const information: ItemInformation[] = []
+    const add = (label: string, value: unknown) => {
+        const text = informationText(value)
+        if (text) information.push({ label, value: text })
+    }
+    if (weapon) {
+        if (informationText(entity.dmg1)) add('Base damage', [informationText(entity.dmg1), DAMAGE_TYPES[String(entity.dmgType)]].filter(Boolean).join(' '))
+        add('Properties', properties.join(', '))
+        const masteries = Array.isArray(entity.mastery) ? entity.mastery.flatMap((uid) => {
+            if (typeof uid !== 'string') return []
+            const mastery = lookupUid(indexes.itemMasteries, uid, { fallbackSources: ['XPHB'] })
+            return mastery ? [mastery.name] : []
+        }) : []
+        add('Mastery', masteries.join(', '))
+        if (informationText(entity.range)) add('Range', `${informationText(entity.range)} ft.`)
+        add('Weapon type', [informationText(entity.weaponCategory), type?.name].filter(Boolean).join(' · '))
+        add('Magic attack / damage bonus', entity.bonusWeapon)
+        return { weaponInformation: information.length ? information : undefined }
+    }
+    if (armor) {
+        const baseAc = informationText(entity.ac)
+        add(typeCode === 'S' ? 'AC bonus' : 'Base AC', baseAc === undefined ? undefined : typeCode === 'S' ? `+${baseAc}` : baseAc)
+        add('Armor type', type?.name)
+        add('Properties', properties.join(', '))
+        add('Strength requirement', entity.strength)
+        if (entity.stealth === true) add('Stealth', 'Disadvantage')
+        add('Magic AC bonus', entity.bonusAc)
+        return { armorInformation: information.length ? information : undefined }
+    }
+    return {}
 }
 
 export function normalizeItem(entity: ProcessedItemEntity, indexes: NormalizationIndexes): Item {
@@ -183,6 +233,10 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         source: entity.source,
         edition: entity._catalogEdition as ItemEdition,
         origin: entity._catalogOrigin,
+        sourcePage: typeof entity.page === 'number' && Number.isInteger(entity.page) && entity.page >= 0 ? entity.page : undefined,
+        attunementRequirement: typeof entity.reqAttune === 'string' ? informationText(entity.reqAttune) : undefined,
+        characteristics: unique([...entryLines, ...auxiliary.properties]),
+        ...equipmentInformation(entity, indexes, type),
     }
 }
 

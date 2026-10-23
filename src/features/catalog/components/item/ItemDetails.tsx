@@ -60,6 +60,6 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
     )
 }
 
-export function DetailFact({ label, value }: { label: string, value: ReactNode }) {
+export function DetailInformation({ label, value }: { label: string, value: ReactNode }) {
     return <div><p className="eyebrow">{label}</p><p className="mt-1.5 font-display text-[11px] font-semibold leading-5 text-cream">{value}</p></div>
 }

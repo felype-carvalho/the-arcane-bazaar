@@ -1,6 +1,6 @@
 import { ExternalLink, Github, Info } from 'lucide-react'
 import packageMetadata from '../../../../package.json'
-import { ToolbarDialog } from './ToolbarDialog'
+import { ModalDialog } from '@/components/ui/ModalDialog'
 
 const GITHUB_URL = 'https://github.com/felype-carvalho/the-arcane-bazaar'
 
@@ -10,7 +10,7 @@ interface SystemInfoModalProps {
 
 export function SystemInfoModal({ onClose }: SystemInfoModalProps) {
   return (
-    <ToolbarDialog
+    <ModalDialog
       eyebrow="System"
       icon={<Info size={20} />}
       onClose={onClose}
@@ -27,6 +27,6 @@ export function SystemInfoModal({ onClose }: SystemInfoModalProps) {
           <dd><a className="inline-flex items-center gap-1.5 text-gold hover:text-gold-bright" href={GITHUB_URL} target="_blank" rel="noreferrer">View repository <ExternalLink size={14} /></a></dd>
         </div>
       </dl>
-    </ToolbarDialog>
+    </ModalDialog>
   )
 }

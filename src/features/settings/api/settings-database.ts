@@ -1,6 +1,6 @@
 import { createDefaultSettings } from '../model/defaults'
 import type { AppSettings, SettingsStorage } from '../types'
-import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog/model/sources'
+import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
 
 export const SETTINGS_DATABASE_NAME = 'the-arcane-bazaar'
 export const SETTINGS_DATABASE_VERSION = 1
