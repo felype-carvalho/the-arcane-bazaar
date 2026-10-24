@@ -40,6 +40,10 @@ export interface ItemInformation {
     value: string
 }
 
+export type ItemDescriptionBlock =
+    | { type: 'paragraph'; text: string }
+    | { type: 'table'; caption?: string; columns: string[]; rows: string[][] }
+
 export interface Item {
     id: string
     name: string
@@ -70,7 +74,9 @@ export interface Item {
     armorInformation?: ItemInformation[]
     vehicleInformation?: ItemInformation[]
     mountInformation?: ItemInformation[]
+    spellcastingFocusInformation?: ItemInformation[]
     characteristics?: string[]
+    descriptionBlocks?: ItemDescriptionBlock[]
 }
 
 export type GroupOptionKind = 'member' | 'inferredInitialStage'

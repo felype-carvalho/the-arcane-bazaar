@@ -118,6 +118,35 @@ describe('complete item sheet normalization', () => {
         expect(normalizeItem({ ...base, type: 'M', speed: 50, carryingCapacity: 480 }, indexes).mountInformation).toBeUndefined()
     })
 
+    it('shows spellcasting focus classes and describes focus groups without source entries', () => {
+        const arcaneFocus = normalizeItem({
+            ...base, name: 'Arcane Focus', type: 'SCF', scfType: 'arcane',
+            _catalogOrigin: 'itemGroup', focus: ['Sorcerer', 'Warlock', 'Wizard'],
+            items: ['Crystal|PHB', 'Orb|PHB', 'Wand|PHB'],
+        }, indexes)
+        expect(arcaneFocus.spellcastingFocusInformation).toEqual([
+            { label: 'Spellcasting Focus Requirement', value: 'Sorcerer, Warlock, Wizard' },
+        ])
+        expect(arcaneFocus.description).toContain('a crystal, an orb, or a wand')
+        expect(arcaneFocus.characteristics).toContain(arcaneFocus.description)
+
+        const druidicFocus = normalizeItem({ ...base, name: 'Druidic Focus', type: 'SCF', scfType: 'druid' }, indexes)
+        expect(druidicFocus.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Druid, Ranger' }])
+        expect(druidicFocus.characteristics?.[0]).toContain('Druids and Rangers')
+        const amulet = normalizeItem({ ...base, name: 'Amulet', source: 'XPHB', type: 'SCF|XPHB', scfType: 'holy', entries: ['For an Amulet to be an effective Holy Symbol, it must be worn or held.'] }, indexes)
+        expect(amulet.characteristics).toEqual([
+            expect.stringContaining('channel divine magic'),
+            'For an Amulet to be an effective Holy Symbol, it must be worn or held.',
+        ])
+        expect(amulet.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Cleric, Paladin' }])
+        expect(normalizeItem({ ...base, type: 'SCF', focus: true }, indexes).spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }])
+        expect(normalizeItem({ ...base, type: 'SCF', focus: ['Wizard', 'Warlock', 'Sorcerer', 'Ranger', 'Paladin', 'Druid', 'Cleric', 'Bard', 'Artificer'] }, indexes).spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }])
+        expect(normalizeItem({ ...base, type: 'SCF', focus: ['Druid', 'Warlock'] }, indexes).spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Druid, Warlock' }])
+        expect(normalizeItem({ ...base, type: 'INS' }, indexes).spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Bard' }])
+        expect(normalizeItem({ ...base, type: 'INS', focus: true }, indexes).spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Bard' }])
+        expect(normalizeItem({ ...base, type: 'M', focus: ['Wizard'] }, indexes).spellcastingFocusInformation).toBeUndefined()
+    })
+
     it('preserves zero and rejects invalid numeric data', () => {
         const item = normalizeItem({ ...base, weight: 0, value: 0, page: 0 }, indexes)
         expect(item).toMatchObject({ weight: '0 lb', basePriceGp: 0, sourcePage: 0, hasExplicitPrice: true })

@@ -1,7 +1,7 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
+import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, MessageCircleCheck, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
-import type { ItemInformation } from '../../types/catalog'
+import type { ItemDescriptionBlock, ItemInformation } from '../../types/catalog'
 import { getSourceName } from '../../model/sources'
 import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 import { RarityBadge, TypeMark } from './ItemBadges'
@@ -46,6 +46,10 @@ const mountIcons: Record<string, ReactNode> = {
     'Monster Stat Block': <Panda aria-hidden="true" />,
 }
 
+const spellcastingFocusIcons: Record<string, ReactNode> = {
+    'Spellcasting Focus Requirement': <MessageCircleCheck aria-hidden="true" />,
+}
+
 interface ItemModalProps {
     item: Item
     configurationSummary?: string
@@ -63,11 +67,11 @@ function Information({ label, value, icon, outlined = false }: { label: string; 
     </div>
 }
 
-function EquipmentSection({ title, information, kind = 'weapon' }: { title: string; information?: ItemInformation[]; kind?: 'weapon' | 'armor' | 'vehicle' | 'mount' }) {
+function EquipmentSection({ title, information, kind = 'weapon' }: { title: string; information?: ItemInformation[]; kind?: 'weapon' | 'armor' | 'vehicle' | 'mount' | 'spellcastingFocus' }) {
     const visibleInformation = information?.filter((entry) => hasText(entry.value)) ?? []
     if (!visibleInformation.length) return null
-    const icons = kind === 'armor' ? armorIcons : kind === 'vehicle' ? vehicleIcons : kind === 'mount' ? mountIcons : weaponIcons
-    const fallbackIcon = kind === 'armor' ? <Shield aria-hidden="true" /> : kind === 'vehicle' || kind === 'mount' ? <Package aria-hidden="true" /> : <Swords aria-hidden="true" />
+    const icons = kind === 'armor' ? armorIcons : kind === 'vehicle' ? vehicleIcons : kind === 'mount' ? mountIcons : kind === 'spellcastingFocus' ? spellcastingFocusIcons : weaponIcons
+    const fallbackIcon = kind === 'armor' ? <Shield aria-hidden="true" /> : kind === 'vehicle' || kind === 'mount' ? <Package aria-hidden="true" /> : kind === 'spellcastingFocus' ? <MessageCircleCheck aria-hidden="true" /> : <Swords aria-hidden="true" />
     return <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>{title}</h3><dl className="grid grid-cols-3 gap-3 max-[900px]:grid-cols-2 max-[601px]:grid-cols-1">
         {visibleInformation.map((entry) => <Information key={entry.label} label={entry.label} value={kind === 'weapon' ? entry.value.charAt(0).toLocaleUpperCase('en-US') + entry.value.slice(1) : entry.value} outlined icon={icons[entry.label] ?? fallbackIcon} />)}
     </dl></section>
@@ -78,11 +82,26 @@ function DescriptionParagraph({ text }: { text: string }) {
     return <p className="mb-[18px] whitespace-pre-line text-sm leading-[1.85] text-cream">{label ? <><strong className="font-semibold">{label}</strong>{text.slice(label.length)}</> : text}</p>
 }
 
+function DescriptionTable({ block }: { block: Extract<ItemDescriptionBlock, { type: 'table' }> }) {
+    return <div className="mb-[18px] overflow-x-auto rounded-lg border border-border">
+        <table className="w-full border-collapse text-left text-sm leading-[1.6]">
+            {block.caption && <caption className="bg-panel-strong px-4 py-3 text-left font-display text-gold-bright">{block.caption}</caption>}
+            {block.columns.length > 0 && <thead className="bg-panel-strong text-gold-bright"><tr>
+                {block.columns.map((column, index) => <th key={index} scope="col" className="border-b border-border px-4 py-2.5 font-semibold">{column}</th>)}
+            </tr></thead>}
+            <tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex} className="border-b border-border even:bg-surface last:border-b-0">
+                {row.map((cell, cellIndex) => <td key={cellIndex} className="px-4 py-2.5 text-cream">{cell}</td>)}
+            </tr>)}</tbody>
+        </table>
+    </div>
+}
+
 export function ItemModal({ item, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
     const dialogRef = useRef<HTMLDivElement>(null)
     const displayedPrice = item.basePriceGp ?? item.variantPriceGp
     const hasPrice = displayedPrice != null && Number.isFinite(displayedPrice) && displayedPrice >= 0
     const characteristics = [...new Set((item.characteristics ?? [item.description, ...item.properties]).map((text) => text.trim()).filter(hasText))]
+    const descriptionBlocks = item.descriptionBlocks ?? characteristics.map((text): ItemDescriptionBlock => ({ type: 'paragraph', text }))
     const hasWeight = hasText(item.weight)
     const sourceName = getSourceName(item.source)
     const sourcePage = item.sourcePage != null && Number.isFinite(item.sourcePage) && item.sourcePage >= 0 ? item.sourcePage : null
@@ -160,8 +179,11 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                         <EquipmentSection title="Armor information" information={item.armorInformation} kind="armor" />
                         <EquipmentSection title="Vehicle Information" information={item.vehicleInformation} kind="vehicle" />
                         <EquipmentSection title="Mount Information" information={item.mountInformation} kind="mount" />
-                        {characteristics.length > 0 && <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>Description</h3>
-                            {characteristics.map((text) => <DescriptionParagraph key={text} text={text} />)}
+                        <EquipmentSection title="Spellcasting Focus Information" information={item.spellcastingFocusInformation} kind="spellcastingFocus" />
+                        {descriptionBlocks.length > 0 && <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>Description</h3>
+                            {descriptionBlocks.map((block, index) => block.type === 'table'
+                                ? <DescriptionTable key={index} block={block} />
+                                : <DescriptionParagraph key={index} text={block.text} />)}
                         </section>}
                         {configurationSummary && <p className={noteClass}>Configuration: {configurationSummary}</p>}
                         {!configurationSummary && selectedVariantOption && <p className={noteClass}>Configured with {selectedVariantOption.baseName} from {selectedVariantOption.baseSource}.</p>}

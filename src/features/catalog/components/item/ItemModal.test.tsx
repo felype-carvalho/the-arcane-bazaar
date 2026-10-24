@@ -25,6 +25,21 @@ describe('ItemModal', () => {
         expect(within(section as HTMLElement).getByText(ITEM_FIXTURES[0].description)).toBeInTheDocument()
     })
 
+    it('renders description tables with column headers and cells in order', () => {
+        render(<ItemModal item={{ ...ITEM_FIXTURES[0], descriptionBlocks: [
+            { type: 'paragraph', text: 'Roll a d6:' },
+            { type: 'table', columns: ['d6', 'Lycanthropy'], rows: [['1-3', 'Wererat'], ['4-5', 'Werewolf'], ['6', 'Wereboar']] },
+            { type: 'paragraph', text: 'End of description.' },
+        ] }} onClose={vi.fn()} />)
+
+        const section = screen.getByRole('heading', { name: 'Description' }).closest('section') as HTMLElement
+        const table = within(section).getByRole('table')
+        expect(within(table).getAllByRole('columnheader').map((cell) => cell.textContent)).toEqual(['d6', 'Lycanthropy'])
+        expect(within(table).getAllByRole('row').map((row) => row.textContent)).toEqual(['d6Lycanthropy', '1-3Wererat', '4-5Werewolf', '6Wereboar'])
+        expect(within(section).getByText('Roll a d6:').compareDocumentPosition(table) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+        expect(table.compareDocumentPosition(within(section).getByText('End of description.')) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    })
+
     it('bolds an opening description label through its colon', () => {
         render(<ItemModal item={{ ...ITEM_FIXTURES[0], characteristics: ['Passengers: This indicates the number of riders.', 'The effect lasts. Duration: 1 hour.'] }} onClose={vi.fn()} />)
 
@@ -158,6 +173,20 @@ it('shows mount information in three columns with its own icons and omits absent
 
     rerender(<ItemModal item={{ ...ITEM_FIXTURES[0], category: 'Mount', categories: ['Mount'], mountInformation: [{ label: 'Speed', value: '' }] }} onClose={vi.fn()} />)
     expect(screen.queryByRole('heading', { name: 'Mount Information' })).not.toBeInTheDocument()
+})
+
+it('shows spellcasting focus requirements with the requested icon and hides absent information', () => {
+    const { rerender } = render(<ItemModal item={{
+        ...ITEM_FIXTURES[0], category: 'Spellcasting Focus', categories: ['Spellcasting Focus'],
+        spellcastingFocusInformation: [{ label: 'Spellcasting Focus Requirement', value: 'Sorcerer, Warlock, Wizard' }],
+    }} onClose={vi.fn()} />)
+    const section = screen.getByRole('heading', { name: 'Spellcasting Focus Information' }).closest('section') as HTMLElement
+    expect(section.querySelector('dl')).toHaveClass('grid-cols-3')
+    expect(within(section).getByText('Sorcerer, Warlock, Wizard')).toBeInTheDocument()
+    expect(within(section).getByText('Spellcasting Focus Requirement').closest('div')?.parentElement?.querySelector('svg')).toHaveClass('lucide-message-circle-check')
+
+    rerender(<ItemModal item={{ ...ITEM_FIXTURES[0], category: 'Spellcasting Focus', categories: ['Spellcasting Focus'] }} onClose={vi.fn()} />)
+    expect(screen.queryByRole('heading', { name: 'Spellcasting Focus Information' })).not.toBeInTheDocument()
 })
 
 it('closes by button, Escape and backdrop, traps focus and restores it', () => {

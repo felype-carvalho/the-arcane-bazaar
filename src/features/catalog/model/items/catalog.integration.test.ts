@@ -56,6 +56,46 @@ describe('catalog integration with the real corpus', () => {
         expect(catalog.find((item) => item.name === 'Axe Beak' && item.source === 'IDRotF')?.mountInformation).toEqual([
             { label: 'Monster Stat Block', value: 'Axe Beak' },
         ])
+        const lycanthropeBlood = catalog.find((item) => item.name === 'Blood of the Lycanthrope' && item.source === 'IMR')
+        expect(lycanthropeBlood?.descriptionBlocks).toEqual(expect.arrayContaining([
+            { type: 'table', caption: undefined, columns: ['d6', 'Lycanthropy'], rows: [['1-3', 'Wererat'], ['4-5', 'Werewolf'], ['6', 'Wereboar']] },
+        ]))
+        for (const source of ['PHB', 'XPHB']) {
+            for (const [name, classes] of [
+                ['Arcane Focus', 'Sorcerer, Warlock, Wizard'],
+                ['Druidic Focus', 'Druid, Ranger'],
+                ['Holy Symbol', 'Cleric, Paladin'],
+            ]) {
+                const focus = catalog.find((item) => item.name === name && item.source === source)
+                expect(focus?.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: classes }])
+                expect(focus?.characteristics?.[0]).toContain('spellcasting focus')
+            }
+        }
+        expect(catalog.find((item) => item.name === 'Crystal' && item.source === 'PHB')?.spellcastingFocusInformation).toEqual([
+            { label: 'Spellcasting Focus Requirement', value: 'Sorcerer, Warlock, Wizard' },
+        ])
+        for (const name of ['Amulet', 'Emblem', 'Reliquary']) {
+            const focus = catalog.find((item) => item.name === name && item.source === 'XPHB')
+            expect(focus?.characteristics?.[0]).toContain('channel divine magic')
+            expect(focus?.characteristics?.[1]).toContain(`For ${name === 'Amulet' || name === 'Emblem' ? 'an' : 'a'} ${name}`)
+        }
+        expect(catalog.find((item) => item.name === 'Sprig of Mistletoe' && item.source === 'XPHB')?.spellcastingFocusInformation).toEqual([
+            { label: 'Spellcasting Focus Requirement', value: 'Druid, Ranger' },
+        ])
+        const dragonFocus = catalog.find((item) => item.name === 'Dragon-Touched Focus' && item.source === 'FTD')
+        expect(dragonFocus?.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }])
+        expect(dragonFocus?.groupOptions?.map((option) => option.resolvedItem.spellcastingFocusInformation)).toEqual([
+            [{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }],
+            [{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }],
+            [{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }],
+            [{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }],
+        ])
+        expect(catalog.find((item) => item.name === 'Ruby Weave Gem' && item.source === 'FTD')?.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }])
+        expect(catalog.find((item) => item.name === 'Ruby of the War Mage' && item.source === 'XDMG')?.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Any Spellcaster' }])
+        expect(catalog.find((item) => item.name === 'Mizzium Apparatus' && item.source === 'GGR')?.spellcastingFocusInformation).toEqual([{ label: 'Spellcasting Focus Requirement', value: 'Sorcerer, Warlock, Wizard' }])
+        const instruments = catalog.filter((item) => item.categories.includes('Instrument'))
+        expect(instruments.length).toBeGreaterThan(0)
+        expect(instruments.filter((item) => item.spellcastingFocusInformation?.[0]?.value !== 'Bard').map((item) => `${item.name}|${item.source}|${item.category}`)).toEqual([])
         expect(catalog.some((item) => item.description.includes('{#itemEntry'))).toBe(false)
         const inlineRemainders = catalog.flatMap((item) => [item.description, ...item.properties].filter((line) => line.includes('{@')).map((line) => `${item.name}|${item.source}: ${line}`))
         expect(inlineRemainders).toEqual([])

@@ -1,8 +1,8 @@
 import type { Availability, Category, Item, ItemEdition, Rarity } from '../../types'
-import type { ItemInformation } from '../../types/catalog'
+import type { ItemDescriptionBlock, ItemInformation } from '../../types/catalog'
 import { CATEGORY_ICONS, resolveCategories } from './categories'
 import { lookupUid } from './indexes'
-import { cleanInlineTags, renderEntryTree, resolveEntityEntries } from './resolve-entries'
+import { cleanInlineTags, entryBlockLines, renderEntryTree, resolveEntityEntryBlocks } from './resolve-entries'
 import type { ProcessedItemEntity, RawItemEntry, RawItemProperty, RawItemType, RawNamedEntity } from './raw-types'
 import { isJsonRecord } from './raw-types'
 
@@ -30,6 +30,29 @@ const FALLBACK_PRICE_GP: Partial<Record<Rarity, number>> = {
     Rare: 4_000,
     'Very Rare': 40_000,
     Legendary: 200_000,
+}
+
+const FOCUS_CLASSES: Record<string, string[]> = {
+    arcane: ['Sorcerer', 'Warlock', 'Wizard'],
+    druid: ['Druid', 'Ranger'],
+    holy: ['Cleric', 'Paladin'],
+}
+
+const ALL_SPELLCASTER_CLASSES = new Set([
+    'Artificer', 'Bard', 'Cleric', 'Druid', 'Paladin', 'Ranger', 'Sorcerer', 'Warlock', 'Wizard',
+])
+
+const FOCUS_DESCRIPTIONS: Record<string, Record<string, string>> = {
+    PHB: {
+        arcane: 'An arcane focus is a specially made crystal, orb, rod, staff, wand, or similar item used to channel arcane spells. Sorcerers, Warlocks, and Wizards can use it as a spellcasting focus.',
+        druid: 'A druidic focus is made from plants, wood, or materials associated with sacred animals. Druids and Rangers can use it as a spellcasting focus.',
+        holy: 'A holy symbol represents a deity or pantheon and may be worn as an amulet, displayed on a shield, or kept as a reliquary. Clerics and Paladins can use it as a spellcasting focus.',
+    },
+    XPHB: {
+        arcane: 'An arcane focus can be a crystal, orb, rod, staff, or wand, decorated with gems or carvings to channel arcane magic. Sorcerers, Warlocks, and Wizards can use it as a spellcasting focus.',
+        druid: 'A druidic focus can be a sprig of mistletoe, wooden staff, or yew wand, carved, wrapped with ribbon, or painted to channel primal magic. Druids and Rangers can use it as a spellcasting focus.',
+        holy: 'A holy symbol can be an amulet, emblem, or reliquary, adorned with jewels or paint to channel divine magic. Clerics and Paladins can use it as a spellcasting focus.',
+    },
 }
 
 const MAGIC_TYPE_SOURCES = new Set(['RD', 'RG', 'SC', 'WD'])
@@ -260,13 +283,57 @@ function mountInformation(entity: ProcessedItemEntity, categories: readonly Cate
     return information.length ? information : undefined
 }
 
+function focusClasses(entity: ProcessedItemEntity): string[] {
+    const explicit = Array.isArray(entity.focus)
+        ? unique(entity.focus.filter((value): value is string => typeof value === 'string').map((value) => value.trim()))
+        : []
+    const focusType = typeof entity.scfType === 'string' ? entity.scfType.toLocaleLowerCase('en-US') : ''
+    if (entity.type?.split('|')[0] === 'SCF' && FOCUS_DESCRIPTIONS[entity.source]?.[focusType]) return FOCUS_CLASSES[focusType]
+    return explicit.length ? explicit : FOCUS_CLASSES[focusType] ?? []
+}
+
+function spellcastingFocusInformation(entity: ProcessedItemEntity, categories: readonly Category[]): ItemInformation[] | undefined {
+    if (categories.includes('Instrument')) return [{ label: 'Spellcasting Focus Requirement', value: 'Bard' }]
+    if (!categories.includes('Spellcasting Focus')) return undefined
+    const classes = focusClasses(entity)
+    const anySpellcaster = entity.focus === true || (classes.length === ALL_SPELLCASTER_CLASSES.size && classes.every((name) => ALL_SPELLCASTER_CLASSES.has(name)))
+    return anySpellcaster || classes.length
+        ? [{ label: 'Spellcasting Focus Requirement', value: anySpellcaster ? 'Any Spellcaster' : classes.join(', ') }]
+        : undefined
+}
+
+function standardFocusDescription(entity: ProcessedItemEntity): string | undefined {
+    if (entity.type?.split('|')[0] !== 'SCF') return undefined
+    const focusType = typeof entity.scfType === 'string' ? entity.scfType.toLocaleLowerCase('en-US') : ''
+    const description = FOCUS_DESCRIPTIONS[entity.source]?.[focusType]
+    if (!description || entity._catalogOrigin !== 'itemGroup' || !Array.isArray(entity.items)) return description
+    const forms = unique(entity.items.filter((uid): uid is string => typeof uid === 'string').map((uid) => uid.split('|')[0].trim().toLocaleLowerCase('en-US')))
+    if (!forms.length) return description
+    const namedForms = forms.map((form) => `${/^[aeiou]/i.test(form) ? 'an' : 'a'} ${form}`)
+    const formList = namedForms.length === 1 ? namedForms[0] : namedForms.length === 2 ? namedForms.join(' or ') : `${namedForms.slice(0, -1).join(', ')}, or ${namedForms.at(-1)}`
+    return `${description} Available forms include ${formList}.`
+}
+
 export function normalizeItem(entity: ProcessedItemEntity, indexes: NormalizationIndexes): Item {
     if (!entity.name.trim() || !entity.source.trim()) throw new Error('Cannot normalize an item without name and source')
     const rarity = normalizeRarity(entity.rarity)
     const type = typeDefinition(entity, indexes.itemTypes)
-    const entryLines = resolveEntityEntries(entity, indexes.itemEntries)
+    const entryBlocks = resolveEntityEntryBlocks(entity, indexes.itemEntries)
+    const entryLines = entryBlocks.flatMap(entryBlockLines).filter((line, index, lines) => line && lines.indexOf(line) === index)
     const auxiliary = auxiliaryProperties(entity, indexes, type)
-    const description = entryLines[0] ?? `${type?.name ?? (entity._catalogOrigin === 'itemGroup' ? 'Item group' : 'Item')} from ${entity.source}.`
+    const focusDescription = standardFocusDescription(entity)
+    const seenDescription = new Set<string>()
+    const descriptionBlocks: ItemDescriptionBlock[] | undefined = entryBlocks.some((block) => block.type === 'table')
+        ? [...(focusDescription ? [{ type: 'paragraph' as const, text: focusDescription }] : []), ...entryBlocks, ...auxiliary.properties.map((text): ItemDescriptionBlock => ({ type: 'paragraph', text }))]
+            .filter((block) => {
+                if (block.type === 'table') return true
+                const key = block.text.trim().toLocaleLowerCase('en-US')
+                if (!key || seenDescription.has(key)) return false
+                seenDescription.add(key)
+                return true
+            })
+        : undefined
+    const description = focusDescription ?? entryLines[0] ?? `${type?.name ?? (entity._catalogOrigin === 'itemGroup' ? 'Item group' : 'Item')} from ${entity.source}.`
     const categories = resolveCategories(entity, description)
     const category = categories[0]
     const rawRarity = typeof entity.rarity === 'string' ? entity.rarity.toLocaleLowerCase('en-US') : ''
@@ -306,10 +373,12 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         origin: entity._catalogOrigin,
         sourcePage: typeof entity.page === 'number' && Number.isInteger(entity.page) && entity.page >= 0 ? entity.page : undefined,
         attunementRequirement: typeof entity.reqAttune === 'string' ? informationText(entity.reqAttune) : undefined,
-        characteristics: unique([...entryLines, ...auxiliary.properties]),
+        characteristics: unique([...(focusDescription ? [focusDescription] : []), ...entryLines, ...auxiliary.properties]),
+        descriptionBlocks,
         ...equipmentInformation(entity, indexes, type),
         vehicleInformation: vehicleInformation(entity, categories),
         mountInformation: mountInformation(entity, categories, entryLines),
+        spellcastingFocusInformation: spellcastingFocusInformation(entity, categories),
     }
 }
 

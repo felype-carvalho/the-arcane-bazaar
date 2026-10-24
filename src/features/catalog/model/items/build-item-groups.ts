@@ -66,11 +66,15 @@ export function buildItemGroups(
             groupOptions.unshift({ id: `${group.id}::initial`, label: 'Initial', source: group.source, kind: 'inferredInitialStage', rarityOrigin, resolvedItem: withEffectiveRarity(group, rarity) })
         }
         if (!groupOptions.length) groupsWithoutOptions.push(`${group.name}|${group.source}`)
+        const categories = orderCategories(group.category, [...group.categories, ...groupOptions.flatMap((option) => option.resolvedItem.categories)])
         return {
             ...group,
             groupOptions,
             availableRarities: [...new Set(groupOptions.map((option) => option.resolvedItem.rarity))],
-            categories: orderCategories(group.category, [...group.categories, ...groupOptions.flatMap((option) => option.resolvedItem.categories)]),
+            categories,
+            spellcastingFocusInformation: categories.includes('Instrument')
+                ? [{ label: 'Spellcasting Focus Requirement', value: 'Bard' }]
+                : group.spellcastingFocusInformation,
             tags: [...new Set([...group.tags, ...groupOptions.flatMap((option) => [option.label.toLowerCase(), option.source.toLowerCase(), ...option.resolvedItem.tags])])],
         }
     })

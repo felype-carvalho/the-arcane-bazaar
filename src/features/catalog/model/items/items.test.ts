@@ -3,7 +3,7 @@ import { editionsAreCompatible, evaluateItemExpression, matchesVariantRequiremen
 import { resolveCategory } from './categories'
 import { parseUid } from './indexes'
 import { deriveAvailability, deriveBasePriceGp, normalizeRarity } from './normalize-item'
-import { cleanInlineTags, createItemEntryIndex, resolveEntityEntries } from './resolve-entries'
+import { cleanInlineTags, createItemEntryIndex, resolveEntityEntries, resolveEntityEntryBlocks } from './resolve-entries'
 import { resolveCopies } from './resolve-copy'
 import type { ProcessedItemEntity, RawItemEntity, RawItemEntry, RawMagicVariant } from './raw-types'
 
@@ -112,6 +112,15 @@ describe('specific magic variants', () => {
 })
 
 describe('rich entries', () => {
+    it('preserves table structure and rendered text from nested entries', () => {
+        const entity = { name: 'Test', source: 'TST', entries: ['Roll a {@dice d6}:', { type: 'entries', entries: [{ type: 'table', colLabels: ['d6', 'Lycanthropy'], rows: [['1-3', '{@creature Wererat}'], ['4-5', '{@creature Werewolf}']] }] }] }
+        expect(resolveEntityEntryBlocks(entity, new Map())).toEqual([
+            { type: 'paragraph', text: 'Roll a d6:' },
+            { type: 'table', caption: undefined, columns: ['d6', 'Lycanthropy'], rows: [['1-3', 'Wererat'], ['4-5', 'Werewolf']] },
+        ])
+        expect(resolveEntityEntries(entity, new Map())).toEqual(['Roll a d6:', 'd6 — Lycanthropy', '1-3 — Wererat', '4-5 — Werewolf'])
+    })
+
   it('resolves itemEntry templates, placeholders, and visible 5etools tag text', () => {
     const entries: RawItemEntry[] = [{ name: 'Resistance', source: 'DMG', entriesTemplate: ['You resist {{item.resist}} and cast {@spell fireball|PHB}. Bonus {=bonusAc}.'] }]
     const entity = { name: 'Test Armor', source: 'DMG', resist: ['fire'], bonusAc: '+1', entries: ['{#itemEntry Resistance}'] }
