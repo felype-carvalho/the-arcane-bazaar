@@ -68,6 +68,8 @@ export interface Item {
     attunementRequirement?: string
     weaponInformation?: ItemInformation[]
     armorInformation?: ItemInformation[]
+    vehicleInformation?: ItemInformation[]
+    mountInformation?: ItemInformation[]
     characteristics?: string[]
 }
 

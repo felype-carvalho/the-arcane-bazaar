@@ -20,6 +20,42 @@ describe('catalog integration with the real corpus', () => {
         expect(new Set(catalog.map((item) => item.origin))).toEqual(new Set(['item', 'itemGroup', 'baseitem', 'genericVariant']))
         expect(catalog.some((item) => item.origin === 'specificVariant')).toBe(false)
         expect(catalog.every((item) => item.id && item.name && item.source && item.category && Array.isArray(item.tags) && Array.isArray(item.properties))).toBe(true)
+        const hoopak = catalog.find((item) => item.name === 'Hoopak' && item.source === 'DSotDQ')
+        expect(hoopak?.weaponInformation).toContainEqual({ label: 'Properties', value: 'Ammunition (Sling Bullet), Finesse, Special, Two-Handed' })
+        for (const source of ['PHB', 'XPHB']) {
+            const heavyCrossbow = catalog.find((item) => item.name === 'Heavy Crossbow' && item.source === source)
+            expect(heavyCrossbow?.weaponInformation).toContainEqual({ label: 'Properties', value: 'Ammunition (Bolt), Heavy, Loading, Two-Handed' })
+            const splintArmor = catalog.find((item) => item.name === 'Splint Armor' && item.source === source)
+            expect(splintArmor?.characteristics).toEqual(expect.arrayContaining([
+                'The wearer has disadvantage on Dexterity (Stealth) checks.',
+                'If the wearer has a Strength score lower than 15, their speed is reduced by 10 feet.',
+            ]))
+            const studdedLeather = catalog.find((item) => item.name === 'Studded Leather Armor' && item.source === source)
+            expect(studdedLeather?.armorInformation).toContainEqual({ label: 'Base AC', value: '12 + Dex' })
+        }
+        const fungalArmor = catalog.find((item) => item.name === 'Armor of Fungal Spores')
+        const fungalChainShirt = fungalArmor?.variantOptions?.find((option) => option.resolvedItem.name === 'Chain Shirt of Fungal Spores')
+        expect(fungalChainShirt?.resolvedItem.armorInformation).toContainEqual({ label: 'Base AC', value: 'AC 13 + Dex (max 2)' })
+        const skyship = catalog.find((item) => item.name === 'Skyship' && item.source === 'EGW')
+        expect(skyship?.vehicleInformation).toEqual(expect.arrayContaining([
+            { label: 'Speed', value: '10 mph' },
+            { label: 'Carrying Capacity', value: '10 tons cargo · 30 passengers' },
+            { label: 'Crew', value: '6–10' },
+            { label: 'Personal Travel Cost', value: '2 GP per mile per passenger' },
+            { label: 'Shipping Cost', value: '1 GP per 100 lb per mile' },
+        ]))
+        expect(catalog.find((item) => item.name === 'Carriage' && item.source === 'PHB')?.vehicleInformation).toBeUndefined()
+        expect(catalog.find((item) => item.name === 'Camel' && item.source === 'PHB')?.mountInformation).toEqual([
+            { label: 'Speed', value: '50 ft.' },
+            { label: 'Carrying Capacity', value: '480 lb' },
+            { label: 'Monster Stat Block', value: 'Camel' },
+        ])
+        expect(catalog.find((item) => item.name === 'Sled Dog' && item.source === 'FRHoF')?.mountInformation).toEqual([
+            { label: 'Monster Stat Block', value: 'Wolf' },
+        ])
+        expect(catalog.find((item) => item.name === 'Axe Beak' && item.source === 'IDRotF')?.mountInformation).toEqual([
+            { label: 'Monster Stat Block', value: 'Axe Beak' },
+        ])
         expect(catalog.some((item) => item.description.includes('{#itemEntry'))).toBe(false)
         const inlineRemainders = catalog.flatMap((item) => [item.description, ...item.properties].filter((line) => line.includes('{@')).map((line) => `${item.name}|${item.source}: ${line}`))
         expect(inlineRemainders).toEqual([])

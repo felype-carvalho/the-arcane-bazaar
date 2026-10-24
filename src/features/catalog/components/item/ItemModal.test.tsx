@@ -73,11 +73,91 @@ it('shows estimates, source, attunement and structured equipment information', (
     expect(screen.queryByText('Armor information')).not.toBeInTheDocument()
 })
 
+it('shows weapon cards in three columns with capitalized values and distinct icons', () => {
+    render(<ItemModal item={{
+        ...ITEM_FIXTURES[0],
+        weaponInformation: [
+            { label: 'Base Damage', value: '1d8 slashing' },
+            { label: 'Weapon Type', value: 'martial · Melee weapon' },
+            { label: 'Properties', value: 'special, Two-Handed' },
+            { label: 'Range', value: '20/60 ft.' },
+            { label: 'Magic attack / damage bonus', value: '+1' },
+        ],
+    }} onClose={vi.fn()} />)
+
+    const section = screen.getByRole('heading', { name: 'Weapon information' }).closest('section') as HTMLElement
+    expect(section.querySelector('dl')).toHaveClass('grid-cols-3')
+    expect(within(section).getByText('Special, Two-Handed')).toBeInTheDocument()
+    expect(within(section).getByText('Martial · Melee weapon')).toBeInTheDocument()
+    for (const [label, icon] of [['Base Damage', 'sword'], ['Weapon Type', 'axe'], ['Properties', 'table-properties'], ['Range', 'bow-arrow'], ['Magic attack / damage bonus', 'wand-sparkles']]) {
+        const card = within(section).getByText(label).closest('div')?.parentElement
+        expect(card?.querySelector('svg')).toHaveClass(`lucide-${icon}`)
+    }
+})
+
 it('shows armor without weapon information', () => {
-    render(<ItemModal item={{ ...ITEM_FIXTURES[0], armorInformation: [{ label: 'AC bonus', value: '+2' }] }} onClose={vi.fn()} />)
-    expect(screen.getByText('Armor information')).toBeInTheDocument()
-    expect(screen.getByText('+2')).toBeInTheDocument()
+    render(<ItemModal item={{ ...ITEM_FIXTURES[0], armorInformation: [
+        { label: 'AC bonus', value: '+2' },
+        { label: 'Armor type', value: 'Heavy armor' },
+        { label: 'Strength requirement', value: '15' },
+        { label: 'Stealth', value: 'Disadvantage' },
+        { label: 'Magic AC bonus', value: '+1' },
+    ] }} onClose={vi.fn()} />)
+    const section = screen.getByRole('heading', { name: 'Armor information' }).closest('section') as HTMLElement
+    expect(within(section).getByText('+2')).toBeInTheDocument()
+    for (const [label, icon] of [['Armor type', 'shield-cog'], ['Strength requirement', 'biceps-flexed'], ['Stealth', 'hat-glasses'], ['Magic AC bonus', 'wand-sparkles']]) {
+        const card = within(section).getByText(label).closest('div')?.parentElement
+        expect(card?.querySelector('svg')).toHaveClass(`lucide-${icon}`)
+    }
     expect(screen.queryByText('Weapon information')).not.toBeInTheDocument()
+})
+
+it('shows available vehicle information with its own icons', () => {
+    render(<ItemModal item={{
+        ...ITEM_FIXTURES[0],
+        category: 'Vehicle',
+        categories: ['Vehicle'],
+        vehicleInformation: [
+            { label: 'Speed', value: '10 mph' },
+            { label: 'Carrying Capacity', value: '10 tons cargo · 30 passengers' },
+            { label: 'Crew', value: '6–10' },
+            { label: 'AC', value: '15' },
+            { label: 'HP', value: '300' },
+            { label: 'Damage Threshold', value: '20' },
+            { label: 'Personal Travel Cost', value: '2 GP per mile per passenger' },
+            { label: 'Shipping Cost', value: '1 GP per 100 lb per mile' },
+        ],
+    }} onClose={vi.fn()} />)
+
+    const section = screen.getByRole('heading', { name: 'Vehicle Information' }).closest('section') as HTMLElement
+    expect(section.querySelector('dl')).toHaveClass('grid-cols-3')
+    for (const [label, icon] of [['Speed', 'circle-gauge'], ['Carrying Capacity', 'package'], ['Crew', 'user-star'], ['AC', 'shield'], ['HP', 'heart-plus'], ['Damage Threshold', 'shield-lock'], ['Personal Travel Cost', 'hand-coins'], ['Shipping Cost', 'package-2']]) {
+        const card = within(section).getByText(label).closest('div')?.parentElement
+        expect(card?.querySelector('svg')).toHaveClass(`lucide-${icon}`)
+    }
+})
+
+it('shows mount information in three columns with its own icons and omits absent values', () => {
+    const { rerender } = render(<ItemModal item={{
+        ...ITEM_FIXTURES[0],
+        category: 'Mount',
+        categories: ['Mount'],
+        mountInformation: [
+            { label: 'Speed', value: '50 ft.' },
+            { label: 'Carrying Capacity', value: '480 lb' },
+            { label: 'Monster Stat Block', value: 'Camel' },
+        ],
+    }} onClose={vi.fn()} />)
+
+    const section = screen.getByRole('heading', { name: 'Mount Information' }).closest('section') as HTMLElement
+    expect(section.querySelector('dl')).toHaveClass('grid-cols-3')
+    for (const [label, icon] of [['Speed', 'circle-gauge'], ['Carrying Capacity', 'package'], ['Monster Stat Block', 'panda']]) {
+        const card = within(section).getByText(label).closest('div')?.parentElement
+        expect(card?.querySelector('svg')).toHaveClass(`lucide-${icon}`)
+    }
+
+    rerender(<ItemModal item={{ ...ITEM_FIXTURES[0], category: 'Mount', categories: ['Mount'], mountInformation: [{ label: 'Speed', value: '' }] }} onClose={vi.fn()} />)
+    expect(screen.queryByRole('heading', { name: 'Mount Information' })).not.toBeInTheDocument()
 })
 
 it('closes by button, Escape and backdrop, traps focus and restores it', () => {

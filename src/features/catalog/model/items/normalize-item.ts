@@ -1,4 +1,4 @@
-import type { Availability, Item, ItemEdition, Rarity } from '../../types'
+import type { Availability, Category, Item, ItemEdition, Rarity } from '../../types'
 import type { ItemInformation } from '../../types/catalog'
 import { CATEGORY_ICONS, resolveCategories } from './categories'
 import { lookupUid } from './indexes'
@@ -73,6 +73,10 @@ function propertyName(property: RawItemProperty): string {
     return property.abbreviation
 }
 
+function isArmor(entity: ProcessedItemEntity): boolean {
+    return entity.armor === true || ['LA', 'MA', 'HA', 'S'].includes(entity.type?.split('|')[0] ?? '')
+}
+
 function stablePart(value: string): string {
     return value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('en-US').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'unknown'
 }
@@ -135,8 +139,11 @@ function auxiliaryProperties(entity: ProcessedItemEntity, indexes: Normalization
         const additional = indexes.typeAdditionalEntries.get(entity.type.toLocaleLowerCase('en-US'))
         properties.push(...renderEntryTree(additional, entity, indexes.itemEntries))
     }
-    if (typeof entity.dmg1 === 'string') properties.push(`${entity.dmg1} ${DAMAGE_TYPES[String(entity.dmgType)] ?? String(entity.dmgType ?? '').toLocaleLowerCase()} damage`.trim())
-    if (typeof entity.ac === 'number') properties.push(`Armor Class ${entity.ac}`)
+    if (isArmor(entity)) {
+        if (entity.stealth === true) properties.push('The wearer has disadvantage on Dexterity (Stealth) checks.')
+        const strength = informationText(entity.strength)
+        if (strength && /^\d+$/.test(strength)) properties.push(`If the wearer has a Strength score lower than ${strength}, their speed is reduced by 10 feet.`)
+    }
     return { properties, tags }
 }
 
@@ -149,13 +156,16 @@ function informationText(value: unknown): string | undefined {
 function equipmentInformation(entity: ProcessedItemEntity, indexes: NormalizationIndexes, type: RawItemType | undefined): Pick<Item, 'weaponInformation' | 'armorInformation'> {
     const typeCode = entity.type?.split('|')[0]
     const weapon = entity.weapon === true || ['M', 'R'].includes(typeCode ?? '') || typeof entity.dmg1 === 'string'
-    const armor = entity.armor === true || ['LA', 'MA', 'HA', 'S'].includes(typeCode ?? '')
+    const armor = isArmor(entity)
+    const ammoType = informationText(entity.ammoType)?.split('|')[0].trim().replace(/^crossbow /i, '').replace(/\b[a-z]/g, (letter) => letter.toLocaleUpperCase('en-US'))
     const properties = (entity.property ?? []).flatMap((uid) => {
         if (typeof uid !== 'string') return []
         const definition = propertyDefinition(entity, uid, indexes.itemProperties)
         if (!definition) return []
         const name = propertyName(definition)
-        return [uid.split('|')[0] === 'V' && informationText(entity.dmg2) ? `${name} (${informationText(entity.dmg2)})` : name]
+        const displayName = name.charAt(0).toLocaleUpperCase('en-US') + name.slice(1)
+        if (uid.split('|')[0] === 'A' && ammoType) return [`${displayName} (${ammoType})`]
+        return [uid.split('|')[0] === 'V' && informationText(entity.dmg2) ? `${displayName} (${informationText(entity.dmg2)})` : displayName]
     })
     const information: ItemInformation[] = []
     const add = (label: string, value: unknown) => {
@@ -163,7 +173,7 @@ function equipmentInformation(entity: ProcessedItemEntity, indexes: Normalizatio
         if (text) information.push({ label, value: text })
     }
     if (weapon) {
-        if (informationText(entity.dmg1)) add('Base damage', [informationText(entity.dmg1), DAMAGE_TYPES[String(entity.dmgType)]].filter(Boolean).join(' '))
+        if (informationText(entity.dmg1)) add('Base Damage', [informationText(entity.dmg1), DAMAGE_TYPES[String(entity.dmgType)]].filter(Boolean).join(' '))
         add('Properties', properties.join(', '))
         const masteries = Array.isArray(entity.mastery) ? entity.mastery.flatMap((uid) => {
             if (typeof uid !== 'string') return []
@@ -172,13 +182,13 @@ function equipmentInformation(entity: ProcessedItemEntity, indexes: Normalizatio
         }) : []
         add('Mastery', masteries.join(', '))
         if (informationText(entity.range)) add('Range', `${informationText(entity.range)} ft.`)
-        add('Weapon type', [informationText(entity.weaponCategory), type?.name].filter(Boolean).join(' · '))
+        add('Weapon Type', [informationText(entity.weaponCategory), type?.name].filter(Boolean).join(' · '))
         add('Magic attack / damage bonus', entity.bonusWeapon)
         return { weaponInformation: information.length ? information : undefined }
     }
     if (armor) {
         const baseAc = informationText(entity.ac)
-        add(typeCode === 'S' ? 'AC bonus' : 'Base AC', baseAc === undefined ? undefined : typeCode === 'S' ? `+${baseAc}` : baseAc)
+        add(typeCode === 'S' ? 'AC bonus' : 'Base AC', baseAc === undefined ? undefined : typeCode === 'S' ? `+${baseAc}` : typeCode === 'LA' ? `${baseAc} + Dex` : typeCode === 'MA' ? `AC ${baseAc} + Dex (max 2)` : baseAc)
         add('Armor type', type?.name)
         add('Properties', properties.join(', '))
         add('Strength requirement', entity.strength)
@@ -187,6 +197,67 @@ function equipmentInformation(entity: ProcessedItemEntity, indexes: Normalizatio
         return { armorInformation: information.length ? information : undefined }
     }
     return {}
+}
+
+function vehicleInformation(entity: ProcessedItemEntity, categories: readonly Category[]): ItemInformation[] | undefined {
+    if (!categories.includes('Vehicle')) return undefined
+
+    const number = (value: unknown): number | undefined => typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : undefined
+    const format = (value: number): string => new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(value)
+    const information: ItemInformation[] = []
+    const add = (label: string, value: string | undefined) => { if (value) information.push({ label, value }) }
+
+    const speed = number(entity.vehSpeed)
+    if (speed !== undefined) add('Speed', `${format(speed)} mph`)
+
+    const cargo = number(entity.capCargo)
+    const passengers = number(entity.capPassenger)
+    const capacity = [
+        cargo === undefined ? undefined : `${format(cargo)} ${cargo === 1 ? 'ton' : 'tons'} cargo`,
+        passengers === undefined ? undefined : `${format(passengers)} ${passengers === 1 ? 'passenger' : 'passengers'}`,
+    ].filter((value): value is string => value !== undefined)
+    add('Carrying Capacity', capacity.length ? capacity.join(' · ') : undefined)
+
+    const crew = number(entity.crew)
+    const crewMin = number(entity.crewMin)
+    const crewMax = number(entity.crewMax)
+    add('Crew', crew !== undefined ? format(crew) : crewMin !== undefined && crewMax !== undefined ? `${format(crewMin)}–${format(crewMax)}` : crewMin !== undefined ? format(crewMin) : crewMax !== undefined ? format(crewMax) : undefined)
+
+    const ac = number(entity.vehAc)
+    const hp = number(entity.vehHp)
+    const damageThreshold = number(entity.vehDmgThresh)
+    if (ac !== undefined) add('AC', format(ac))
+    if (hp !== undefined) add('HP', format(hp))
+    if (damageThreshold !== undefined) add('Damage Threshold', format(damageThreshold))
+
+    const travelCost = number(entity.travelCost)
+    const shippingCost = number(entity.shippingCost)
+    if (travelCost !== undefined) add('Personal Travel Cost', `${format(travelCost / 100)} GP per mile per passenger`)
+    if (shippingCost !== undefined) add('Shipping Cost', `${format(shippingCost / 100)} GP per 100 lb per mile`)
+
+    return information.length ? information : undefined
+}
+
+function mountInformation(entity: ProcessedItemEntity, categories: readonly Category[], entryLines: readonly string[]): ItemInformation[] | undefined {
+    if (!categories.includes('Mount')) return undefined
+
+    const format = (value: unknown): string | undefined =>
+        typeof value === 'number' && Number.isFinite(value) && value >= 0
+            ? new Intl.NumberFormat('en-US', { maximumFractionDigits: 4 }).format(value)
+            : undefined
+    const information: ItemInformation[] = []
+    const speed = format(entity.speed)
+    const capacity = format(entity.carryingCapacity)
+    if (speed !== undefined) information.push({ label: 'Speed', value: `${speed} ft.` })
+    if (capacity !== undefined) information.push({ label: 'Carrying Capacity', value: `${capacity} lb` })
+
+    const statBlock = entryLines
+        .map((line) => /\buses?\s+the\s+([a-z][a-z' -]*?)\s+stat block\b/i.exec(line)?.[1].trim())
+        .find((name): name is string => Boolean(name))
+    const monsterName = statBlock ? statBlock.charAt(0).toLocaleUpperCase('en-US') + statBlock.slice(1) : entity.name
+    information.push({ label: 'Monster Stat Block', value: monsterName })
+
+    return information.length ? information : undefined
 }
 
 export function normalizeItem(entity: ProcessedItemEntity, indexes: NormalizationIndexes): Item {
@@ -237,6 +308,8 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         attunementRequirement: typeof entity.reqAttune === 'string' ? informationText(entity.reqAttune) : undefined,
         characteristics: unique([...entryLines, ...auxiliary.properties]),
         ...equipmentInformation(entity, indexes, type),
+        vehicleInformation: vehicleInformation(entity, categories),
+        mountInformation: mountInformation(entity, categories, entryLines),
     }
 }
 

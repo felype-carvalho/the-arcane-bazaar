@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { BookOpen, CircleDashedCheck, Coins, Shield, Sparkles, Swords, Weight, X } from 'lucide-react'
+import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
 import type { ItemInformation } from '../../types/catalog'
 import { getSourceName } from '../../model/sources'
@@ -13,6 +13,39 @@ import '@fontsource/inter/latin-400-italic.css'
 const sectionHeadingClass = 'mb-[14px] font-display text-sm font-semibold tracking-[0.06em] text-gold-bright'
 const summarySectionClass = 'border-t border-border pt-5'
 const noteClass = 'mt-3 text-[11px] leading-[1.6] text-silver'
+
+const weaponIcons: Record<string, ReactNode> = {
+    'Base Damage': <Sword aria-hidden="true" />,
+    'Weapon Type': <Axe aria-hidden="true" />,
+    Properties: <TableProperties aria-hidden="true" />,
+    Range: <BowArrow aria-hidden="true" />,
+    'Magic attack / damage bonus': <WandSparkles aria-hidden="true" />,
+}
+
+const armorIcons: Record<string, ReactNode> = {
+    'Armor type': <ShieldCog aria-hidden="true" />,
+    'Strength requirement': <BicepsFlexed aria-hidden="true" />,
+    Stealth: <HatGlasses aria-hidden="true" />,
+    'Magic AC bonus': <WandSparkles aria-hidden="true" />,
+}
+
+const vehicleIcons: Record<string, ReactNode> = {
+    Speed: <CircleGauge aria-hidden="true" />,
+    'Carrying Capacity': <Package aria-hidden="true" />,
+    Crew: <UserStar aria-hidden="true" />,
+    AC: <Shield aria-hidden="true" />,
+    HP: <HeartPlus aria-hidden="true" />,
+    'Damage Threshold': <ShieldLock aria-hidden="true" />,
+    'Personal Travel Cost': <HandCoins aria-hidden="true" />,
+    'Shipping Cost': <Package2 aria-hidden="true" />,
+}
+
+const mountIcons: Record<string, ReactNode> = {
+    Speed: <CircleGauge aria-hidden="true" />,
+    'Carrying Capacity': <Package aria-hidden="true" />,
+    'Monster Stat Block': <Panda aria-hidden="true" />,
+}
+
 interface ItemModalProps {
     item: Item
     configurationSummary?: string
@@ -30,11 +63,13 @@ function Information({ label, value, icon, outlined = false }: { label: string; 
     </div>
 }
 
-function EquipmentSection({ title, information, armor = false }: { title: string; information?: ItemInformation[]; armor?: boolean }) {
+function EquipmentSection({ title, information, kind = 'weapon' }: { title: string; information?: ItemInformation[]; kind?: 'weapon' | 'armor' | 'vehicle' | 'mount' }) {
     const visibleInformation = information?.filter((entry) => hasText(entry.value)) ?? []
     if (!visibleInformation.length) return null
-    return <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>{title}</h3><dl className="grid grid-cols-2 gap-3 max-[601px]:grid-cols-1">
-        {visibleInformation.map((entry) => <Information key={entry.label} {...entry} outlined icon={armor ? <Shield aria-hidden="true" /> : <Swords aria-hidden="true" />} />)}
+    const icons = kind === 'armor' ? armorIcons : kind === 'vehicle' ? vehicleIcons : kind === 'mount' ? mountIcons : weaponIcons
+    const fallbackIcon = kind === 'armor' ? <Shield aria-hidden="true" /> : kind === 'vehicle' || kind === 'mount' ? <Package aria-hidden="true" /> : <Swords aria-hidden="true" />
+    return <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>{title}</h3><dl className="grid grid-cols-3 gap-3 max-[900px]:grid-cols-2 max-[601px]:grid-cols-1">
+        {visibleInformation.map((entry) => <Information key={entry.label} label={entry.label} value={kind === 'weapon' ? entry.value.charAt(0).toLocaleUpperCase('en-US') + entry.value.slice(1) : entry.value} outlined icon={icons[entry.label] ?? fallbackIcon} />)}
     </dl></section>
 }
 
@@ -122,7 +157,9 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                             {item.attunement && hasText(item.attunementRequirement) && <Information label="Requirement" value={item.attunementRequirement} icon={<CircleDashedCheck aria-hidden="true" />} />}
                         </dl>}
                         <EquipmentSection title="Weapon information" information={item.weaponInformation} />
-                        <EquipmentSection title="Armor information" information={item.armorInformation} armor />
+                        <EquipmentSection title="Armor information" information={item.armorInformation} kind="armor" />
+                        <EquipmentSection title="Vehicle Information" information={item.vehicleInformation} kind="vehicle" />
+                        <EquipmentSection title="Mount Information" information={item.mountInformation} kind="mount" />
                         {characteristics.length > 0 && <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>Description</h3>
                             {characteristics.map((text) => <DescriptionParagraph key={text} text={text} />)}
                         </section>}
