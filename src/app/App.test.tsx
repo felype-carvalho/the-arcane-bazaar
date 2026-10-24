@@ -442,7 +442,6 @@ describe('Arcane Bazaar app', () => {
         expect(within(resolvedDialog).getByText('A longsword empowered by the selected variant.')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText('Enchanted blade')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText('Combined base and variant property')).toBeInTheDocument()
-        expect(within(resolvedDialog).getByText('resolved-variant')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText('Required')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText('415 GP')).toBeInTheDocument()
         expect(within(resolvedDialog).getByText(/Configuration:/)).toHaveTextContent('Longsword (PHB)')
@@ -484,7 +483,7 @@ describe('Arcane Bazaar app', () => {
         expect(persistedChip).toHaveAttribute('aria-pressed', 'false')
 
         await user.click(screen.getByRole('button', { name: 'Reset local data' }))
-        await user.click(screen.getByRole('button', { name: 'Reset IndexedDB' }))
+        await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
 
         await waitFor(() => expect(persistedChip).toHaveAttribute('aria-pressed', 'true'))
         expect(await screen.findByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()

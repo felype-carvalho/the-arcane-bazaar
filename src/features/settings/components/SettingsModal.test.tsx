@@ -167,7 +167,7 @@ describe('SettingsModal', () => {
     expect(storage.reset).not.toHaveBeenCalled()
 
     await user.click(within(dialog).getByRole('button', { name: 'Reset local data' }))
-    await user.click(within(dialog).getByRole('button', { name: 'Reset IndexedDB' }))
+    await user.click(within(dialog).getByRole('button', { name: 'Reset All Configuration' }))
 
     await waitFor(() => expect(storage.reset).toHaveBeenCalledOnce())
     expect(sourceChip).toHaveAttribute('aria-pressed', 'true')
@@ -183,7 +183,7 @@ describe('SettingsModal', () => {
     await waitFor(() => expect(sourceChip).toBeEnabled())
 
     await user.click(screen.getByRole('button', { name: 'Reset local data' }))
-    await user.click(screen.getByRole('button', { name: 'Reset IndexedDB' }))
+    await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
 
     await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('database blocked'))
     expect(sourceChip).toHaveAttribute('aria-pressed', 'false')

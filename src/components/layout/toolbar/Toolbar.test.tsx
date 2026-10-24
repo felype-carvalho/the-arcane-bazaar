@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { SettingsProvider, type SettingsStorage } from '@/features/settings'
 import { ALL_SOURCE_CODES } from '@/features/catalog'
+import packageMetadata from '../../../../package.json'
 import { Toolbar } from './Toolbar'
 
 const storage: SettingsStorage = {
@@ -41,7 +42,7 @@ describe('Toolbar', () => {
     await user.click(screen.getByRole('menuitem', { name: 'About' }))
     const dialog = screen.getByRole('dialog', { name: 'About The Arcane Bazaar' })
 
-    expect(within(dialog).getByText('1.1.0')).toBeInTheDocument()
+    expect(within(dialog).getByText(packageMetadata.version)).toBeInTheDocument()
     expect(within(dialog).getByRole('link', { name: /View repository/ })).toHaveAttribute('href', 'https://github.com/felype-carvalho/the-arcane-bazaar')
   })
 })

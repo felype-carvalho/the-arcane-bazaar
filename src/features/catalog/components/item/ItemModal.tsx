@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react'
-import { BookOpen, Coins, Shield, Sparkles, Swords, Weight, UserRound, X } from 'lucide-react'
+import { BookOpen, CircleDashedCheck, Coins, Shield, Sparkles, Swords, Weight, X } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
 import type { ItemInformation } from '../../types/catalog'
 import { getSourceName } from '../../model/sources'
@@ -13,7 +13,6 @@ import '@fontsource/inter/latin-400-italic.css'
 const sectionHeadingClass = 'mb-[14px] font-display text-sm font-semibold tracking-[0.06em] text-gold-bright'
 const summarySectionClass = 'border-t border-border pt-5'
 const noteClass = 'mt-3 text-[11px] leading-[1.6] text-silver'
-
 interface ItemModalProps {
     item: Item
     configurationSummary?: string
@@ -76,7 +75,10 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
             <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="item-modal-title" tabIndex={-1} className="flex w-[min(1400px,100%)] max-h-[calc(100dvh-32px)] animate-[modal-in_160ms_ease-out] flex-col overflow-hidden rounded-2xl border border-gold bg-panel shadow-[0_30px_90px_rgb(0_0_0_/_65%),0_0_30px_rgb(178_127_24_/_10%)] outline-none max-[601px]:max-h-dvh max-[601px]:rounded-none max-[601px]:border-0">
                 <header className="flex shrink-0 items-center gap-5 border-b border-[#80662c] bg-[linear-gradient(110deg,var(--color-catalog),var(--color-panel))] px-7 py-[22px] max-[900px]:gap-3 max-[900px]:p-4">
                     <span className="item-icon-tile small" aria-hidden="true">{item.icon}</span>
-                    <h2 id="item-modal-title" className="min-w-0 flex-1 font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2>
+                    <div className="min-w-0 flex-1">
+                        <h2 id="item-modal-title" className="font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2>
+                        {hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]">{item.subtype}</p>}
+                    </div>
                     <button className="icon-button shrink-0" onClick={onClose} aria-label="Close item sheet"><X size={24} /></button>
                 </header>
                 <div className="arcane-scrollbar grid min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] overflow-y-auto max-[900px]:grid-cols-[minmax(0,1fr)]">
@@ -117,7 +119,7 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                         {(hasWeight || item.attunement) && <dl className="flex flex-wrap rounded-lg border border-border bg-surface">
                             {hasWeight && <Information label="Weight" value={item.weight} icon={<Weight aria-hidden="true" />} />}
                             {item.attunement && <Information label="Attunement" value="Required" icon={<Sparkles aria-hidden="true" />} />}
-                            {item.attunement && hasText(item.attunementRequirement) && <Information label="Requirement" value={item.attunementRequirement} icon={<UserRound aria-hidden="true" />} />}
+                            {item.attunement && hasText(item.attunementRequirement) && <Information label="Requirement" value={item.attunementRequirement} icon={<CircleDashedCheck aria-hidden="true" />} />}
                         </dl>}
                         <EquipmentSection title="Weapon information" information={item.weaponInformation} />
                         <EquipmentSection title="Armor information" information={item.armorInformation} armor />

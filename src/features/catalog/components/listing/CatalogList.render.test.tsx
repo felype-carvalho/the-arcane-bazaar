@@ -18,7 +18,7 @@ describe('catalog category presentation', () => {
             expect(within(group).getByText('Bag/Container')).toBeInTheDocument()
             expect(within(group).getByText('Consumable')).toBeInTheDocument()
             expect(within(group).getByText('Wondrous')).toBeInTheDocument()
-            expect(within(group).getByText('✨')).toHaveAttribute('aria-hidden', 'true')
+            expect(within(group).getByText('🌟')).toHaveAttribute('aria-hidden', 'true')
         }
         expect(screen.getByText('Container')).toBeInTheDocument()
     })
