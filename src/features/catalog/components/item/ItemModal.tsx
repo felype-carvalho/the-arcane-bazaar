@@ -1,13 +1,14 @@
-import { useEffect, useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, MessageCircleCheck, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
 import type { ItemDescriptionBlock, ItemInformation } from '../../types/catalog'
 import { getSourceName } from '../../model/sources'
+import { getItemImages, type ItemImage } from '../../model/items/item-images'
 import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 import { RarityBadge, TypeMark } from './ItemBadges'
 import { ItemCategories } from './ItemCategories'
+import { ItemImageViewer } from './ItemImageViewer'
 import { SourceChip } from './SourceChip'
-import placeholderImage from '../../assets/item-placeholder.png'
 import '@fontsource/inter/latin-400-italic.css'
 
 const sectionHeadingClass = 'mb-[14px] font-display text-sm font-semibold tracking-[0.06em] text-gold-bright'
@@ -87,10 +88,10 @@ function DescriptionTable({ block }: { block: Extract<ItemDescriptionBlock, { ty
         <table className="w-full border-collapse text-left text-sm leading-[1.6]">
             {block.caption && <caption className="bg-panel-strong px-4 py-3 text-left font-display text-gold-bright">{block.caption}</caption>}
             {block.columns.length > 0 && <thead className="bg-panel-strong text-gold-bright"><tr>
-                {block.columns.map((column, index) => <th key={index} scope="col" className="border-b border-border px-4 py-2.5 font-semibold">{column}</th>)}
+                {block.columns.map((column, index) => <th key={index} scope="col" className="min-w-[30px] border-b border-border px-4 py-2.5 font-semibold">{column}</th>)}
             </tr></thead>}
             <tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex} className="border-b border-border even:bg-surface last:border-b-0">
-                {row.map((cell, cellIndex) => <td key={cellIndex} className="px-4 py-2.5 text-cream">{cell}</td>)}
+                {row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-[30px] px-4 py-2.5 text-cream">{cell}</td>)}
             </tr>)}</tbody>
         </table>
     </div>
@@ -98,18 +99,48 @@ function DescriptionTable({ block }: { block: Extract<ItemDescriptionBlock, { ty
 
 export function ItemModal({ item, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
     const dialogRef = useRef<HTMLDivElement>(null)
+    const thumbnailRef = useRef<HTMLButtonElement>(null)
+    const [images, setImages] = useState<ItemImage[]>([])
+    const [imageFailed, setImageFailed] = useState(false)
+    const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null)
+    const hasItemImage = images.length > 0 && !imageFailed
     const displayedPrice = item.basePriceGp ?? item.variantPriceGp
     const hasPrice = displayedPrice != null && Number.isFinite(displayedPrice) && displayedPrice >= 0
     const characteristics = [...new Set((item.characteristics ?? [item.description, ...item.properties]).map((text) => text.trim()).filter(hasText))]
-    const descriptionBlocks = item.descriptionBlocks ?? characteristics.map((text): ItemDescriptionBlock => ({ type: 'paragraph', text }))
+    const tradeGoodSubtype = item.category === 'Trade Good' && hasText(item.subtype) ? item.subtype : null
+    const descriptionBlocks = [
+        ...(tradeGoodSubtype ? [{ type: 'paragraph' as const, text: tradeGoodSubtype }] : []),
+        ...(item.descriptionBlocks ?? characteristics.map((text): ItemDescriptionBlock => ({ type: 'paragraph', text }))),
+    ]
     const hasWeight = hasText(item.weight)
     const sourceName = getSourceName(item.source)
     const sourcePage = item.sourcePage != null && Number.isFinite(item.sourcePage) && item.sourcePage >= 0 ? item.sourcePage : null
+    const badges = <>
+        {!['None', 'Unknown'].includes(item.rarity) && <RarityBadge rarity={item.rarity} />}
+        <span className="type-pill bg-[color-mix(in_srgb,#4d2f5e_25%,#101119)]! px-3! py-[3px]! text-xs! [&>span]:text-xs!"><TypeMark type={item.type} /></span>
+    </>
+
+    useEffect(() => {
+        let active = true
+        setImages([])
+        setImageFailed(false)
+        setActiveImageIndex(null)
+        getItemImages(item.name, item.source, item.imageFallback)
+            .then((result) => { if (active) setImages(result) })
+            .catch(() => { if (active) setImages([]) })
+        return () => { active = false }
+    }, [item.name, item.source, item.imageFallback])
+
     useEffect(() => {
         const previous = document.activeElement as HTMLElement | null
-        const dialog = dialogRef.current
-        dialog?.focus()
+        dialogRef.current?.focus()
+        return () => previous?.focus()
+    }, [])
+
+    useEffect(() => {
         const onKeyDown = (event: KeyboardEvent) => {
+            if (activeImageIndex !== null) return
+            const dialog = dialogRef.current
             if (event.key === 'Escape') onClose()
             if (event.key === 'Tab' && dialog) {
                 const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')).filter((element) => !element.hasAttribute('disabled'))
@@ -121,31 +152,33 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
             }
         }
         document.addEventListener('keydown', onKeyDown)
-        return () => { document.removeEventListener('keydown', onKeyDown); previous?.focus() }
-    }, [onClose])
+        return () => document.removeEventListener('keydown', onKeyDown)
+    }, [activeImageIndex, onClose])
 
     return (
         <div className="modal-backdrop" onMouseDown={(event) => { if (event.currentTarget === event.target) onClose() }}>
-            <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="item-modal-title" tabIndex={-1} className="flex w-[min(1400px,100%)] max-h-[calc(100dvh-32px)] animate-[modal-in_160ms_ease-out] flex-col overflow-hidden rounded-2xl border border-gold bg-panel shadow-[0_30px_90px_rgb(0_0_0_/_65%),0_0_30px_rgb(178_127_24_/_10%)] outline-none max-[601px]:max-h-dvh max-[601px]:rounded-none max-[601px]:border-0">
+            <div ref={dialogRef} role="dialog" aria-modal={activeImageIndex === null} aria-hidden={activeImageIndex !== null} inert={activeImageIndex !== null} aria-labelledby="item-modal-title" tabIndex={-1} className="flex w-[min(1400px,100%)] max-h-[calc(100dvh-32px)] animate-[modal-in_160ms_ease-out] flex-col overflow-hidden rounded-2xl border border-gold bg-panel shadow-[0_30px_90px_rgb(0_0_0_/_65%),0_0_30px_rgb(178_127_24_/_10%)] outline-none max-[601px]:max-h-dvh max-[601px]:rounded-none max-[601px]:border-0">
                 <header className="flex shrink-0 items-center gap-5 border-b border-[#80662c] bg-[linear-gradient(110deg,var(--color-catalog),var(--color-panel))] px-7 py-[22px] max-[900px]:gap-3 max-[900px]:p-4">
                     <span className="item-icon-tile small" aria-hidden="true">{item.icon}</span>
                     <div className="min-w-0 flex-1">
                         <h2 id="item-modal-title" className="font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2>
-                        {hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]">{item.subtype}</p>}
+                        {!tradeGoodSubtype && hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]">{item.subtype}</p>}
                     </div>
                     <button className="icon-button shrink-0" onClick={onClose} aria-label="Close item sheet"><X size={24} /></button>
                 </header>
                 <div className="arcane-scrollbar grid min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] overflow-y-auto max-[900px]:grid-cols-[minmax(0,1fr)]">
-                    <aside className="flex min-w-0 flex-col gap-[22px] border-r border-[#80662c] bg-catalog px-7 pb-7 max-[900px]:border-r-0 max-[900px]:border-b max-[601px]:px-5" aria-label="Item summary">
-                        <figure className="relative -mx-7 max-[601px]:-mx-5">
-                            <img className="block max-h-[340px] w-full object-cover max-[900px]:h-[190px] max-[900px]:bg-app max-[900px]:object-contain" src={placeholderImage} alt="" />
+                    <aside className={`flex min-w-0 flex-col gap-[22px] border-r border-[#80662c] bg-catalog px-7 pb-7 max-[900px]:border-r-0 max-[900px]:border-b max-[601px]:px-5 ${hasItemImage ? '' : 'pt-7 max-[601px]:pt-5'}`} aria-label="Item summary">
+                        {hasItemImage && <figure className="relative -mx-7 max-[601px]:-mx-5">
+                            <button ref={thumbnailRef} type="button" className="block w-full cursor-zoom-in bg-app" aria-label={`View images of ${item.name}`} onClick={() => setActiveImageIndex(0)}>
+                                <img className="block h-[340px] w-full object-contain max-[900px]:h-[190px]" src={images[0].src} width={images[0].width} height={images[0].height} alt={item.name} onError={() => setImageFailed(true)} />
+                            </button>
                             <div className="absolute inset-x-3 bottom-2.5 flex flex-wrap items-center gap-2.5 [&_.rarity-badge]:bg-[color-mix(in_srgb,currentColor_16%,#101119)]! [&_.rarity-badge]:px-3! [&_.rarity-badge]:py-[3px]! [&_.rarity-badge]:text-xs!">
-                                {!['None', 'Unknown'].includes(item.rarity) && <RarityBadge rarity={item.rarity} />}
-                                <span className="type-pill bg-[color-mix(in_srgb,#4d2f5e_25%,#101119)]! px-3! py-[3px]! text-xs! [&>span]:text-xs!"><TypeMark type={item.type} /></span>
+                                {badges}
                             </div>
-                            <figcaption className="absolute top-2.5 right-3 rounded bg-[rgb(9_11_21_/_85%)] px-[7px] py-[3px] text-[10px] text-silver">Illustrative image</figcaption>
-                        </figure>
-                        {item.categories.length > 0 && <section className={`${summarySectionClass} -mt-[22px] border-t-0 [&_.category-chip]:text-xs!`}>
+                            <figcaption className="pointer-events-none absolute top-2.5 right-3 rounded bg-[rgb(9_11_21_/_85%)] px-[7px] py-[3px] text-[10px] text-silver">{images.length} {images.length === 1 ? 'image' : 'images'}</figcaption>
+                        </figure>}
+                        {!hasItemImage && <div className="flex flex-wrap items-center gap-2.5 [&_.rarity-badge]:px-3! [&_.rarity-badge]:py-[3px]! [&_.rarity-badge]:text-xs!">{badges}</div>}
+                        {item.categories.length > 0 && <section className={`${summarySectionClass} border-t-0 [&_.category-chip]:text-xs! ${hasItemImage ? '-mt-[22px]' : 'pt-0'}`}>
                             <h3 className={sectionHeadingClass}>Categories</h3>
                             <ItemCategories categories={item.categories} presentation="pills" />
                         </section>}
@@ -190,6 +223,7 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                     </div>
                 </div>
             </div>
+            {activeImageIndex !== null && hasItemImage && <ItemImageViewer itemName={item.name} images={images} activeIndex={activeImageIndex} returnFocusRef={thumbnailRef} onIndexChange={setActiveImageIndex} onClose={() => setActiveImageIndex(null)} />}
         </div>
     )
 }

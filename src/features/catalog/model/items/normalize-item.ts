@@ -371,6 +371,7 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         source: entity.source,
         edition: entity._catalogEdition as ItemEdition,
         origin: entity._catalogOrigin,
+        imageFallback: entity._catalogOrigin === 'specificVariant' ? entity._catalogVariant : undefined,
         sourcePage: typeof entity.page === 'number' && Number.isInteger(entity.page) && entity.page >= 0 ? entity.page : undefined,
         attunementRequirement: typeof entity.reqAttune === 'string' ? informationText(entity.reqAttune) : undefined,
         characteristics: unique([...(focusDescription ? [focusDescription] : []), ...entryLines, ...auxiliary.properties]),

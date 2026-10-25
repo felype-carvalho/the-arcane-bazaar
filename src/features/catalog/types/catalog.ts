@@ -63,6 +63,7 @@ export interface Item {
     source: string
     edition: ItemEdition
     origin: ItemOrigin
+    imageFallback?: { name: string; source: string }
     groupOptions?: ItemGroupOption[]
     availableRarities?: Rarity[]
     hasExplicitPrice?: boolean

@@ -1,9 +1,81 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import { ITEM_FIXTURES } from '../../test/fixtures/items'
 import { ItemModal } from './ItemModal'
 
 describe('ItemModal', () => {
+    it('shows inherited artwork for a resolved specific variant', async () => {
+        const item = {
+            ...ITEM_FIXTURES[0],
+            name: 'Ascendant Wave-Swept Longsword',
+            source: 'AU',
+            origin: 'specificVariant' as const,
+            imageFallback: { name: 'Ascendant Wave-Swept Weapon', source: 'AU' },
+        }
+        render(<ItemModal item={item} onClose={vi.fn()} />)
+
+        const thumbnail = await screen.findByRole('button', { name: `View images of ${item.name}` })
+        expect(within(thumbnail).getByRole('img')).toHaveAttribute('src', 'https://5e.tools/img/items/AU/Aquatic%20Wave-Swept%20Weapon.webp')
+    })
+
+    it('shows the first real image and navigates the full-size viewer', async () => {
+        const item = { ...ITEM_FIXTURES[0], name: "Iggwilv's Cauldron", source: 'WBtW' }
+        const onClose = vi.fn()
+        render(<ItemModal item={item} onClose={onClose} />)
+
+        const thumbnail = await screen.findByRole('button', { name: `View images of ${item.name}` })
+        expect(within(thumbnail).getByRole('img')).toHaveAttribute('src', 'https://5e.tools/img/items/WBtW/Iggwilvs%20Cauldron.webp')
+        thumbnail.focus()
+        fireEvent.click(thumbnail)
+
+        const viewer = screen.getByRole('dialog', { name: `${item.name} images` })
+        expect(within(viewer).getByRole('img')).toHaveAttribute('alt', `${item.name}, image 1 of 2`)
+        fireEvent.click(within(viewer).getByRole('button', { name: 'Next image' }))
+        expect(within(viewer).getByRole('img')).toHaveAttribute('alt', `${item.name}, image 2 of 2`)
+        fireEvent.keyDown(document, { key: 'ArrowRight' })
+        expect(within(viewer).getByRole('img')).toHaveAttribute('alt', `${item.name}, image 1 of 2`)
+        fireEvent.keyDown(document, { key: 'ArrowLeft' })
+        expect(within(viewer).getByRole('img')).toHaveAttribute('alt', `${item.name}, image 2 of 2`)
+        fireEvent.keyDown(document, { key: 'Escape' })
+        expect(screen.queryByRole('dialog', { name: `${item.name} images` })).not.toBeInTheDocument()
+        await waitFor(() => expect(thumbnail).toHaveFocus())
+        expect(onClose).not.toHaveBeenCalled()
+    })
+
+    it('omits the image area when artwork is missing or fails to load', async () => {
+        const { rerender } = render(<ItemModal item={{ ...ITEM_FIXTURES[0], name: 'Item without artwork', source: 'TEST' }} onClose={vi.fn()} />)
+        const summary = screen.getByRole('complementary', { name: 'Item summary' })
+        expect(summary.querySelector('figure')).toBeNull()
+        expect(screen.queryByRole('button', { name: /View images of/ })).not.toBeInTheDocument()
+        expect(within(summary).getByText('Uncommon')).toBeInTheDocument()
+        expect(within(summary).getByRole('heading', { name: 'Categories' })).toBeInTheDocument()
+
+        const item = { ...ITEM_FIXTURES[0], name: 'Potion of Vitality', source: 'XDMG' }
+        rerender(<ItemModal item={item} onClose={vi.fn()} />)
+        const thumbnail = await screen.findByRole('button', { name: `View images of ${item.name}` })
+        fireEvent.error(within(thumbnail).getByRole('img'))
+        await waitFor(() => expect(screen.queryByRole('button', { name: `View images of ${item.name}` })).not.toBeInTheDocument())
+        expect(summary.querySelector('figure')).toBeNull()
+    })
+
+    it('shows a Trade Good subtype in the description instead of the header', () => {
+        render(<ItemModal item={{
+            ...ITEM_FIXTURES[0],
+            name: 'Amulet of dinosaur feathers (Sun Empire)',
+            category: 'Trade Good',
+            categories: ['Trade Good'],
+            subtype: 'Treasure (Art Object)',
+            description: '',
+            properties: [],
+            characteristics: [],
+        }} onClose={vi.fn()} />)
+
+        const dialog = screen.getByRole('dialog', { name: 'Amulet of dinosaur feathers (Sun Empire)' })
+        expect(dialog.querySelector('header')).not.toHaveTextContent('Treasure (Art Object)')
+        const description = within(dialog).getByRole('heading', { name: 'Description' }).closest('section') as HTMLElement
+        expect(within(description).getByText('Treasure (Art Object)')).toBeInTheDocument()
+    })
+
     it('shows every category in the complete sheet', () => {
         render(<ItemModal item={{ ...ITEM_FIXTURES[0], categories: ['Bag/Container', 'Consumable', 'Wondrous'] }} onClose={vi.fn()} />)
         const categories = screen.getByLabelText('Item categories')

@@ -38,6 +38,14 @@ describe('category membership in catalog construction', () => {
         expect(catalog.find((item) => item.name === 'Unavailable Relic')).toMatchObject({ category: 'Other', categories: ['Other', 'Wondrous'], variantOptions: [] })
     })
 
+    it('retains the generic variant identity on resolved specific items for artwork lookup', () => {
+        const family = buildCatalog(createFiles()).find((item) => item.name === 'Enchanted Blade')!
+        expect(family.variantOptions?.[0].resolvedItem).toMatchObject({
+            origin: 'specificVariant',
+            imageFallback: { name: 'Enchanted Blade', source: 'TST' },
+        })
+    })
+
     it('counts primary categories separately from all memberships', () => {
         let diagnostics: CatalogDiagnostics | undefined
         const catalog = buildCatalog(createFiles(), { onDiagnostics: (value) => { diagnostics = value } })
