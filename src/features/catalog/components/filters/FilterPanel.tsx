@@ -154,7 +154,7 @@ function CategoryFilterSection({ options, selected, onSelect, itemType }: {
     onSelect: (value: Category | 'All') => void
     itemType: ItemType
 }) {
-    const [isOpen, setIsOpen] = useState(itemType === 'Magic')
+    const [isOpen, setIsOpen] = useState(true)
     const instanceId = useId()
     const optionsId = `filter-categories-${instanceId}-options`
 

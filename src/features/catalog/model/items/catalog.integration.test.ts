@@ -186,17 +186,25 @@ describe('magic groups in the real corpus', () => {
 })
 
 
-it('resolves every raw group reference by name and source in the current corpus', () => {
+it('resolves every raw group reference by name and source, including marked generic variants', () => {
+    const variants = (magicVariantsJson as unknown as ItemJsonFiles['variants']).magicvariant
     const keys = new Set([
         ...itemsJson.item.map((item) => item.name.toLowerCase() + '|' + item.source.toLowerCase()),
         ...itemsBaseJson.baseitem.map((item) => item.name.toLowerCase() + '|' + item.source.toLowerCase()),
-        ...(magicVariantsJson as unknown as ItemJsonFiles['variants']).magicvariant.map((variant) => variant.name.toLowerCase() + '|' + String(variant.source ?? variant.inherits?.source).toLowerCase()),
+        ...variants.map((variant) => variant.name.toLowerCase() + '|' + String(variant.source ?? variant.inherits?.source).toLowerCase()),
     ])
+    const aliasCounts = new Map<string, number>()
+    for (const variant of variants) {
+        if (!variant.name.endsWith(' (*)')) continue
+        const alias = `${variant.name.slice(0, -4).toLowerCase()}|${String(variant.source ?? variant.inherits?.source).toLowerCase()}`
+        aliasCounts.set(alias, (aliasCounts.get(alias) ?? 0) + 1)
+    }
     const references = itemsJson.itemGroup.flatMap((group) => group.items)
     expect(references).toHaveLength(669)
     const unresolved = itemsJson.itemGroup.flatMap((group) => group.items.filter((uid) => {
         const [name, source] = uid.toLowerCase().split('|')
         if (keys.has(name + '|' + (source ?? group.source.toLowerCase()))) return false
+        if (aliasCounts.get(name + '|' + (source ?? group.source.toLowerCase())) === 1) return false
         return Boolean(source) || [...keys].filter((key) => key.startsWith(name + '|')).length !== 1
     }))
     expect(unresolved).toEqual([])

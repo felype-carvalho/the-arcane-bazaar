@@ -82,6 +82,24 @@ describe('item group construction', () => {
         expect(catalog[0].groupOptions?.[1].resolvedItem.variantOptions).toHaveLength(1)
     })
 
+    it('matches marked generic variants only when the exact member is absent and the source agrees', () => {
+        const files = fixture([{ name: 'Equipment', source: 'A', rarity: 'varies', items: ['Marked|A', 'Exact|A', 'Wrong|A'] }], [
+            { name: 'Exact', source: 'A', rarity: 'rare' },
+        ])
+        files.base.baseitem.push({ name: 'Blade', source: 'A', weapon: true })
+        files.variants.magicvariant.push(
+            { name: 'Marked (*)', source: 'A', requires: [{ weapon: true }], inherits: { rarity: 'rare' } },
+            { name: 'Exact (*)', source: 'A', requires: [{ weapon: true }], inherits: { rarity: 'rare' } },
+            { name: 'Wrong (*)', source: 'B', requires: [{ weapon: true }], inherits: { rarity: 'rare' } },
+        )
+        let diagnostics: CatalogDiagnostics | undefined
+        const catalog = buildCatalog(files, { onDiagnostics: (value) => { diagnostics = value } })
+        const group = catalog.find((item) => item.name === 'Equipment')!
+        expect(group.groupOptions?.map((option) => option.label)).toEqual(['Marked (*)', 'Exact'])
+        expect(group.groupOptions?.map((option) => option.resolvedItem.origin)).toEqual(['genericVariant', 'item'])
+        expect(diagnostics?.unresolvedReferences).toEqual(['Equipment|A -> Wrong|A'])
+    })
+
     it('recalculates inherited generic and specific rarity with the existing combined-price rules', () => {
         const files = fixture([{ name: 'Equipment', source: 'A', rarity: 'rare', items: ['Enchanted'] }], [])
         files.base.baseitem.push({ name: 'Blade', source: 'A', weapon: true, value: 1500 })

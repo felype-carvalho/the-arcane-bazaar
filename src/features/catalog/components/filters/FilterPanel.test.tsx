@@ -22,7 +22,7 @@ describe('category filter visibility', () => {
             <FilterPanel {...commonProps} filters={{ ...EMPTY_FILTERS, types: ['Common'] }} availableCategories={['Armor']} />,
         )
 
-        expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'false')
+        expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'true')
 
         rerender(
             <FilterPanel {...commonProps} filters={{ ...EMPTY_FILTERS, types: ['Magic'] }} availableCategories={['Armor', 'Cursed']} />,

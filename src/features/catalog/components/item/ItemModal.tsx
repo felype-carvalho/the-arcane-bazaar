@@ -170,7 +170,7 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                     <aside className={`flex min-w-0 flex-col gap-[22px] border-r border-[#80662c] bg-catalog px-7 pb-7 max-[900px]:border-r-0 max-[900px]:border-b max-[601px]:px-5 ${hasItemImage ? '' : 'pt-7 max-[601px]:pt-5'}`} aria-label="Item summary">
                         {hasItemImage && <figure className="relative -mx-7 max-[601px]:-mx-5">
                             <button ref={thumbnailRef} type="button" className="block w-full cursor-zoom-in bg-app" aria-label={`View images of ${item.name}`} onClick={() => setActiveImageIndex(0)}>
-                                <img className="block h-[340px] w-full object-contain max-[900px]:h-[190px]" src={images[0].src} width={images[0].width} height={images[0].height} alt={item.name} onError={() => setImageFailed(true)} />
+                                <img className="block h-[340px] w-full object-contain p-4 max-[900px]:h-[190px] max-[601px]:p-3" src={images[0].src} width={images[0].width} height={images[0].height} alt={item.name} onError={() => setImageFailed(true)} />
                             </button>
                             <div className="absolute inset-x-3 bottom-2.5 flex flex-wrap items-center gap-2.5 [&_.rarity-badge]:bg-[color-mix(in_srgb,currentColor_16%,#101119)]! [&_.rarity-badge]:px-3! [&_.rarity-badge]:py-[3px]! [&_.rarity-badge]:text-xs!">
                                 {badges}

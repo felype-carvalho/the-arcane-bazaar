@@ -146,7 +146,7 @@ describe('Arcane Bazaar app', () => {
         expect(within(cells[2]).queryByText('Container')).not.toBeInTheDocument()
     })
 
-    it('starts item type expanded and lists only the ordered facets available for the selected type', async () => {
+    it('starts item type and category expanded and lists only the ordered facets available for the selected type', async () => {
         const user = userEvent.setup()
         renderApp()
 
@@ -157,13 +157,11 @@ describe('Arcane Bazaar app', () => {
             'Item type', 'Category',
             // 'Availability',
         ].map((name) => screen.getByRole('button', { name }))
-        expect(toggles.map((toggle) => toggle.getAttribute('aria-expanded'))).toEqual(['true', 'false'])
+        expect(toggles.map((toggle) => toggle.getAttribute('aria-expanded'))).toEqual(['true', 'true'])
         expect(screen.queryByRole('button', { name: 'Rarity' })).not.toBeInTheDocument()
 
-        await user.click(screen.getByRole('button', { name: 'Category' }))
-        expect(screen.getByRole('button', { name: 'Category' })).toHaveAttribute('aria-expanded', 'true')
-
         const categoryFilter = screen.getByRole('group', { name: 'Category' })
+        await within(categoryFilter).findByRole('button', { name: 'Adventuring Gear' })
         const categoryNames = within(categoryFilter).getAllByRole('button')
             .filter((button) => button.hasAttribute('aria-pressed'))
             .map((button) => button.querySelector('span:last-child')?.textContent ?? button.textContent)
@@ -185,7 +183,6 @@ describe('Arcane Bazaar app', () => {
         const user = userEvent.setup()
         renderApp()
         await screen.findByRole('table')
-        await user.click(screen.getByRole('button', { name: 'Category' }))
 
         const all = screen.getByRole('button', { name: 'All' })
         const adventuringGear = screen.getByRole('button', { name: 'Adventuring Gear' })
@@ -222,7 +219,6 @@ describe('Arcane Bazaar app', () => {
         const user = userEvent.setup()
         renderApp()
         await screen.findByRole('table')
-        await user.click(screen.getByRole('button', { name: 'Category' }))
 
         await user.click(screen.getByRole('button', { name: 'Adventuring Gear' }))
         expect(screen.getByRole('row', { name: /Hempen Rope/i })).toBeInTheDocument()

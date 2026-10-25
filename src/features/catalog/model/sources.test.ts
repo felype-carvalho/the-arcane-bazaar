@@ -6,8 +6,8 @@ import { ALL_SOURCE_CODES, normalizeSource, SOURCE_DEFINITIONS, SOURCE_GROUPS, S
 
 describe('source registry', () => {
   it('deduplicates sources and sorts each edition from oldest to newest', () => {
-    expect(SOURCE_DEFINITIONS).toHaveLength(155)
-    expect(new Set(ALL_SOURCE_CODES.map(normalizeSource)).size).toBe(155)
+    expect(SOURCE_DEFINITIONS).toHaveLength(158)
+    expect(new Set(ALL_SOURCE_CODES.map(normalizeSource)).size).toBe(158)
 
     for (const sources of Object.values(SOURCES_BY_EDITION)) {
       expect(sources).toEqual([...sources].sort((left, right) => {
@@ -18,7 +18,7 @@ describe('source registry', () => {
   })
 
   it('classifies sources around the edition cutoff', () => {
-    expect(SOURCES_BY_EDITION['5.5e']).toHaveLength(30)
+    expect(SOURCES_BY_EDITION['5.5e']).toHaveLength(33)
     expect(SOURCES_BY_EDITION['5e']).toHaveLength(125)
     expect(SOURCES_BY_EDITION['5.5e'].every(({ published }) => published != null && published > '2024-09-16')).toBe(true)
     expect(SOURCES_BY_EDITION['5e'].every(({ published }) => published == null || published <= '2024-09-16')).toBe(true)

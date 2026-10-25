@@ -38,6 +38,11 @@ export function buildItemGroups(
                     const matches = candidates.filter((candidate) => candidate.name.toLowerCase() === parsed.name.toLowerCase())
                     if (matches.length === 1) member = matches[0]
                 }
+                if (!member) {
+                    const aliases = candidates.filter((candidate) => candidate.origin === 'genericVariant'
+                        && entityKey(candidate.name, candidate.source) === entityKey(`${parsed.name} (*)`, parsed.source ?? group.source))
+                    if (aliases.length === 1) member = aliases[0]
+                }
             } catch { /* Invalid references are reported below without suppressing candidates. */ }
             if (!member) {
                 unresolvedReferences.push(`${group.name}|${group.source} -> ${uid}`)
