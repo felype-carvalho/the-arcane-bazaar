@@ -1,7 +1,7 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { describe, expect, it } from 'vitest'
 import { ALL_SOURCE_CODES } from '@/features/catalog'
-import { createSettingsStorage, SETTINGS_DATABASE_NAME, SETTINGS_DATABASE_VERSION, SETTINGS_RECORD_KEY, SETTINGS_STORE_NAME } from './settings-database'
+import { createSettingsStorage, PROFILES_RECORD_KEY, SETTINGS_DATABASE_NAME, SETTINGS_DATABASE_VERSION, SETTINGS_RECORD_KEY, SETTINGS_STORE_NAME } from './settings-database'
 
 function openDatabase(factory: IDBFactory): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -24,6 +24,48 @@ async function readStoredSettings(factory: IDBFactory): Promise<unknown> {
 }
 
 describe('settings IndexedDB storage', () => {
+  it('migrates legacy source choices into the Default profile', async () => {
+    const factory = new IDBFactory()
+    const storage = createSettingsStorage(factory)
+    await storage.save({ selectedSources: ['DMG'] })
+
+    const state = await storage.loadProfiles!()
+    expect(state.activeProfileId).toBe('default')
+    expect(state.profiles).toHaveLength(1)
+    expect(state.profiles[0].settings.selectedSources).toEqual(['DMG'])
+    expect(state.profiles[0].catalog.pageSize).toBe(20)
+    expect(await readStoredSettings(factory)).toBeUndefined()
+    const database = await openDatabase(factory)
+    const transaction = database.transaction(SETTINGS_STORE_NAME, 'readonly')
+    expect(await new Promise((resolve) => {
+      const request = transaction.objectStore(SETTINGS_STORE_NAME).get(PROFILES_RECORD_KEY)
+      request.onsuccess = () => resolve(request.result)
+    })).toEqual(state)
+    database.close()
+    await storage.close?.()
+  })
+
+  it('keeps each profile separate across connections and resets them together', async () => {
+    const factory = new IDBFactory()
+    const first = createSettingsStorage(factory)
+    const initial = await first.loadProfiles!()
+    const custom = {
+      ...initial.profiles[0], id: 'custom', name: 'Campaign',
+      settings: { selectedSources: ['XDMG'] },
+      catalog: { ...initial.profiles[0].catalog, pageSize: 50, filters: { ...initial.profiles[0].catalog.filters, search: 'sword' } },
+    }
+    await first.saveProfiles!({ profiles: [...initial.profiles, custom], activeProfileId: custom.id })
+    await first.close?.()
+
+    const second = createSettingsStorage(factory)
+    const restored = await second.loadProfiles!()
+    expect(restored.activeProfileId).toBe('custom')
+    expect(restored.profiles[0].settings.selectedSources).toEqual(ALL_SOURCE_CODES)
+    expect(restored.profiles[1].catalog).toMatchObject({ pageSize: 50, filters: { search: 'sword' } })
+    expect(await second.resetProfiles!()).toMatchObject({ activeProfileId: 'default', profiles: [{ name: 'Default' }] })
+    expect((await second.loadProfiles!()).profiles).toHaveLength(1)
+    await second.close?.()
+  })
   it('creates the database and selects every source when no record exists', async () => {
     const factory = new IDBFactory()
     const storage = createSettingsStorage(factory)

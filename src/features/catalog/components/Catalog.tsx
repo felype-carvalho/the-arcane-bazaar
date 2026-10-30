@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CircleHelp, Filter, Menu, Sparkles } from 'lucide-react'
 import { getItems } from '../api/catalog'
 import { applySourceSelection } from '../model/content-visibility'
@@ -7,6 +7,7 @@ import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '..
 import { resolveItemSelection } from '../model/items/resolve-item-selection'
 import { DEFAULT_MODIFIERS } from '../model/pricing'
 import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../types'
+import type { CatalogPreferences } from '@/features/settings/types'
 import { FilterPanel, type FilterGroup } from './filters/FilterPanel'
 import { ItemDetails } from './item/ItemDetails'
 import { ItemModal } from './item/ItemModal'
@@ -19,17 +20,25 @@ const INITIAL_FILTERS: ItemFilters = { ...EMPTY_FILTERS, types: ['Common'] }
 export interface CatalogProps {
     selectedSources?: readonly string[]
     settingsReady?: boolean
+    preferences?: CatalogPreferences
+    onPreferencesChange?: (preferences: CatalogPreferences) => void
 }
 
-export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = true }: CatalogProps) {
+export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = true, preferences, onPreferencesChange }: CatalogProps) {
     const [items, setItems] = useState<Item[]>([])
     const [loading, setLoading] = useState(true)
     const [loadError, setLoadError] = useState(false)
-    const [filters, setFilters] = useState<ItemFilters>(INITIAL_FILTERS)
-    const [sortKey, setSortKey] = useState<SortKey>('name')
-    const [direction, setDirection] = useState<SortDirection>('asc')
+    const [filters, setFilters] = useState<ItemFilters>(() => preferences?.filters ?? INITIAL_FILTERS)
+    const [sortKey, setSortKey] = useState<SortKey>(preferences?.sortKey ?? 'name')
+    const [direction, setDirection] = useState<SortDirection>(preferences?.direction ?? 'asc')
     const [page, setPage] = useState(1)
-    const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
+    const [pageSize, setPageSize] = useState(preferences?.pageSize ?? DEFAULT_PAGE_SIZE)
+    const initialPreferencesRef = useRef(true)
+    const initialPreferencesValueRef = useRef(preferences)
+    const changedBeforeReadyRef = useRef(false)
+    const readyAppliedRef = useRef(settingsReady)
+    const skipPersistRef = useRef(false)
+    const markPreferenceChange = () => { if (!settingsReady) changedBeforeReadyRef.current = true }
     const [selected, setSelected] = useState<Item | null>(null)
     const [selectedGroupOptionId, setSelectedGroupOptionId] = useState('')
     const [selectedBaseOptionId, setSelectedBaseOptionId] = useState('')
@@ -42,6 +51,33 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     useEffect(() => {
         getItems().then((catalog) => { setItems(catalog); setSelected(catalog[0] ?? null) }).catch(() => setLoadError(true)).finally(() => setLoading(false))
     }, [])
+
+    useEffect(() => {
+        if (!settingsReady || readyAppliedRef.current) return
+        readyAppliedRef.current = true
+        if (changedBeforeReadyRef.current || preferences === initialPreferencesValueRef.current) return
+        skipPersistRef.current = true
+        setFilters(preferences?.filters ?? INITIAL_FILTERS)
+        setSortKey(preferences?.sortKey ?? 'name')
+        setDirection(preferences?.direction ?? 'asc')
+        setPageSize(preferences?.pageSize ?? DEFAULT_PAGE_SIZE)
+    }, [preferences, settingsReady])
+
+    useEffect(() => {
+        if (initialPreferencesRef.current) {
+            initialPreferencesRef.current = false
+            return
+        }
+        if (!settingsReady) {
+            changedBeforeReadyRef.current = true
+            return
+        }
+        if (skipPersistRef.current) {
+            skipPersistRef.current = false
+            return
+        }
+        if (readyAppliedRef.current) onPreferencesChange?.({ filters, sortKey, direction, pageSize })
+    }, [filters, sortKey, direction, pageSize, settingsReady, onPreferencesChange])
 
     useEffect(() => { setPage(1) }, [filters, sortKey, direction])
     useEffect(() => { setManualPrice(''); setModifiers(DEFAULT_MODIFIERS); setSelectedGroupOptionId(''); setSelectedBaseOptionId('') }, [selected?.id])
@@ -85,6 +121,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }, [selected, selectedGroupOptionId, selectedBaseOptionId, selection?.selectedGroupOption, selection?.selectedBaseOption])
 
     useEffect(() => {
+        if (loading || !settingsReady) return
         const availableRarities = new Set(availableFilterOptions.rarities)
         const availableCategories = new Set(availableFilterOptions.categories)
         const availableSources = new Set(availableFilterOptions.sources)
@@ -96,9 +133,10 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
             if (rarities.length === current.rarities.length && categories.length === current.categories.length && sources.length === current.sources.length) return current
             return { ...current, rarities, categories, sources }
         })
-    }, [availableFilterOptions])
+    }, [availableFilterOptions, loading, settingsReady])
 
     const toggleFilter = (group: FilterGroup, value: string) => {
+        markPreferenceChange()
         setFilters((current) => {
             const values = current[group] as string[]
             return { ...current, [group]: values.includes(value) ? values.filter((entry) => entry !== value) : [...values, value] }
@@ -106,6 +144,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }
 
     const selectType = (type: ItemType) => {
+        markPreferenceChange()
         const available = getAvailableFilterOptions(visibleItems, type)
         const rarities = new Set(available.rarities)
         const categories = new Set(available.categories)
@@ -121,6 +160,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }
 
     const selectCategory = (category: Category | 'All') => {
+        markPreferenceChange()
         setFilters((current) => {
             if (category === 'All') return current.categories.length ? { ...current, categories: [] } : current
 
@@ -137,6 +177,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }
 
     const selectSource = (source: string) => {
+        markPreferenceChange()
         setFilters((current) => {
             if (source === 'All') return current.sources.length ? { ...current, sources: [] } : current
             const normalizedSource = normalizeSource(source)
@@ -148,11 +189,13 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }
 
     const sort = (key: SortKey) => {
+        markPreferenceChange()
         if (key === sortKey) setDirection((current) => current === 'asc' ? 'desc' : 'asc')
         else { setSortKey(key); setDirection('asc') }
     }
 
     const changePageSize = (nextPageSize: number) => {
+        markPreferenceChange()
         setPageSize(nextPageSize)
         setPage(1)
     }
@@ -161,7 +204,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
         <>
             <div className="flex min-h-0 flex-1">
                 <div className="hidden w-[242px] shrink-0 border-r border-border lg:block">
-                    <FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => setFilters(INITIAL_FILTERS)} />
+                    <FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => { markPreferenceChange(); setFilters((current) => ({ ...current, search })) }} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => { markPreferenceChange(); setFilters(INITIAL_FILTERS) }} />
                 </div>
 
                 <main className="flex min-w-0 flex-1 flex-col bg-catalog">
@@ -191,7 +234,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
 
             {filtersOpen && (
                 <div className="drawer-backdrop lg:hidden" onMouseDown={(event) => { if (event.currentTarget === event.target) setFiltersOpen(false) }}>
-                    <div className="drawer left"><FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => setFilters((current) => ({ ...current, search }))} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => setFilters(INITIAL_FILTERS)} onClose={() => setFiltersOpen(false)} /></div>
+                    <div className="drawer left"><FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => { markPreferenceChange(); setFilters((current) => ({ ...current, search })) }} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => { markPreferenceChange(); setFilters(INITIAL_FILTERS) }} onClose={() => setFiltersOpen(false)} /></div>
                 </div>
             )}
 

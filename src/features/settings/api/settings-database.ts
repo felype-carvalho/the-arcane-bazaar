@@ -1,11 +1,12 @@
-import { createDefaultSettings } from '../model/defaults'
-import type { AppSettings, SettingsStorage } from '../types'
+import { createDefaultCatalogPreferences, createDefaultProfileState, createDefaultSettings, DEFAULT_PROFILE_ID } from '../model/defaults'
+import type { AppSettings, CatalogPreferences, Profile, ProfileState, SettingsStorage } from '../types'
 import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
 
 export const SETTINGS_DATABASE_NAME = 'the-arcane-bazaar'
 export const SETTINGS_DATABASE_VERSION = 1
 export const SETTINGS_STORE_NAME = 'settings'
 export const SETTINGS_RECORD_KEY = 'app-settings'
+export const PROFILES_RECORD_KEY = 'profile-state'
 
 function requestResult<T>(request: IDBRequest<T>): Promise<T> {
   return new Promise((resolve, reject) => {
@@ -35,6 +36,42 @@ function normalizeSettings(value: unknown): AppSettings {
     return { selectedSources: ALL_SOURCE_CODES.filter((source) => selected.has(normalizeSource(source))) }
   }
   return createDefaultSettings()
+}
+
+function normalizeCatalog(value: unknown): CatalogPreferences {
+  const defaults = createDefaultCatalogPreferences()
+  if (typeof value !== 'object' || value === null) return defaults
+  const stored = value as Partial<CatalogPreferences>
+  const filters = stored.filters
+  const validStrings = (input: unknown): input is string[] => Array.isArray(input) && input.every((entry) => typeof entry === 'string')
+  const validSortKeys = ['name', 'type', 'category', 'rarity', 'price']
+  return {
+    filters: {
+      search: typeof filters?.search === 'string' ? filters.search : '',
+      types: validStrings(filters?.types) ? filters.types.filter((type): type is 'Common' | 'Magic' => type === 'Common' || type === 'Magic').slice(0, 1) : defaults.filters.types,
+      rarities: validStrings(filters?.rarities) ? filters.rarities as CatalogPreferences['filters']['rarities'] : [],
+      categories: validStrings(filters?.categories) ? filters.categories as CatalogPreferences['filters']['categories'] : [],
+      availabilities: validStrings(filters?.availabilities) ? filters.availabilities as CatalogPreferences['filters']['availabilities'] : [],
+      sources: validStrings(filters?.sources) ? filters.sources : [],
+    },
+    sortKey: validSortKeys.includes(stored.sortKey ?? '') ? stored.sortKey! : defaults.sortKey,
+    direction: stored.direction === 'desc' ? 'desc' : 'asc',
+    pageSize: [10, 20, 50, 100].includes(stored.pageSize ?? 0) ? stored.pageSize! : 20,
+  }
+}
+
+function normalizeProfileState(value: unknown): ProfileState {
+  if (typeof value !== 'object' || value === null || !Array.isArray((value as Partial<ProfileState>).profiles)) return createDefaultProfileState()
+  const stored = value as ProfileState
+  const profiles: Profile[] = []
+  const ids = new Set<string>()
+  for (const candidate of stored.profiles) {
+    if (!candidate || typeof candidate.id !== 'string' || typeof candidate.name !== 'string' || !candidate.id || ids.has(candidate.id)) continue
+    ids.add(candidate.id)
+    profiles.push({ id: candidate.id, name: candidate.id === DEFAULT_PROFILE_ID ? 'Default' : candidate.name.trim(), settings: normalizeSettings(candidate.settings), catalog: normalizeCatalog(candidate.catalog) })
+  }
+  if (!ids.has(DEFAULT_PROFILE_ID)) profiles.unshift(createDefaultProfileState().profiles[0])
+  return { profiles, activeProfileId: profiles.some((profile) => profile.id === stored.activeProfileId) ? stored.activeProfileId : DEFAULT_PROFILE_ID }
 }
 
 function settingsMatch(left: AppSettings, right: AppSettings): boolean {
@@ -115,6 +152,34 @@ export function createSettingsStorage(factory?: IDBFactory): SettingsStorage {
     await completed
   }
 
+  const loadProfiles = async (): Promise<ProfileState> => {
+    const database = await openDatabase()
+    const transaction = database.transaction(SETTINGS_STORE_NAME, 'readwrite')
+    const completed = transactionComplete(transaction)
+    const store = transaction.objectStore(SETTINGS_STORE_NAME)
+    const stored = await requestResult(store.get(PROFILES_RECORD_KEY))
+    if (stored !== undefined) {
+      const normalized = normalizeProfileState(stored)
+      store.put(normalized, PROFILES_RECORD_KEY)
+      await completed
+      return normalized
+    }
+    const legacy = await requestResult(store.get(SETTINGS_RECORD_KEY))
+    const initial = createDefaultProfileState(normalizeSettings(legacy))
+    store.put(initial, PROFILES_RECORD_KEY)
+    store.delete(SETTINGS_RECORD_KEY)
+    await completed
+    return initial
+  }
+
+  const saveProfiles = async (state: ProfileState): Promise<void> => {
+    const database = await openDatabase()
+    const transaction = database.transaction(SETTINGS_STORE_NAME, 'readwrite')
+    const completed = transactionComplete(transaction)
+    transaction.objectStore(SETTINGS_STORE_NAME).put(normalizeProfileState(state), PROFILES_RECORD_KEY)
+    await completed
+  }
+
   const closeDatabase = async (): Promise<void> => {
     if (!databasePromise) return
     try {
@@ -142,5 +207,12 @@ export function createSettingsStorage(factory?: IDBFactory): SettingsStorage {
     return defaults
   }
 
-  return { load, save, reset, close: closeDatabase }
+  const resetProfiles = async (): Promise<ProfileState> => {
+    await deleteDatabase()
+    const defaults = createDefaultProfileState()
+    await saveProfiles(defaults)
+    return defaults
+  }
+
+  return { load, save, reset, loadProfiles, saveProfiles, resetProfiles, close: closeDatabase }
 }

@@ -3,6 +3,7 @@ import { X } from 'lucide-react'
 
 interface ModalDialogProps {
     children?: ReactNode
+    dialogHeight?: CSSProperties['height']
     dialogWidth?: CSSProperties['width']
     eyebrow: string
     icon: ReactNode
@@ -11,7 +12,7 @@ interface ModalDialogProps {
     titleId: string
 }
 
-export function ModalDialog({ children, dialogWidth, eyebrow, icon, onClose, title, titleId }: ModalDialogProps) {
+export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon, onClose, title, titleId }: ModalDialogProps) {
     const dialogRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -39,7 +40,7 @@ export function ModalDialog({ children, dialogWidth, eyebrow, icon, onClose, tit
 
     return (
         <div className="modal-backdrop" onMouseDown={(event) => { if (event.currentTarget === event.target) onClose() }}>
-            <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className="modal-card modal-dialog" style={dialogWidth ? { width: dialogWidth } : undefined}>
+            <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className="modal-card modal-dialog" style={{ height: dialogHeight, width: dialogWidth }}>
                 <div className="modal-header">
                     <div className="flex items-center gap-4">
                         <div className="item-icon-tile small" aria-hidden="true">{icon}</div>

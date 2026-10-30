@@ -170,7 +170,7 @@ describe('Arcane Bazaar app', () => {
         expect(new Set(categoryNames).size).toBe(categoryNames.length)
 
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
-        await user.click(screen.getByRole('button', { name: 'Rarity' }))
+        await user.click(await screen.findByRole('button', { name: 'Rarity' }))
         const rarityFilter = screen.getByRole('group', { name: 'Rarity' })
 
         expect(within(categoryFilter).getAllByRole('button')
@@ -346,6 +346,52 @@ describe('Arcane Bazaar app', () => {
         expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(25)
     })
 
+    it('restores catalog preferences when switching profiles and after reopening the app', async () => {
+        const user = userEvent.setup()
+        const firstRender = renderApp()
+        await screen.findByRole('table')
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        await user.selectOptions(screen.getByRole('combobox', { name: 'Items per page' }), '50')
+        await user.type(screen.getByRole('textbox', { name: 'Search items' }), 'Bag')
+        await user.click(screen.getByRole('button', { name: 'Sort by Price' }))
+
+        await user.click(screen.getByRole('button', { name: 'Open system menu' }))
+        await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+        await user.click(screen.getByRole('button', { name: 'Profile' }))
+        await user.type(screen.getByRole('textbox', { name: 'New profile name' }), 'Campaign')
+        await user.click(screen.getByRole('button', { name: 'Create profile' }))
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Campaign (active)' })).toBeInTheDocument())
+        await user.click(screen.getByRole('button', { name: 'Close settings' }))
+        expect(screen.getByRole('radio', { name: 'Mundane' })).toBeChecked()
+        expect(screen.getByRole('textbox', { name: 'Search items' })).toHaveValue('')
+        expect(screen.getByRole('combobox', { name: 'Items per page' })).toHaveValue('20')
+
+        await user.click(screen.getByRole('button', { name: 'Open system menu' }))
+        await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+        await user.click(screen.getByRole('button', { name: 'Profile' }))
+        await user.click(screen.getByRole('button', { name: 'Default' }))
+        await user.click(screen.getByRole('button', { name: 'Close settings' }))
+        expect(screen.getByRole('radio', { name: 'Magic' })).toBeChecked()
+        expect(screen.getByRole('textbox', { name: 'Search items' })).toHaveValue('Bag')
+        expect(screen.getByRole('combobox', { name: 'Items per page' })).toHaveValue('50')
+        expect(screen.getByRole('button', { name: 'Sort by Price' })).toHaveTextContent('Price')
+
+        firstRender.unmount()
+        renderApp()
+        await waitFor(() => expect(screen.getByRole('radio', { name: 'Magic' })).toBeChecked())
+        await waitFor(() => expect(screen.getByRole('textbox', { name: 'Search items' })).toHaveValue('Bag'))
+        expect(screen.getByRole('combobox', { name: 'Items per page' })).toHaveValue('50')
+
+        await user.click(screen.getByRole('button', { name: 'Open system menu' }))
+        await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+        await user.click(screen.getByRole('button', { name: 'Local Data' }))
+        await user.click(screen.getByRole('button', { name: 'Reset local data' }))
+        await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
+        await waitFor(() => expect(screen.getByRole('combobox', { name: 'Items per page' })).toHaveValue('20'))
+        expect(screen.getByRole('textbox', { name: 'Search items' })).toHaveValue('')
+        expect(screen.getByRole('radio', { name: 'Mundane' })).toBeChecked()
+    })
+
     it('adds and removes a custom percentage modifier', async () => {
         const user = userEvent.setup()
         renderApp()
@@ -451,12 +497,14 @@ describe('Arcane Bazaar app', () => {
     it('persists a source selection and restores every source when local data is reset', async () => {
         const user = userEvent.setup()
         const firstRender = renderApp()
+        await screen.findByRole('table')
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
         expect(await screen.findByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
         expect(screen.getByRole('row', { name: /Modern Satchel/i })).toBeInTheDocument()
 
         await user.click(screen.getByRole('button', { name: 'Open system menu' }))
         await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+        await user.click(screen.getByRole('button', { name: 'Content Sources' }))
         const dmgChip = screen.getByRole('button', { name: formatSourceTitle('DMG') })
         await waitFor(() => expect(dmgChip).toBeEnabled())
         await user.click(dmgChip)
@@ -468,20 +516,25 @@ describe('Arcane Bazaar app', () => {
 
         firstRender.unmount()
         renderApp()
+        await screen.findByRole('table')
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
         expect(await screen.findByRole('row', { name: /Modern Satchel/i })).toBeInTheDocument()
         expect(screen.queryByRole('row', { name: /Bag of Holding/i })).not.toBeInTheDocument()
 
         await user.click(screen.getByRole('button', { name: 'Open system menu' }))
         await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
+        await user.click(screen.getByRole('button', { name: 'Content Sources' }))
         const persistedChip = screen.getByRole('button', { name: formatSourceTitle('DMG') })
         await waitFor(() => expect(persistedChip).toBeEnabled())
         expect(persistedChip).toHaveAttribute('aria-pressed', 'false')
 
+        await user.click(screen.getByRole('button', { name: 'Local Data' }))
         await user.click(screen.getByRole('button', { name: 'Reset local data' }))
         await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
 
         await waitFor(() => expect(persistedChip).toHaveAttribute('aria-pressed', 'true'))
+        expect(screen.getByRole('radio', { name: 'Mundane' })).toBeChecked()
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
         expect(await screen.findByRole('row', { name: /Bag of Holding/i })).toBeInTheDocument()
         expect(screen.getByText('Local data reset to defaults.')).toBeInTheDocument()
     })
@@ -513,6 +566,7 @@ describe('group configuration flows', () => {
     it('updates tattoo rarity, price and sheet in both detail panels and clears choices when changing groups', async () => {
         const user = userEvent.setup()
         renderApp()
+        await screen.findByRole('table')
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
         const search = screen.getAllByLabelText('Search items')[0]
         await user.type(search, 'Spellwrought Tattoo')
@@ -547,6 +601,7 @@ describe('group configuration flows', () => {
     it('requires a dragon stage and base and resets the base when switching stages', async () => {
         const user = userEvent.setup()
         renderApp()
+        await screen.findByRole('table')
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
         await user.type(screen.getAllByLabelText('Search items')[0], "Dragon's Wrath Weapon")
         const details = (await screen.findAllByLabelText("Dragon's Wrath Weapon details"))[0]

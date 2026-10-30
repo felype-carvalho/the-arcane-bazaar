@@ -43,10 +43,12 @@ References: [groups](src/features/catalog/model/items/build-item-groups.ts), [va
 
 ## Sources and settings
 
+- The Settings dialog uses a left-side navigation on wide screens, with `Local Data`, `Profile`, and `Content Sources` as separate views. The first view, `Local Data`, opens by default; on narrow screens the navigation appears above the active view. The dialog keeps its maximum available height when switching between views, regardless of their content length.
+- Profiles keep source selection, catalog search, filters, sorting, and items per page independently. The `Default` profile always exists and cannot be renamed or deleted. New profiles start with default preferences and become active immediately. Deleting the active profile selects `Default`.
 - Available sources are organized by edition (`5e` or `5.5e`) and group. All are selected by default. Source code comparisons ignore letter case and surrounding whitespace.
 - Deselecting a source hides its items. It also removes group options originating from that source and variant bases whose source was deselected. A group or variant with no remaining options disappears.
-- Source selection is stored in IndexedDB. On load, unknown codes are discarded and the known source order is restored. If storage is unavailable, changes may last only for the current session; if saving fails, the previous selection is restored.
-- “Reset local data” deletes the local database and recreates the default settings with all sources selected.
+- Profile data is stored in IndexedDB. A legacy source selection is migrated into the `Default` profile. On load, unknown source codes are discarded and the known source order is restored. If storage is unavailable, changes may last only for the current session; if saving a source selection fails, the previous selection is restored.
+- “Reset local data” deletes the local database and recreates only the `Default` profile with all sources selected.
 
 References: [source registry](src/features/catalog/model/sources.ts), [visibility](src/features/catalog/model/content-visibility.ts), [persistence](src/features/settings/api/settings-database.ts), [settings state](src/features/settings/model/SettingsProvider.tsx).
 
@@ -57,7 +59,7 @@ References: [source registry](src/features/catalog/model/sources.ts), [visibilit
 - The Item type and Category filter sections start expanded. Category also expands when switching to `Magic`.
 - Selecting `All` for categories or sources clears only the selections in that group. Multiple selected categories act as alternatives: an item needs to belong to any one of them.
 - The list starts sorted by name in ascending order. It can also be sorted by type, category, rarity, and price; items without a price come last when sorting by price in ascending order.
-- Pagination starts at 20 items per page and offers 10, 20, 50, and 100. Changing filters, sorting, or page size returns to the first page.
+- Pagination starts at 20 items per page and offers 10, 20, 50, and 100. Changing filters, sorting, or page size returns to the first page. Search, filters, sorting, and page size are restored for the active profile; page number and selected item are not stored.
 
 References: [filtering](src/features/catalog/model/filtering.ts), [catalog state](src/features/catalog/components/Catalog.tsx), [pagination](src/features/catalog/components/listing/Pagination.tsx).
 
