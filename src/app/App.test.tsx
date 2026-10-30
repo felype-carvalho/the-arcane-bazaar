@@ -386,7 +386,7 @@ describe('Arcane Bazaar app', () => {
         await user.click(screen.getByRole('menuitem', { name: 'Settings' }))
         await user.click(screen.getByRole('button', { name: 'Local Data' }))
         await user.click(screen.getByRole('button', { name: 'Reset local data' }))
-        await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
+        await user.click(within(screen.getByRole('dialog', { name: 'Reset local data?' })).getByRole('button', { name: 'Continue' }))
         await waitFor(() => expect(screen.getByRole('combobox', { name: 'Items per page' })).toHaveValue('20'))
         expect(screen.getByRole('textbox', { name: 'Search items' })).toHaveValue('')
         expect(screen.getByRole('radio', { name: 'Mundane' })).toBeChecked()
@@ -530,7 +530,7 @@ describe('Arcane Bazaar app', () => {
 
         await user.click(screen.getByRole('button', { name: 'Local Data' }))
         await user.click(screen.getByRole('button', { name: 'Reset local data' }))
-        await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
+        await user.click(within(screen.getByRole('dialog', { name: 'Reset local data?' })).getByRole('button', { name: 'Continue' }))
 
         await waitFor(() => expect(persistedChip).toHaveAttribute('aria-pressed', 'true'))
         expect(screen.getByRole('radio', { name: 'Mundane' })).toBeChecked()

@@ -1,6 +1,7 @@
 import { IDBFactory } from 'fake-indexeddb'
 import { describe, expect, it } from 'vitest'
 import { ALL_SOURCE_CODES } from '@/features/catalog'
+import { parseSettingsBackup, serializeSettingsBackup } from '../model/settings-backup'
 import { createSettingsStorage, PROFILES_RECORD_KEY, SETTINGS_DATABASE_NAME, SETTINGS_DATABASE_VERSION, SETTINGS_RECORD_KEY, SETTINGS_STORE_NAME } from './settings-database'
 
 function openDatabase(factory: IDBFactory): Promise<IDBDatabase> {
@@ -65,6 +66,30 @@ describe('settings IndexedDB storage', () => {
     expect(await second.resetProfiles!()).toMatchObject({ activeProfileId: 'default', profiles: [{ name: 'Default' }] })
     expect((await second.loadProfiles!()).profiles).toHaveLength(1)
     await second.close?.()
+  })
+  it('keeps persisted profile states compatible with backup export and import', async () => {
+    const sourceStorage = createSettingsStorage(new IDBFactory())
+    const initial = await sourceStorage.loadProfiles!()
+    const state = {
+      ...initial,
+      profiles: initial.profiles.map((profile) => ({
+        ...profile,
+        catalog: {
+          ...profile.catalog,
+          filters: { ...profile.catalog.filters, sources: ['JttRC', 'unknown'] },
+        },
+      })),
+    }
+    await sourceStorage.saveProfiles!(state)
+    const persisted = await sourceStorage.loadProfiles!()
+    expect(persisted.profiles[0].catalog.filters.sources).toEqual(['JTTRC'])
+
+    const imported = parseSettingsBackup(serializeSettingsBackup(persisted))
+    const destinationStorage = createSettingsStorage(new IDBFactory())
+    await destinationStorage.saveProfiles!(imported)
+    expect(await destinationStorage.loadProfiles!()).toEqual(persisted)
+    await sourceStorage.close?.()
+    await destinationStorage.close?.()
   })
   it('creates the database and selects every source when no record exists', async () => {
     const factory = new IDBFactory()

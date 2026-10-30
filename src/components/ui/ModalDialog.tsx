@@ -7,21 +7,33 @@ interface ModalDialogProps {
     dialogWidth?: CSSProperties['width']
     eyebrow: string
     icon: ReactNode
+    inactive?: boolean
     onClose: () => void
     title: string
     titleId: string
 }
 
-export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon, onClose, title, titleId }: ModalDialogProps) {
+export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon, inactive = false, onClose, title, titleId }: ModalDialogProps) {
     const dialogRef = useRef<HTMLDivElement>(null)
+    const hasFocusedRef = useRef(false)
+    const onCloseRef = useRef(onClose)
+    onCloseRef.current = onClose
 
     useEffect(() => {
         const previous = document.activeElement as HTMLElement | null
+        return () => previous?.focus()
+    }, [])
+
+    useEffect(() => {
         const dialog = dialogRef.current
-        dialog?.focus()
+        if (!inactive && !hasFocusedRef.current) {
+            dialog?.focus()
+            hasFocusedRef.current = true
+        }
 
         const onKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') onClose()
+            if (inactive) return
+            if (event.key === 'Escape') onCloseRef.current()
             if (event.key !== 'Tab' || !dialog) return
 
             const focusable = Array.from(dialog.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'))
@@ -35,11 +47,11 @@ export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon
         }
 
         document.addEventListener('keydown', onKeyDown)
-        return () => { document.removeEventListener('keydown', onKeyDown); previous?.focus() }
-    }, [onClose])
+        return () => document.removeEventListener('keydown', onKeyDown)
+    }, [inactive])
 
     return (
-        <div className="modal-backdrop" onMouseDown={(event) => { if (event.currentTarget === event.target) onClose() }}>
+        <div className="modal-backdrop" inert={inactive} aria-hidden={inactive || undefined} onMouseDown={(event) => { if (!inactive && event.currentTarget === event.target) onClose() }}>
             <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className="modal-card modal-dialog" style={{ height: dialogHeight, width: dialogWidth }}>
                 <div className="modal-header">
                     <div className="flex items-center gap-4">

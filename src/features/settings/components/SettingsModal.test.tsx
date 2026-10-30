@@ -7,6 +7,8 @@ import type { AppSettings, SettingsStorage } from '../types'
 import { SettingsProvider } from '../model/SettingsProvider'
 import { SettingsModal } from './SettingsModal'
 import { createSettingsStorage } from '../api/settings-database'
+import { createDefaultProfileState } from '../model/defaults'
+import { serializeSettingsBackup } from '../model/settings-backup'
 import { IDBFactory } from 'fake-indexeddb'
 
 function cloneSettings(settings: AppSettings): AppSettings {
@@ -40,6 +42,113 @@ function dmgChip() {
 }
 
 describe('SettingsModal', () => {
+    it('downloads a versioned JSON backup of the current state', async () => {
+        const user = userEvent.setup()
+        const storage = createSettingsStorage(new IDBFactory())
+        const originalCreateUrl = Object.getOwnPropertyDescriptor(URL, 'createObjectURL')
+        const originalRevokeUrl = Object.getOwnPropertyDescriptor(URL, 'revokeObjectURL')
+        const createUrl = vi.fn((_blob: Blob) => 'blob:settings-backup')
+        const revokeUrl = vi.fn()
+        Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: createUrl })
+        Object.defineProperty(URL, 'revokeObjectURL', { configurable: true, value: revokeUrl })
+        let downloadedName = ''
+        const clickLink = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(function (this: HTMLAnchorElement) { downloadedName = this.download })
+        try {
+            renderModal(storage, false)
+            const button = screen.getByRole('button', { name: 'Backup Data' })
+            await waitFor(() => expect(button).toBeEnabled(), { timeout: 5000 })
+            await user.click(button)
+
+            expect(clickLink).toHaveBeenCalledOnce()
+            expect(createUrl).toHaveBeenCalledOnce()
+            const blob = createUrl.mock.calls[0]?.[0]
+            if (!blob) throw new Error('Backup blob was not created')
+            expect(blob.type).toBe('application/json')
+            const contents = await new Promise<string>((resolve, reject) => {
+                const reader = new FileReader()
+                reader.onload = () => resolve(reader.result as string)
+                reader.onerror = () => reject(reader.error)
+                reader.readAsText(blob)
+            })
+            expect(JSON.parse(contents)).toEqual({ version: 1, data: createDefaultProfileState() })
+            expect(downloadedName).toMatch(/^arcane-bazaar-backup-\d{4}-\d{2}-\d{2}\.json$/)
+        } finally {
+            if (originalCreateUrl) Object.defineProperty(URL, 'createObjectURL', originalCreateUrl)
+            else Reflect.deleteProperty(URL, 'createObjectURL')
+            if (originalRevokeUrl) Object.defineProperty(URL, 'revokeObjectURL', originalRevokeUrl)
+            else Reflect.deleteProperty(URL, 'revokeObjectURL')
+            clickLink.mockRestore()
+            await storage.close?.()
+        }
+    }, 10000)
+
+    it('warns before selecting a file and imports a validated backup', async () => {
+        const user = userEvent.setup()
+        const storage = createSettingsStorage(new IDBFactory())
+        renderModal(storage, false)
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Import Data' })).toBeEnabled(), { timeout: 5000 })
+
+        await user.click(screen.getByRole('button', { name: 'Import Data' }))
+        const warning = screen.getByRole('dialog', { name: 'Import local data?' })
+        expect(warning).toHaveTextContent('overwrite all current local data')
+        expect(warning).toHaveTextContent('backing up your data')
+        const continueButton = within(warning).getByRole('button', { name: 'Continue' })
+        continueButton.focus()
+        await user.tab()
+        expect(within(warning).getByRole('button', { name: 'Close import local data?' })).toHaveFocus()
+        await user.tab({ shift: true })
+        expect(continueButton).toHaveFocus()
+        await user.keyboard('{Escape}')
+        expect(screen.queryByRole('dialog', { name: 'Import local data?' })).not.toBeInTheDocument()
+        expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: 'Import Data' })).toHaveFocus()
+
+        const state = createDefaultProfileState()
+        state.profiles.push({ ...state.profiles[0], id: 'campaign', name: 'Campaign', settings: { selectedSources: ['DMG'] }, catalog: { ...state.profiles[0].catalog, pageSize: 50 } })
+        state.activeProfileId = 'campaign'
+        const contents = serializeSettingsBackup(state)
+        const file = new File([contents], 'backup.json', { type: 'application/json' })
+        Object.defineProperty(file, 'text', { value: async () => contents })
+
+        await user.click(screen.getByRole('button', { name: 'Import Data' }))
+        await user.click(screen.getByRole('button', { name: 'Continue' }))
+        fireEvent.change(document.querySelector('input[type="file"]')!, { target: { files: [file] } })
+        await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent('Local data imported successfully.'))
+        expect(await storage.loadProfiles!()).toEqual(state)
+        await user.click(screen.getByRole('button', { name: 'Profile' }))
+        expect(screen.getByRole('button', { name: 'Campaign (active)' })).toBeInTheDocument()
+        await storage.close?.()
+    }, 10000)
+
+    it('keeps existing profiles after an invalid file or failed save', async () => {
+        const user = userEvent.setup()
+        const storage = createSettingsStorage(new IDBFactory())
+        renderModal(storage, false)
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Import Data' })).toBeEnabled())
+        const initial = await storage.loadProfiles!()
+        const input = document.querySelector('input[type="file"]')!
+        const invalidFile = new File(['<script>alert(1)</script>'], 'backup.json', { type: 'application/json' })
+        Object.defineProperty(invalidFile, 'text', { value: async () => '<script>alert(1)</script>' })
+
+        await user.click(screen.getByRole('button', { name: 'Import Data' }))
+        await user.click(screen.getByRole('button', { name: 'Continue' }))
+        fireEvent.change(input, { target: { files: [invalidFile] } })
+        await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('not valid JSON'))
+        expect(await storage.loadProfiles!()).toEqual(initial)
+
+        const changed = { ...initial, profiles: [{ ...initial.profiles[0], settings: { selectedSources: ['DMG'] } }] }
+        const contents = serializeSettingsBackup(changed)
+        const validFile = new File([contents], 'backup.json', { type: 'application/json' })
+        Object.defineProperty(validFile, 'text', { value: async () => contents })
+        storage.saveProfiles = vi.fn(async () => { throw new Error('quota exceeded') })
+        await user.click(screen.getByRole('button', { name: 'Import Data' }))
+        await user.click(screen.getByRole('button', { name: 'Continue' }))
+        fireEvent.change(input, { target: { files: [validFile] } })
+        await waitFor(() => expect(screen.getAllByRole('alert').some((alert) => alert.textContent?.includes('quota exceeded'))).toBe(true))
+        expect(await storage.loadProfiles!()).toEqual(initial)
+        await storage.close?.()
+    })
+
     it('creates, selects, renames, and deletes profiles while protecting Default', async () => {
         const user = userEvent.setup()
         const storage = createSettingsStorage(new IDBFactory())
@@ -85,17 +194,18 @@ describe('SettingsModal', () => {
 
         expect(localData).toHaveAttribute('aria-current', 'page')
         expect(dialog).toHaveStyle({ height: '100dvh' })
-        expect(screen.getByRole('region', { name: 'Local data' })).toBeInTheDocument()
+        const localDataSection = screen.getByRole('region', { name: 'Import / Export Data' })
+        expect(within(localDataSection).getAllByRole('heading', { level: 3 }).map((heading) => heading.textContent)).toEqual(['Import / Export Data', 'Reset local data'])
         expect(screen.queryByRole('region', { name: 'Content sources' })).not.toBeInTheDocument()
 
         await user.click(contentSources)
         expect(contentSources).toHaveAttribute('aria-current', 'page')
         expect(dialog).toHaveStyle({ height: '100dvh' })
         expect(screen.getByRole('region', { name: 'Content sources' })).toBeInTheDocument()
-        expect(screen.queryByRole('region', { name: 'Local data' })).not.toBeInTheDocument()
+        expect(screen.queryByRole('region', { name: 'Import / Export Data' })).not.toBeInTheDocument()
 
         await user.click(localData)
-        expect(screen.getByRole('region', { name: 'Local data' })).toBeInTheDocument()
+        expect(screen.getByRole('region', { name: 'Import / Export Data' })).toBeInTheDocument()
     })
 
     it('loads IndexedDB correctly under React StrictMode', async () => {
@@ -228,11 +338,14 @@ describe('SettingsModal', () => {
         const resetButton = within(dialog).getByRole('button', { name: 'Reset local data' })
         expect(resetButton).toHaveClass('primary-button')
         await user.click(resetButton)
-        await user.click(within(dialog).getByRole('button', { name: 'Cancel' }))
+        const warning = screen.getByRole('dialog', { name: 'Reset local data?' })
+        expect(warning).toHaveTextContent('Reset the IndexedDB database and all configuration?')
+        await user.click(within(warning).getByRole('button', { name: 'Cancel' }))
+        expect(screen.queryByRole('dialog', { name: 'Reset local data?' })).not.toBeInTheDocument()
         expect(storage.reset).not.toHaveBeenCalled()
 
         await user.click(within(dialog).getByRole('button', { name: 'Reset local data' }))
-        await user.click(within(dialog).getByRole('button', { name: 'Reset All Configuration' }))
+        await user.click(within(screen.getByRole('dialog', { name: 'Reset local data?' })).getByRole('button', { name: 'Continue' }))
 
         await waitFor(() => expect(storage.reset).toHaveBeenCalledOnce())
         await user.click(within(dialog).getByRole('button', { name: 'Content Sources' }))
@@ -250,9 +363,10 @@ describe('SettingsModal', () => {
 
         await user.click(screen.getByRole('button', { name: 'Local Data' }))
         await user.click(screen.getByRole('button', { name: 'Reset local data' }))
-        await user.click(screen.getByRole('button', { name: 'Reset All Configuration' }))
+        await user.click(within(screen.getByRole('dialog', { name: 'Reset local data?' })).getByRole('button', { name: 'Continue' }))
 
         await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('database blocked'))
+        expect(screen.queryByRole('dialog', { name: 'Reset local data?' })).not.toBeInTheDocument()
         await user.click(screen.getByRole('button', { name: 'Content Sources' }))
         expect(sourceChip).toHaveAttribute('aria-pressed', 'false')
         expect(screen.queryByText('Local data reset to defaults.')).not.toBeInTheDocument()

@@ -1,5 +1,6 @@
-import { Database, LibraryBig, Pencil, RotateCcw, Save, Settings, Trash2, UserRound } from 'lucide-react'
-import { useState } from 'react'
+import { Database, Download, LibraryBig, Pencil, Save, Settings, Trash2, Upload, UserRound } from 'lucide-react'
+import { useRef, useState, type ChangeEvent } from 'react'
+import { AlertDialog } from '@/components/ui/AlertDialog'
 import { ModalDialog } from '@/components/ui/ModalDialog'
 import {
     SourceChip,
@@ -10,6 +11,7 @@ import {
     type SourceGroup,
 } from '@/features/catalog'
 import { useSettings } from '../model/SettingsProvider'
+import { readSettingsBackup } from '../model/settings-backup'
 
 interface SettingsModalProps {
     onClose: () => void
@@ -26,8 +28,11 @@ const SOURCE_GROUP_LABELS: Readonly<Record<SourceGroup, string>> = {
 }
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
-    const { settings, profiles, activeProfileId, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, createProfile, renameProfile, deleteProfile, selectProfile } = useSettings()
-    const [confirmReset, setConfirmReset] = useState(false)
+    const { settings, profiles, activeProfileId, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup, createProfile, renameProfile, deleteProfile, selectProfile } = useSettings()
+    const [showResetAlert, setShowResetAlert] = useState(false)
+    const [showImportAlert, setShowImportAlert] = useState(false)
+    const [importError, setImportError] = useState('')
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const [successMessage, setSuccessMessage] = useState('')
     const [activeSection, setActiveSection] = useState<SettingsSection>('local-data')
     const [profileName, setProfileName] = useState('')
@@ -120,13 +125,40 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
     }
 
     const reset = async () => {
+        setShowResetAlert(false)
         setSuccessMessage('')
         try {
             await resetLocalData()
-            setConfirmReset(false)
             setSuccessMessage('Local data reset to defaults.')
         } catch {
             // The provider exposes the actionable error message.
+        }
+    }
+
+    const downloadBackup = () => {
+        const file = new Blob([exportSettingsBackup()], { type: 'application/json' })
+        const url = URL.createObjectURL(file)
+        const link = document.createElement('a')
+        link.href = url
+        link.download = `arcane-bazaar-backup-${new Date().toISOString().slice(0, 10)}.json`
+        document.body.append(link)
+        link.click()
+        link.remove()
+        window.setTimeout(() => URL.revokeObjectURL(url), 0)
+    }
+
+    const selectImportFile = async (event: ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0]
+        event.target.value = ''
+        if (!file) return
+        setImportError('')
+        setSuccessMessage('')
+        try {
+            const imported = await readSettingsBackup(file)
+            await importSettingsBackup(imported)
+            setSuccessMessage('Local data imported successfully.')
+        } catch (importFailure) {
+            setImportError(importFailure instanceof Error ? importFailure.message : 'Local data could not be imported.')
         }
     }
 
@@ -136,6 +168,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
             dialogWidth="min(1080px, 100%)"
             eyebrow="System"
             icon={<Settings size={20} />}
+            inactive={showResetAlert || showImportAlert}
             onClose={onClose}
             title="Settings"
             titleId="settings-modal-title"
@@ -164,22 +197,21 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                     </section>
 
                     <section id="local-data-section" aria-labelledby="local-data-title" hidden={activeSection !== 'local-data'}>
-                        <h3 id="local-data-title" className="font-display text-xs uppercase tracking-[0.12em] text-gold">Local data</h3>
-                        <p className="mt-2 text-[11px] leading-5 text-muted">Delete this application's IndexedDB database and restore every setting to its default value.</p>
-
-                        {!confirmReset ? (
-                            <button className="primary-button mt-4" disabled={isSaving} onClick={() => { setSuccessMessage(''); setConfirmReset(true) }}>
+                        <h3 id="local-data-title" className="font-display text-xs uppercase tracking-[0.12em] text-gold">Import / Export Data</h3>
+                        <p className="mt-2 text-[11px] leading-5 text-muted">Back up or restore all profiles and their configuration.</p>
+                        <div className="mt-4 flex flex-wrap gap-2">
+                            <button type="button" className="secondary-button !border-emerald-600 !bg-emerald-900 !text-[#fff2ce] shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" disabled={!isReady || isSaving} onClick={downloadBackup}><Upload size={14} /> Backup Data</button>
+                            <button type="button" className="secondary-button !border-blue-600 !bg-blue-900 !text-[#fff2ce] shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" disabled={!isReady || isSaving} onClick={() => { setImportError(''); setSuccessMessage(''); setShowImportAlert(true) }}><Download size={14} /> Import Data</button>
+                        </div>
+                        <input ref={fileInputRef} type="file" accept=".json,application/json" hidden onChange={(event) => void selectImportFile(event)} />
+                        {importError && <p role="alert" className="mt-4 text-xs leading-5 text-red-300">{importError}</p>}
+                        <div className="mt-8 border-t border-border pt-6">
+                            <h3 className="font-display text-xs uppercase tracking-[0.12em] text-gold">Reset local data</h3>
+                            <p className="mt-2 text-[11px] leading-5 text-muted">Delete this application's IndexedDB database and restore every setting to its default value.</p>
+                            <button className="primary-button mt-4" disabled={isSaving} onClick={() => { setSuccessMessage(''); setShowResetAlert(true) }}>
                                 <Trash2 size={14} /> Reset local data
                             </button>
-                        ) : (
-                            <div className="mt-4 rounded-md border border-red-900/70 bg-red-950/20 p-4">
-                                <p className="text-xs leading-5 text-red-200">Reset the IndexedDB database and all configuration?</p>
-                                <div className="mt-3 flex flex-wrap gap-2">
-                                    <button className="secondary-button" disabled={isSaving} onClick={() => setConfirmReset(false)}>Cancel</button>
-                                    <button className="primary-button" disabled={isSaving} onClick={() => void reset()}><RotateCcw size={14} /> Reset All Configuration</button>
-                                </div>
-                            </div>
-                        )}
+                        </div>
                     </section>
 
                     <section id="profile-section" aria-labelledby="profile-title" hidden={activeSection !== 'profile'}>
@@ -191,7 +223,7 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                         }}>
                             <label className="sr-only" htmlFor="new-profile-name">New profile name</label>
                             <input id="new-profile-name" className="min-w-0 flex-1 rounded border border-border bg-panel px-3 py-2 text-xs text-cream" value={profileName} onChange={(event) => setProfileName(event.target.value)} placeholder="Profile name" />
-                            <button type="submit" className="primary-button !border-emerald-600 !bg-emerald-900 !bg-none !text-emerald-50 hover:!brightness-125" disabled={!isReady || isSaving}>Create profile</button>
+                            <button type="submit" className="primary-button !border-emerald-600 !bg-emerald-900 !bg-none !text-emerald-50 hover:!brightness-[1.14]" disabled={!isReady || isSaving}>Create profile</button>
                         </form>
                         <ul className="mt-4 grid gap-2">
                             {profiles.map((profile) => (
@@ -204,20 +236,20 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                                             <label className="sr-only" htmlFor={`edit-profile-${profile.id}`}>Edit profile name</label>
                                             <input id={`edit-profile-${profile.id}`} className="min-w-0 flex-1 rounded border border-border bg-panel px-3 py-2 text-xs text-cream" value={editingName} onChange={(event) => setEditingName(event.target.value)} />
                                             <button className="primary-button size-9 !min-h-0 !p-0" type="submit" aria-label="Save profile name" title="Save profile name" disabled={isSaving}><Save size={16} aria-hidden="true" /></button>
-                                            <button className="secondary-button" type="button" onClick={() => setEditingId(null)}>Cancel</button>
+                                            <button className="secondary-button shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" type="button" onClick={() => setEditingId(null)}>Cancel</button>
                                         </form>
                                     ) : (
                                         <div className="flex min-h-9 flex-wrap items-center gap-2">
                                             <button type="button" aria-current={activeProfileId === profile.id ? 'true' : undefined} className="min-w-0 flex-1 text-left text-sm text-cream hover:text-gold-bright" disabled={!isReady || isSaving || activeProfileId === profile.id} onClick={() => void runProfileAction(() => selectProfile(profile.id))}>{profile.name}{activeProfileId === profile.id ? ' (active)' : ''}</button>
                                             {profile.id !== 'default' && <>
-                                                <button type="button" className="secondary-button size-9 !min-h-0 !border-orange-600 !bg-orange-900 !p-0 !text-orange-50 hover:!brightness-125" aria-label={`Rename ${profile.name}`} title={`Rename ${profile.name}`} disabled={isSaving} onClick={() => { setEditingId(profile.id); setEditingName(profile.name); setDeletingId(null) }}><Pencil size={16} aria-hidden="true" /></button>
-                                                <button type="button" className="secondary-button size-9 !min-h-0 !border-red-600 !bg-red-900 !p-0 !text-red-50 hover:!brightness-125" aria-label={`Delete ${profile.name}`} title={`Delete ${profile.name}`} disabled={isSaving} onClick={() => { setDeletingId(profile.id); setEditingId(null) }}><Trash2 size={16} aria-hidden="true" /></button>
+                                                <button type="button" className="secondary-button size-9 !min-h-0 !border-orange-600 !bg-orange-900 !p-0 !text-orange-50 shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" aria-label={`Rename ${profile.name}`} title={`Rename ${profile.name}`} disabled={isSaving} onClick={() => { setEditingId(profile.id); setEditingName(profile.name); setDeletingId(null) }}><Pencil size={16} aria-hidden="true" /></button>
+                                                <button type="button" className="secondary-button size-9 !min-h-0 !border-red-600 !bg-red-900 !p-0 !text-red-50 shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" aria-label={`Delete ${profile.name}`} title={`Delete ${profile.name}`} disabled={isSaving} onClick={() => { setDeletingId(profile.id); setEditingId(null) }}><Trash2 size={16} aria-hidden="true" /></button>
                                             </>}
                                         </div>
                                     )}
                                     {deletingId === profile.id && <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-red-200">
                                         <span>Delete {profile.name}?</span>
-                                        <button type="button" className="secondary-button" onClick={() => setDeletingId(null)}>Cancel</button>
+                                        <button type="button" className="secondary-button shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" onClick={() => setDeletingId(null)}>Cancel</button>
                                         <button type="button" className="primary-button" disabled={isSaving} onClick={() => void runProfileAction(async () => { await deleteProfile(profile.id); setDeletingId(null) })}>Confirm delete</button>
                                     </div>}
                                 </li>
@@ -231,6 +263,18 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                     {error && <p role="alert" className="mt-4 text-xs leading-5 text-red-300">{error}</p>}
                 </div>
             </div>
+            {showResetAlert && <AlertDialog
+                title="Reset local data?"
+                message="Reset the IndexedDB database and all configuration?"
+                onCancel={() => setShowResetAlert(false)}
+                onConfirm={() => void reset()}
+            />}
+            {showImportAlert && <AlertDialog
+                title="Import local data?"
+                message="Importing data will overwrite all current local data. We recommend backing up your data before continuing."
+                onCancel={() => setShowImportAlert(false)}
+                onConfirm={() => { setShowImportAlert(false); fileInputRef.current?.click() }}
+            />}
         </ModalDialog>
     )
 }

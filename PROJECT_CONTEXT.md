@@ -43,14 +43,17 @@ References: [groups](src/features/catalog/model/items/build-item-groups.ts), [va
 
 ## Sources and settings
 
-- The Settings dialog uses a left-side navigation on wide screens, with `Local Data`, `Profile`, and `Content Sources` as separate views. The first view, `Local Data`, opens by default; on narrow screens the navigation appears above the active view. The dialog keeps its maximum available height when switching between views, regardless of their content length.
+- The Settings dialog uses a left-side navigation on wide screens, with `Local Data`, `Profile`, and `Content Sources` as separate views. The first view, `Local Data`, opens by default and shows Import / Export Data above Reset local data; on narrow screens the navigation appears above the active view. The dialog keeps its maximum available height when switching between views, regardless of their content length.
 - Profiles keep source selection, catalog search, filters, sorting, and items per page independently. The `Default` profile always exists and cannot be renamed or deleted. New profiles start with default preferences and become active immediately. Deleting the active profile selects `Default`.
 - Available sources are organized by edition (`5e` or `5.5e`) and group. All are selected by default. Source code comparisons ignore letter case and surrounding whitespace.
 - Deselecting a source hides its items. It also removes group options originating from that source and variant bases whose source was deselected. A group or variant with no remaining options disappears.
 - Profile data is stored in IndexedDB. A legacy source selection is migrated into the `Default` profile. On load, unknown source codes are discarded and the known source order is restored. If storage is unavailable, changes may last only for the current session; if saving a source selection fails, the previous selection is restored.
-- “Reset local data” deletes the local database and recreates only the `Default` profile with all sources selected.
+- IndexedDB database `the-arcane-bazaar` (version 1) stores the complete profile state in the `settings` object store under `profile-state`; the legacy `app-settings` record is migrated. Stored catalog filters are normalized against the same allowed values used by backup validation. Catalog source filters are matched without case or surrounding whitespace and stored in uppercase, while unsupported stored filter values are discarded.
+- “Reset local data” asks for confirmation in a warning dialog, then deletes the local database and recreates only the `Default` profile with all sources selected.
 
-References: [source registry](src/features/catalog/model/sources.ts), [visibility](src/features/catalog/model/content-visibility.ts), [persistence](src/features/settings/api/settings-database.ts), [settings state](src/features/settings/model/SettingsProvider.tsx).
+- The Local Data view can download a versioned JSON backup of all profiles, the active profile, source choices, and catalog preferences. Backup version 1 uses `{ version: 1, data: { profiles, activeProfileId } }`; each profile contains `id`, `name`, `settings`, and `catalog`. Import first warns that current local data will be overwritten and recommends a backup. It then accepts a JSON file of at most 1 MB, validates its format and profile data, accepts known catalog source codes regardless of case, and replaces the stored profile state. Invalid or unsafe files leave the existing data unchanged.
+
+References: [source registry](src/features/catalog/model/sources.ts), [visibility](src/features/catalog/model/content-visibility.ts), [persistence](src/features/settings/api/settings-database.ts), [settings state](src/features/settings/model/SettingsProvider.tsx), [shared filter schema](src/features/settings/model/catalog-filter-schema.ts), [backup format](src/features/settings/model/settings-backup.ts).
 
 ## Search, filters, and navigation
 

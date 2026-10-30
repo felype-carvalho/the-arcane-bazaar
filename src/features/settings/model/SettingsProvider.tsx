@@ -3,6 +3,7 @@ import { createSettingsStorage } from '../api/settings-database'
 import { createDefaultCatalogPreferences, createDefaultProfileState, createDefaultSettings, DEFAULT_PROFILE_ID } from './defaults'
 import type { AppSettings, CatalogPreferences, ProfileState, SettingsContextValue, SettingsStorage } from '../types'
 import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
+import { serializeSettingsBackup } from './settings-backup'
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)
 
@@ -167,12 +168,18 @@ export function SettingsProvider({ children, storage: providedStorage }: Setting
         }
     }, [storage, updateState])
 
+    const exportSettingsBackup = useCallback(() => serializeSettingsBackup(stateRef.current), [])
+    const importSettingsBackup = useCallback(async (imported: ProfileState) => {
+        await commit(imported, true, true)
+        setResetVersion((current) => current + 1)
+    }, [commit])
+
     const active = state.profiles.find((profile) => profile.id === state.activeProfileId) ?? state.profiles[0]
     const value = useMemo<SettingsContextValue>(() => ({
         settings: active.settings, catalog: active.catalog, profiles: state.profiles, activeProfileId: state.activeProfileId, resetVersion,
-        isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData,
+        isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup,
         createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog,
-    }), [active, state, resetVersion, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog])
+    }), [active, state, resetVersion, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup, createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog])
     return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>
 }
 

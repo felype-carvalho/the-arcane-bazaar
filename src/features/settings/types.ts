@@ -45,6 +45,8 @@ export interface SettingsContextValue {
   setSourceEnabled: (source: string, enabled: boolean) => Promise<void>
   setSourcesEnabled: (sources: readonly string[], enabled: boolean) => Promise<void>
   resetLocalData: () => Promise<void>
+  exportSettingsBackup: () => string
+  importSettingsBackup: (state: ProfileState) => Promise<void>
   createProfile: (name: string) => Promise<void>
   renameProfile: (id: string, name: string) => Promise<void>
   deleteProfile: (id: string) => Promise<void>

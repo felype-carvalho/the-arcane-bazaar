@@ -1,4 +1,5 @@
 import { createDefaultCatalogPreferences, createDefaultProfileState, createDefaultSettings, DEFAULT_PROFILE_ID } from '../model/defaults'
+import { normalizeCatalogFilters } from '../model/catalog-filter-schema'
 import type { AppSettings, CatalogPreferences, Profile, ProfileState, SettingsStorage } from '../types'
 import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
 
@@ -42,18 +43,9 @@ function normalizeCatalog(value: unknown): CatalogPreferences {
   const defaults = createDefaultCatalogPreferences()
   if (typeof value !== 'object' || value === null) return defaults
   const stored = value as Partial<CatalogPreferences>
-  const filters = stored.filters
-  const validStrings = (input: unknown): input is string[] => Array.isArray(input) && input.every((entry) => typeof entry === 'string')
   const validSortKeys = ['name', 'type', 'category', 'rarity', 'price']
   return {
-    filters: {
-      search: typeof filters?.search === 'string' ? filters.search : '',
-      types: validStrings(filters?.types) ? filters.types.filter((type): type is 'Common' | 'Magic' => type === 'Common' || type === 'Magic').slice(0, 1) : defaults.filters.types,
-      rarities: validStrings(filters?.rarities) ? filters.rarities as CatalogPreferences['filters']['rarities'] : [],
-      categories: validStrings(filters?.categories) ? filters.categories as CatalogPreferences['filters']['categories'] : [],
-      availabilities: validStrings(filters?.availabilities) ? filters.availabilities as CatalogPreferences['filters']['availabilities'] : [],
-      sources: validStrings(filters?.sources) ? filters.sources : [],
-    },
+    filters: normalizeCatalogFilters(stored.filters),
     sortKey: validSortKeys.includes(stored.sortKey ?? '') ? stored.sortKey! : defaults.sortKey,
     direction: stored.direction === 'desc' ? 'desc' : 'asc',
     pageSize: [10, 20, 50, 100].includes(stored.pageSize ?? 0) ? stored.pageSize! : 20,
