@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="7 8 50 50" width="512" height="512" role="img" aria-labelledby="title">
+    <title id="title">The Arcane Bazaar - wizard-pouch</title>
+    <path d="m21 9 7 3 8-3 7 2-7 12H27Z" fill="#9d7de0"/>
+    <path d="M25 23C23 29 12 34 12 44c0 9 8 13 20 13s20-4 20-13c0-10-11-15-13-21Z" fill="#c69b32"/>
+    <path d="M24 23h16" fill="none" stroke="#17192a" stroke-width="4" stroke-linecap="round"/>
+    <path d="m32 32 3 7 7 3-7 3-3 7-3-7-7-3 7-3Z" fill="#17192a"/>
+</svg>
