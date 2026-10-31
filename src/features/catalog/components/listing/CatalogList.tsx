@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { Search } from 'lucide-react'
 import { ItemCategories } from '../item/ItemCategories'
 import type { Item, SortDirection, SortKey } from '../../types'
@@ -20,10 +21,11 @@ export function formatCatalogItemName(name: string): string {
 }
 
 export function CatalogList({ items, selectedId, sortKey, direction, onSort, onSelect }: CatalogListProps) {
+    const { t } = useInterfaceTranslation()
     const showRarity = items.some((item) => item.type === 'Magic')
     const SortHeader = ({ label, column, className = '' }: { label: string, column: SortKey, className?: string }) => (
         <th className={className} scope="col">
-            <button className="table-sort" onClick={() => onSort(column)} aria-label={`Sort by ${label}`}>
+            <button className="table-sort" onClick={() => onSort(column)} aria-label={t("catalog.sortBy", { name: label })}>
                 {label}<span aria-hidden="true" className={sortKey === column ? 'text-gold-bright' : 'text-muted'}>{sortKey === column ? (direction === 'asc' ? '▲' : '▼') : '⇅'}</span>
             </button>
         </th>
@@ -33,8 +35,8 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
         return (
             <div className="flex min-h-[460px] flex-col items-center justify-center px-6 text-center">
                 <div className="mb-4 grid h-16 w-16 place-items-center rounded-full border border-gold/20 bg-gold/5 text-gold"><Search size={24} /></div>
-                <h3 className="font-display text-lg text-cream">No items found</h3>
-                <p className="mt-2 max-w-sm text-sm leading-6 text-muted">Try another name or remove some filters to search the shelves again.</p>
+                <h3 className="font-display text-lg text-cream">{t("catalog.emptyTitle")}</h3>
+                <p className="mt-2 max-w-sm text-sm leading-6 text-muted">{t("catalog.emptyHint")}</p>
             </div>
         )
     }
@@ -45,11 +47,11 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                 <table className="w-full border-collapse text-left">
                     <thead className="sticky top-0 z-10 bg-panel-strong shadow-[0_1px_0_var(--color-border)]">
                         <tr>
-                            <SortHeader label="Name" column="name" className={showRarity ? 'w-[40%]' : 'w-[50%]'} />
-                            <SortHeader label="Item type" column="type" className="w-[10%]" />
-                            <SortHeader label="Category" column="category" className={showRarity ? 'w-[20%]' : 'w-[25%]'} />
-                            {showRarity && <SortHeader label="Rarity" column="rarity" className="w-[15%]" />}
-                            <SortHeader label="Price" column="price" className="w-[15%]" />
+                            <SortHeader label={t("catalog.name")} column="name" className={showRarity ? 'w-[40%]' : 'w-[50%]'} />
+                            <SortHeader label={t("filters.type")} column="type" className="w-[10%]" />
+                            <SortHeader label={t("filters.category")} column="category" className={showRarity ? 'w-[20%]' : 'w-[25%]'} />
+                            {showRarity && <SortHeader label={t("filters.rarity")} column="rarity" className="w-[15%]" />}
+                            <SortHeader label={t("catalog.price")} column="price" className="w-[15%]" />
                         </tr>
                     </thead>
                     <tbody>
@@ -71,7 +73,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                                 <td><TypeMark type={item.type} /></td>
                                 <td className="text-[12px] font-semibold"><ItemCategories categories={item.categories} /></td>
                                 {showRarity && <td><RarityBadge rarity={item.rarity} /></td>}
-                                <td className="font-display text-xs font-semibold text-gold-bright">{item.groupOptions || item.variantOptions || item.basePriceGp == null ? <span className="variable-price">◇ Variable</span> : <CurrencyDisplay valueGp={item.basePriceGp} />}</td>
+                                <td className="font-display text-xs font-semibold text-gold-bright">{item.groupOptions || item.variantOptions || item.basePriceGp == null ? <span className="variable-price">{t("catalog.variablePriceMarker")}</span> : <CurrencyDisplay valueGp={item.basePriceGp} />}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -94,7 +96,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                         </span>
                         <span className="flex flex-col items-end gap-2">
                             {item.type === 'Magic' && <RarityBadge rarity={item.rarity} />}
-                            <span className="font-display text-[10px] font-semibold text-gold-bright">{item.groupOptions || item.variantOptions || item.basePriceGp == null ? 'Variable' : <CurrencyDisplay valueGp={item.basePriceGp} />}</span>
+                            <span className="font-display text-[10px] font-semibold text-gold-bright">{item.groupOptions || item.variantOptions || item.basePriceGp == null ? t("pricing.variable") : <CurrencyDisplay valueGp={item.basePriceGp} />}</span>
                         </span>
                     </button>
                 ))}

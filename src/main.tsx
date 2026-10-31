@@ -1,3 +1,4 @@
+import '@/app/i18n'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
@@ -10,13 +11,13 @@ import '@/assets/styles/index.css'
 import App from '@/app/App'
 
 document.querySelectorAll<HTMLMetaElement>('meta[property="og:image"], meta[name="twitter:image"]').forEach((meta) => {
-  meta.content = new URL('/og.png', window.location.origin).href
+    meta.content = new URL('/og.png', window.location.origin).href
 })
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
+    <StrictMode>
+        <BrowserRouter basename={import.meta.env.BASE_URL}>
+            <App />
+        </BrowserRouter>
+    </StrictMode>,
 )

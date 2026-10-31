@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, MessageCircleCheck, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
@@ -8,6 +9,7 @@ import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
 import { RarityBadge, TypeMark } from './ItemBadges'
 import { ItemCategories } from './ItemCategories'
 import { ItemImageViewer } from './ItemImageViewer'
+import { ItemInformationValue } from './ItemInformationValue'
 import { SourceChip } from './SourceChip'
 import '@fontsource/inter/latin-400-italic.css'
 
@@ -63,8 +65,9 @@ function hasText(value: string | undefined): value is string {
 }
 
 function Information({ label, value, icon, outlined = false }: { label: string; value: ReactNode; icon: ReactNode; outlined?: boolean }) {
+    const { label: translateLabel } = useInterfaceTranslation()
     return <div className={`flex min-w-0 flex-[1_1_150px] items-center gap-[14px] p-[18px] [&>svg]:size-[26px] [&>svg]:shrink-0 [&>svg]:text-silver ${outlined ? 'rounded-lg border border-border bg-panel-strong' : ''}`}>
-        {icon}<div><dt className="mb-1.5 font-display text-[11px] text-gold-bright">{label}</dt><dd className="text-sm leading-[1.6]">{value}</dd></div>
+        {icon}<div><dt className="mb-1.5 font-display text-[11px] text-gold-bright">{translateLabel(label)}</dt><dd className="text-sm leading-[1.6]">{typeof value === 'string' ? <ItemInformationValue field={label} value={value} /> : value}</dd></div>
     </div>
 }
 
@@ -98,6 +101,7 @@ function DescriptionTable({ block }: { block: Extract<ItemDescriptionBlock, { ty
 }
 
 export function ItemModal({ item, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
+    const { t } = useInterfaceTranslation()
     const dialogRef = useRef<HTMLDivElement>(null)
     const thumbnailRef = useRef<HTMLButtonElement>(null)
     const [images, setImages] = useState<ItemImage[]>([])
@@ -164,39 +168,39 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                         <h2 id="item-modal-title" className="font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2>
                         {!tradeGoodSubtype && hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]">{item.subtype}</p>}
                     </div>
-                    <button className="icon-button shrink-0" onClick={onClose} aria-label="Close item sheet"><X size={24} /></button>
+                    <button className="icon-button shrink-0" onClick={onClose} aria-label={t("item.closeSheet")}><X size={24} /></button>
                 </header>
                 <div className="arcane-scrollbar grid min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)] overflow-y-auto max-[900px]:grid-cols-[minmax(0,1fr)]">
-                    <aside className={`flex min-w-0 flex-col gap-[22px] border-r border-[#80662c] bg-catalog px-7 pb-7 max-[900px]:border-r-0 max-[900px]:border-b max-[601px]:px-5 ${hasItemImage ? '' : 'pt-7 max-[601px]:pt-5'}`} aria-label="Item summary">
+                    <aside className={`flex min-w-0 flex-col gap-[22px] border-r border-[#80662c] bg-catalog px-7 pb-7 max-[900px]:border-r-0 max-[900px]:border-b max-[601px]:px-5 ${hasItemImage ? '' : 'pt-7 max-[601px]:pt-5'}`} aria-label={t("item.summary")}>
                         {hasItemImage && <figure className="relative -mx-7 max-[601px]:-mx-5">
-                            <button ref={thumbnailRef} type="button" className="block w-full cursor-zoom-in bg-app" aria-label={`View images of ${item.name}`} onClick={() => setActiveImageIndex(0)}>
+                            <button ref={thumbnailRef} type="button" className="block w-full cursor-zoom-in bg-app" aria-label={t("images.open", { name: item.name })} onClick={() => setActiveImageIndex(0)}>
                                 <img className="block h-[340px] w-full object-contain p-4 max-[900px]:h-[190px] max-[601px]:p-3" src={images[0].src} width={images[0].width} height={images[0].height} alt={item.name} onError={() => setImageFailed(true)} />
                             </button>
                             <div className="absolute inset-x-3 bottom-2.5 flex flex-wrap items-center gap-2.5 [&_.rarity-badge]:bg-[color-mix(in_srgb,currentColor_16%,#101119)]! [&_.rarity-badge]:px-3! [&_.rarity-badge]:py-[3px]! [&_.rarity-badge]:text-xs!">
                                 {badges}
                             </div>
-                            <figcaption className="pointer-events-none absolute top-2.5 right-3 rounded bg-[rgb(9_11_21_/_85%)] px-[7px] py-[3px] text-[10px] text-silver">{images.length} {images.length === 1 ? 'image' : 'images'}</figcaption>
+                            <figcaption className="pointer-events-none absolute top-2.5 right-3 rounded bg-[rgb(9_11_21_/_85%)] px-[7px] py-[3px] text-[10px] text-silver">{images.length} {images.length === 1 ? t("images.singular") : t("images.plural")}</figcaption>
                         </figure>}
                         {!hasItemImage && <div className="flex flex-wrap items-center gap-2.5 [&_.rarity-badge]:px-3! [&_.rarity-badge]:py-[3px]! [&_.rarity-badge]:text-xs!">{badges}</div>}
                         {item.categories.length > 0 && <section className={`${summarySectionClass} border-t-0 [&_.category-chip]:text-xs! ${hasItemImage ? '-mt-[22px]' : 'pt-0'}`}>
-                            <h3 className={sectionHeadingClass}>Categories</h3>
+                            <h3 className={sectionHeadingClass}>{t("item.categories")}</h3>
                             <ItemCategories categories={item.categories} presentation="pills" />
                         </section>}
                         {hasPrice &&
                             <section className={summarySectionClass}>
-                                <h3 className={sectionHeadingClass}>Base price</h3>
+                                <h3 className={sectionHeadingClass}>{t("pricing.basePrice")}</h3>
                                 <div className="flex items-center gap-3 whitespace-nowrap text-lg text-gold-bright">
                                     <Coins className="shrink-0 text-gold" aria-hidden="true" /><CurrencyDisplay valueGp={displayedPrice} className="flex-nowrap!" />
-                                    {item.hasExplicitPrice === false && <span className={`${noteClass} mt-0! shrink-0`}>Estimated</span>}
+                                    {item.hasExplicitPrice === false && <span className={`${noteClass} mt-0! shrink-0`}>{t("item.estimated")}</span>}
                                 </div>
                             </section>}
                         {hasText(item.source) && <section className={summarySectionClass}>
-                            <h3 className={sectionHeadingClass}>Source</h3><div className="flex items-center gap-3 whitespace-nowrap [&_.source-chip]:text-xs!">
+                            <h3 className={sectionHeadingClass}>{t("filters.source")}</h3><div className="flex items-center gap-3 whitespace-nowrap [&_.source-chip]:text-xs!">
                                 <BookOpen className="shrink-0 text-gold" aria-hidden="true" />
                                 {(sourceName || sourcePage != null) && <span className="flex min-w-0 items-center gap-1 text-[13px] leading-[1.6] italic">
                                     {sourceName && <span className="min-w-0 overflow-hidden text-ellipsis" title={sourceName}>{sourceName}</span>}
                                     {sourceName && sourcePage != null && <span aria-hidden="true">-</span>}
-                                    {sourcePage != null && <span className="shrink-0">p. {sourcePage}</span>}
+                                    {sourcePage != null && <span className="shrink-0">{t("item.sourcePage")} {sourcePage}</span>}
                                 </span>}
                                 <SourceChip source={item.source} />
                             </div>
@@ -204,22 +208,22 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                     </aside>
                     <div className="flex min-w-0 flex-col gap-[26px] p-[26px] [overflow-wrap:anywhere] max-[900px]:p-5">
                         {(hasWeight || item.attunement) && <dl className="flex flex-wrap rounded-lg border border-border bg-surface">
-                            {hasWeight && <Information label="Weight" value={item.weight} icon={<Weight aria-hidden="true" />} />}
-                            {item.attunement && <Information label="Attunement" value="Required" icon={<Sparkles aria-hidden="true" />} />}
-                            {item.attunement && hasText(item.attunementRequirement) && <Information label="Requirement" value={item.attunementRequirement} icon={<CircleDashedCheck aria-hidden="true" />} />}
+                            {hasWeight && <Information label={t("item.weight")} value={item.weight} icon={<Weight aria-hidden="true" />} />}
+                            {item.attunement && <Information label={t("item.attunement")} value={t("item.attunementRequired")} icon={<Sparkles aria-hidden="true" />} />}
+                            {item.attunement && hasText(item.attunementRequirement) && <Information label={t("item.requirement")} value={item.attunementRequirement} icon={<CircleDashedCheck aria-hidden="true" />} />}
                         </dl>}
-                        <EquipmentSection title="Weapon information" information={item.weaponInformation} />
-                        <EquipmentSection title="Armor information" information={item.armorInformation} kind="armor" />
-                        <EquipmentSection title="Vehicle Information" information={item.vehicleInformation} kind="vehicle" />
-                        <EquipmentSection title="Mount Information" information={item.mountInformation} kind="mount" />
-                        <EquipmentSection title="Spellcasting Focus Information" information={item.spellcastingFocusInformation} kind="spellcastingFocus" />
-                        {descriptionBlocks.length > 0 && <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>Description</h3>
+                        <EquipmentSection title={t("item.weaponSection")} information={item.weaponInformation} />
+                        <EquipmentSection title={t("item.armorSection")} information={item.armorInformation} kind="armor" />
+                        <EquipmentSection title={t("item.vehicleSection")} information={item.vehicleInformation} kind="vehicle" />
+                        <EquipmentSection title={t("item.mountSection")} information={item.mountInformation} kind="mount" />
+                        <EquipmentSection title={t("item.focusSection")} information={item.spellcastingFocusInformation} kind="spellcastingFocus" />
+                        {descriptionBlocks.length > 0 && <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>{t("item.description")}</h3>
                             {descriptionBlocks.map((block, index) => block.type === 'table'
                                 ? <DescriptionTable key={index} block={block} />
                                 : <DescriptionParagraph key={index} text={block.text} />)}
                         </section>}
-                        {configurationSummary && <p className={noteClass}>Configuration: {configurationSummary}</p>}
-                        {!configurationSummary && selectedVariantOption && <p className={noteClass}>Configured with {selectedVariantOption.baseName} from {selectedVariantOption.baseSource}.</p>}
+                        {configurationSummary && <p className={noteClass}>{t("item.configurationLabel")} {configurationSummary}</p>}
+                        {!configurationSummary && selectedVariantOption && <p className={noteClass}>{t("item.configuredWith")} {selectedVariantOption.baseName} {t("item.configurationSource")} {selectedVariantOption.baseSource}.</p>}
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, type CSSProperties, type ReactNode } from 'react'
 import { X } from 'lucide-react'
 
@@ -14,6 +15,7 @@ interface ModalDialogProps {
 }
 
 export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon, inactive = false, onClose, title, titleId }: ModalDialogProps) {
+    const { t } = useInterfaceTranslation()
     const dialogRef = useRef<HTMLDivElement>(null)
     const hasFocusedRef = useRef(false)
     const onCloseRef = useRef(onClose)
@@ -58,7 +60,7 @@ export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon
                         <div className="item-icon-tile small" aria-hidden="true">{icon}</div>
                         <div><p className="eyebrow">{eyebrow}</p><h2 id={titleId} className="mt-1 font-display text-xl text-gold-bright">{title}</h2></div>
                     </div>
-                    <button className="icon-button" onClick={onClose} aria-label={`Close ${title.toLocaleLowerCase('en-US')}`}><X size={20} /></button>
+                    <button className="icon-button" onClick={onClose} aria-label={t("common.closeNamed", { name: title.toLocaleLowerCase() })}><X size={20} /></button>
                 </div>
                 {children && <div className="min-h-0 overflow-y-auto p-6 md:p-8">{children}</div>}
             </div>

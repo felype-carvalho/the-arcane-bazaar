@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { useId } from 'react'
 import { Layers3 } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
@@ -35,6 +36,7 @@ function compareBaseOptions(left: VariantBaseOption, right: VariantBaseOption): 
 }
 
 export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSelectorProps) {
+    const { t } = useInterfaceTranslation()
     const options = [...(item.variantOptions ?? [])].sort(compareBaseOptions)
     const titleId = useId()
 
@@ -42,8 +44,8 @@ export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSel
         <section className="variant-base-card" aria-labelledby={titleId}>
             <div className="flex items-center justify-between">
                 <div>
-                    <p className="eyebrow">Variant configuration</p>
-                    <h3 id={titleId} className="mt-1 font-display text-sm text-gold">Base item</h3>
+                    <p className="eyebrow">{t("variants.configuration")}</p>
+                    <h3 id={titleId} className="mt-1 font-display text-sm text-gold">{t("variants.baseItem")}</h3>
                 </div>
                 <Layers3 size={17} className="text-gold" />
             </div>
@@ -51,9 +53,9 @@ export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSel
             {options.length ? (
                 <>
                     <label className="mt-4 block">
-                        <span className="field-label">Compatible base item</span>
+                        <span className="field-label">{t("variants.compatibleBase")}</span>
                         <select className="field mt-1.5 w-full" value={selectedOption?.id ?? ''} onChange={(event) => onSelect(event.target.value)}>
-                            <option value="" disabled>Select a base item</option>
+                            <option value="" disabled>{t("variants.selectBase")}</option>
                             {options.map((option) => (
                                 <option key={option.id} value={option.id}>{option.baseName} · {formatSourceLabel(option.baseSource)}</option>
                             ))}
@@ -61,11 +63,11 @@ export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSel
                     </label>
 
                     {!selectedOption && (
-                        <p className="mt-3 text-[11px] leading-5 text-muted">Choose a compatible base item to determine this variant's price and full item sheet.</p>
+                        <p className="mt-3 text-[11px] leading-5 text-muted">{t("variants.baseHint")}</p>
                     )}
                 </>
             ) : (
-                <p className="mt-3 text-[11px] leading-5 text-red-300">No compatible base items were found for this variant.</p>
+                <p className="mt-3 text-[11px] leading-5 text-red-300">{t("variants.noBases")}</p>
             )}
         </section>
     )

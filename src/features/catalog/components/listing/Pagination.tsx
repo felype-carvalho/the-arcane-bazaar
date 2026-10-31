@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { Fragment } from 'react'
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react'
 
@@ -28,15 +29,16 @@ export function getVisiblePages(page: number, totalPages: number): number[] {
 }
 
 export function Pagination({ page, totalPages, totalItems, start, end, pageSize, onPage, onPageSizeChange }: PaginationProps) {
+    const { t, number } = useInterfaceTranslation()
     const pageCount = Math.max(totalPages, 1)
     const visiblePages = getVisiblePages(page, totalPages)
 
     return (
         <div className="grid min-h-12 grid-cols-1 items-center gap-2 border-t border-border bg-panel px-4 py-2 sm:grid-cols-[1fr_auto_1fr]">
-            <p className="justify-self-start text-[10px] text-muted">{totalItems ? `${start}–${end} of ${totalItems} items` : '0 items'}</p>
-            <nav className="flex max-w-full items-center justify-self-center gap-1 overflow-x-auto" aria-label="Pagination">
-                <button type="button" className="page-button" disabled={page === 1} onClick={() => onPage(1)} aria-label="First page"><ChevronsLeft size={14} /></button>
-                <button type="button" className="page-button" disabled={page === 1} onClick={() => onPage(page - 1)} aria-label="Previous page"><ChevronLeft size={14} /></button>
+            <p className="justify-self-start text-[10px] text-muted">{totalItems ? t("pagination.range", { start: number(start), end: number(end), total: number(totalItems) }) : t("pagination.empty")}</p>
+            <nav className="flex max-w-full items-center justify-self-center gap-1 overflow-x-auto" aria-label={t("pagination.label")}>
+                <button type="button" className="page-button" disabled={page === 1} onClick={() => onPage(1)} aria-label={t("pagination.first")}><ChevronsLeft size={14} /></button>
+                <button type="button" className="page-button" disabled={page === 1} onClick={() => onPage(page - 1)} aria-label={t("pagination.previous")}><ChevronLeft size={14} /></button>
                 {visiblePages.map((visiblePage, index) => {
                     const isCurrent = visiblePage === page
                     const hasGap = index > 0 && visiblePage - visiblePages[index - 1] > 1
@@ -48,19 +50,18 @@ export function Pagination({ page, totalPages, totalItems, start, end, pageSize,
                                 className={`page-button ${isCurrent ? 'active' : ''}`}
                                 onClick={() => onPage(visiblePage)}
                                 aria-current={isCurrent ? 'page' : undefined}
-                                aria-label={isCurrent ? `Page ${visiblePage}, current page` : `Go to page ${visiblePage}`}
+                                aria-label={isCurrent ? t("pagination.currentPage", { page: number(visiblePage) }) : t("pagination.goToPage", { page: number(visiblePage) })}
                             >
                                 {visiblePage}
                             </button>
                         </Fragment>
                     )
                 })}
-                <button type="button" className="page-button" disabled={page >= pageCount} onClick={() => onPage(page + 1)} aria-label="Next page"><ChevronRight size={14} /></button>
-                <button type="button" className="page-button" disabled={page >= pageCount} onClick={() => onPage(pageCount)} aria-label="Last page"><ChevronsRight size={14} /></button>
+                <button type="button" className="page-button" disabled={page >= pageCount} onClick={() => onPage(page + 1)} aria-label={t("pagination.next")}><ChevronRight size={14} /></button>
+                <button type="button" className="page-button" disabled={page >= pageCount} onClick={() => onPage(pageCount)} aria-label={t("pagination.last")}><ChevronsRight size={14} /></button>
             </nav>
             <label className="flex items-center justify-self-end gap-2 text-[10px] text-muted">
-                Items per page
-                <select
+                {t("pagination.pageSize")}<select
                     className="rounded border border-border bg-panel px-2 py-1 text-cream focus-visible:outline focus-visible:outline-2 focus-visible:outline-gold-bright"
                     value={pageSize}
                     onChange={(event) => {

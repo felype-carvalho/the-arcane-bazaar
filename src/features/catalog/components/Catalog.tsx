@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CircleHelp, Filter, Menu, Sparkles } from 'lucide-react'
 import { getItems } from '../api/catalog'
@@ -25,6 +26,7 @@ export interface CatalogProps {
 }
 
 export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = true, preferences, onPreferencesChange }: CatalogProps) {
+    const { t, number } = useInterfaceTranslation()
     const [items, setItems] = useState<Item[]>([])
     const [loading, setLoading] = useState(true)
     const [loadError, setLoadError] = useState(false)
@@ -209,16 +211,16 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
 
                 <main className="flex min-w-0 flex-1 flex-col bg-catalog">
                     <div className="flex min-h-12 items-center justify-between border-b border-border bg-panel px-3 lg:hidden">
-                        <button className="secondary-button" onClick={() => setFiltersOpen(true)}><Filter size={14} /> Filters</button>
-                        <span className="text-[10px] text-muted">{filtered.length} items</span>
-                        <button className="secondary-button" onClick={() => selected && setDetailsOpen(true)} disabled={!selected}><Menu size={14} /> Item</button>
+                        <button className="secondary-button" onClick={() => setFiltersOpen(true)}><Filter size={14} /> {t("catalog.filters")}</button>
+                        <span className="text-[10px] text-muted">{number(filtered.length)} {t("catalog.itemCountLabel")}</span>
+                        <button className="secondary-button" onClick={() => selected && setDetailsOpen(true)} disabled={!selected}><Menu size={14} /> {t("catalog.item")}</button>
                     </div>
 
                     <div className="min-h-0 flex-1">
                         {loading || !settingsReady ? (
-                            <div className="flex h-full items-center justify-center"><div className="text-center"><Sparkles className="mx-auto animate-pulse text-gold" /><p className="mt-3 font-display text-xs text-muted">Consulting the bazaar ledger...</p></div></div>
+                            <div className="flex h-full items-center justify-center"><div className="text-center"><Sparkles className="mx-auto animate-pulse text-gold" /><p className="mt-3 font-display text-xs text-muted">{t("catalog.loading")}</p></div></div>
                         ) : loadError ? (
-                            <div className="flex h-full items-center justify-center p-6 text-center"><div><h2 className="font-display text-lg text-cream">The ledger could not be opened</h2><p className="mt-2 text-sm text-muted">Refresh the page to try loading the catalog again.</p></div></div>
+                            <div className="flex h-full items-center justify-center p-6 text-center"><div><h2 className="font-display text-lg text-cream">{t("catalog.loadError")}</h2><p className="mt-2 text-sm text-muted">{t("catalog.retryHint")}</p></div></div>
                         ) : (
                             <CatalogList items={pageItems} selectedId={selected?.id} sortKey={sortKey} direction={direction} onSort={sort} onSelect={selectItem} />
                         )}
@@ -228,7 +230,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
                 </main>
 
                 <div className="hidden w-[360px] shrink-0 border-l border-border xl:block">
-                    {selected ? <ItemDetails item={selected} selectedGroupOption={selection?.selectedGroupOption} onGroupOptionSelect={selectGroupOption} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedBaseOptionId} onOpenModal={setModalItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /> : <div className="grid h-full place-items-center text-sm text-muted">Select an item</div>}
+                    {selected ? <ItemDetails item={selected} selectedGroupOption={selection?.selectedGroupOption} onGroupOptionSelect={selectGroupOption} selectedVariantOption={selectedVariantOption} onVariantOptionSelect={setSelectedBaseOptionId} onOpenModal={setModalItem} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} /> : <div className="grid h-full place-items-center text-sm text-muted">{t("catalog.selectItem")}</div>}
                 </div>
             </div>
 
@@ -245,7 +247,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
             )}
 
             {modalItem && <ItemModal configurationSummary={selection?.configurationSummary} item={modalItem} selectedVariantOption={selectedVariantOption} onClose={() => setModalItem(null)} />}
-            <button className="help-button" aria-label="About this prototype" title="Prices are a campaign aid, not official rules"><CircleHelp size={18} /></button>
+            <button className="help-button" aria-label={t("catalog.prototypeHelp")} title={t("catalog.pricingDisclaimer")}><CircleHelp size={18} /></button>
         </>
     )
 }

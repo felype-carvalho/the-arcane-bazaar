@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { BookOpen, X } from 'lucide-react'
 import type { Item, ItemGroupOption, PricingModifiers, VariantBaseOption } from '../../types'
@@ -23,10 +24,11 @@ interface ItemDetailsProps {
 }
 
 export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, selectedVariantOption, onVariantOptionSelect, onOpenModal, onClose, modifiers, setModifiers, manualPrice, setManualPrice }: ItemDetailsProps) {
+    const { t, label } = useInterfaceTranslation()
     const { effectiveItem: sheetItem, groupResolvedItem, pendingSelection } = resolveItemSelection(item, selectedGroupOption?.id, selectedVariantOption?.id)
 
     return (
-        <aside className="arcane-scrollbar h-full overflow-y-auto bg-panel" aria-label={`${sheetItem.name} details`}>
+        <aside className="arcane-scrollbar h-full overflow-y-auto bg-panel" aria-label={t("item.detailsLabel", { name: sheetItem.name })}>
             <div className="border-b border-border px-5 py-5">
                 <div className="flex items-start gap-4">
                     <div className="item-icon-tile" aria-hidden="true">{sheetItem.icon}</div>
@@ -36,10 +38,10 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
                                 <h2 className="font-display text-base leading-6 text-gold-bright">{sheetItem.name}</h2>
                                 <SourceChip source={sheetItem.source} />
                             </div>
-                            {onClose && <button className="icon-button shrink-0" onClick={onClose} aria-label="Close item details"><X size={18} /></button>}
+                            {onClose && <button className="icon-button shrink-0" onClick={onClose} aria-label={t("item.closeDetails")}><X size={18} /></button>}
                         </div>
                         <div className="mt-2 flex flex-wrap gap-2">
-                            <span className="type-pill"><span aria-hidden="true">{sheetItem.type === 'Magic' ? '✨' : '📦'}</span>{itemTypeLabel(sheetItem.type)}</span>
+                            <span className="type-pill"><span aria-hidden="true">{sheetItem.type === 'Magic' ? '✨' : '📦'}</span>{label(itemTypeLabel(sheetItem.type))}</span>
                             <RarityBadge rarity={sheetItem.rarity} />
                         </div>
                     </div>
@@ -52,7 +54,7 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
             {groupResolvedItem.variantOptions && <BaseItemSelector item={groupResolvedItem} selectedOption={selectedVariantOption} onSelect={onVariantOptionSelect} />}
 
             <div className="border-b border-border px-5 py-4">
-                <button className="primary-button mt-4 w-full" disabled={Boolean(pendingSelection)} onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> View full item sheet</button>
+                <button className="primary-button mt-4 w-full" disabled={Boolean(pendingSelection)} onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> {t("item.openSheet")}</button>
             </div>
 
             <PriceCalculator item={item} effectiveItem={sheetItem} pendingSelection={pendingSelection} selectedOption={selectedVariantOption} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />

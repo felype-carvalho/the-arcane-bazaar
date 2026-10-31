@@ -1,3 +1,4 @@
+import { resetLanguage } from '@/app/i18n'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createSettingsStorage } from '../api/settings-database'
 import { createDefaultCatalogPreferences, createDefaultProfileState, createDefaultSettings, DEFAULT_PROFILE_ID } from './defaults'
@@ -158,6 +159,7 @@ export function SettingsProvider({ children, storage: providedStorage }: Setting
             const defaults = storage.resetProfiles ? await storage.resetProfiles() : createDefaultProfileState(await storage.reset())
             persistenceAvailableRef.current = true
             updateState(defaults)
+            await resetLanguage()
             setResetVersion((current) => current + 1)
         } catch (resetError) {
             persistenceAvailableRef.current = false

@@ -1,3 +1,4 @@
+import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useId, useState } from 'react'
 import { ChevronDown, Search, X } from 'lucide-react'
 import { CATEGORY_ICONS } from '../../model/items/categories'
@@ -26,27 +27,28 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ filters, availableRarities, availableCategories, availableSources, onSearch, onTypeSelect, onToggle, onCategorySelect, onSourceSelect, onClear, onClose }: FilterPanelProps) {
+    const { t } = useInterfaceTranslation()
     return (
-        <aside className="flex h-full min-h-0 flex-col bg-panel" aria-label="Item filters">
+        <aside className="flex h-full min-h-0 flex-col bg-panel" aria-label={t("filters.region")}>
             <div className="flex items-start justify-between border-b border-border px-5 py-4">
-                <h2 className="font-display text-sm uppercase tracking-[0.14em] text-gold">Filters</h2>
-                {onClose && <button className="icon-button" onClick={onClose} aria-label="Close filters"><X size={18} /></button>}
+                <h2 className="font-display text-sm uppercase tracking-[0.14em] text-gold">{t("catalog.filters")}</h2>
+                {onClose && <button className="icon-button" onClick={onClose} aria-label={t("filters.close")}><X size={18} /></button>}
             </div>
 
             <div className="arcane-scrollbar min-h-0 flex-1 overflow-y-auto px-4 py-4">
                 <label className="relative block">
                     <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-violet-300" size={15} />
-                    <span className="sr-only">Search items</span>
+                    <span className="sr-only">{t("filters.searchLabel")}</span>
                     <input
                         value={filters.search}
                         onChange={(event) => onSearch(event.target.value)}
                         className="field search-field h-10 w-full text-xs"
-                        placeholder="Search items..."
+                        placeholder={t("filters.searchPlaceholder")}
                     />
                 </label>
 
-                <FilterGroupSection title="Item type" group="types" options={TYPES} selected={filters.types} onToggle={onToggle} onSingleSelect={(value) => onTypeSelect(value as ItemType)} selectionMode="single" showTypeMarks defaultOpen />
-                {filters.types[0] === 'Magic' && <FilterGroupSection title="Rarity" group="rarities" options={availableRarities} selected={filters.rarities} onToggle={onToggle} colorize />}
+                <FilterGroupSection title={t("filters.type")} group="types" options={TYPES} selected={filters.types} onToggle={onToggle} onSingleSelect={(value) => onTypeSelect(value as ItemType)} selectionMode="single" showTypeMarks defaultOpen />
+                {filters.types[0] === 'Magic' && <FilterGroupSection title={t("filters.rarity")} group="rarities" options={availableRarities} selected={filters.rarities} onToggle={onToggle} colorize />}
                 <CategoryFilterSection options={availableCategories} selected={filters.categories} onSelect={onCategorySelect} itemType={filters.types[0] ?? 'Common'} />
                 <SourceFilterSection options={availableSources} selected={filters.sources} onSelect={onSourceSelect} />
                 {/* <FilterGroupSection title="Availability" group="availabilities" options={AVAILABILITIES} selected={filters.availabilities} onToggle={onToggle} /> */}
@@ -54,8 +56,7 @@ export function FilterPanel({ filters, availableRarities, availableCategories, a
 
             <div className="border-t border-border p-4">
                 <button className="primary-button w-full" onClick={onClear}>
-                    <X size={14} /> Clear all filters
-                </button>
+                    <X size={14} /> {t("filters.clearAll")}</button>
             </div>
         </aside>
     )
@@ -66,6 +67,7 @@ function SourceFilterSection({ options, selected, onSelect }: {
     selected: readonly string[]
     onSelect: (value: string) => void
 }) {
+    const { t } = useInterfaceTranslation()
     const [isOpen, setIsOpen] = useState(false)
     const instanceId = useId()
     const optionsId = `filter-sources-${instanceId}-options`
@@ -84,13 +86,12 @@ function SourceFilterSection({ options, selected, onSelect }: {
                     aria-controls={optionsId}
                     onClick={() => setIsOpen((current) => !current)}
                 >
-                    Source<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                    {t("filters.source")}<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
             </legend>
             <div id={optionsId} className="mt-3 flex flex-wrap items-center gap-2" hidden={!isOpen}>
                 <button type="button" className="category-chip" aria-pressed={selected.length === 0} onClick={() => onSelect('All')}>
-                    All
-                </button>
+                    {t("common.all")}</button>
                 {sortedSources.map((source) => (
                     <SourceChip key={source} source={source} selected={selectedSources.has(normalizeSource(source))} onSelectedChange={() => onSelect(source)} />
                 ))}
@@ -111,6 +112,7 @@ function FilterGroupSection({ title, group, options, selected, onToggle, onSingl
     showTypeMarks?: boolean
     defaultOpen?: boolean
 }) {
+    const { label } = useInterfaceTranslation()
     const [isOpen, setIsOpen] = useState(defaultOpen)
     const instanceId = useId()
     const optionsId = `filter-${group}-${instanceId}-options`
@@ -140,7 +142,7 @@ function FilterGroupSection({ title, group, options, selected, onToggle, onSingl
                         />
                         {showTypeMarks
                             ? <TypeMark type={option as ItemType} />
-                            : <span className={colorize ? `filter-${option.toLowerCase().replaceAll(' ', '-')}` : ''}>{option}</span>}
+                            : <span className={colorize ? `filter-${option.toLowerCase().replaceAll(' ', '-')}` : ''}>{label(option)}</span>}
                     </label>
                 ))}
             </div>
@@ -154,6 +156,7 @@ function CategoryFilterSection({ options, selected, onSelect, itemType }: {
     onSelect: (value: Category | 'All') => void
     itemType: ItemType
 }) {
+    const { t, label } = useInterfaceTranslation()
     const [isOpen, setIsOpen] = useState(true)
     const instanceId = useId()
     const optionsId = `filter-categories-${instanceId}-options`
@@ -172,17 +175,16 @@ function CategoryFilterSection({ options, selected, onSelect, itemType }: {
                     aria-controls={optionsId}
                     onClick={() => setIsOpen((current) => !current)}
                 >
-                    Category<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                    {t("filters.category")}<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
             </legend>
             <div id={optionsId} className="mt-3 flex flex-wrap gap-2" hidden={!isOpen}>
                 <button type="button" className="category-chip" aria-pressed={selected.length === 0} onClick={() => onSelect('All')}>
-                    All
-                </button>
+                    {t("common.all")}</button>
                 {options.map((category) => (
                     <button key={category} type="button" className="category-chip" aria-pressed={selected.includes(category)} onClick={() => onSelect(category)}>
                         <span aria-hidden="true">{CATEGORY_ICONS[category]}</span>
-                        <span>{category}</span>
+                        <span>{label(category)}</span>
                     </button>
                 ))}
             </div>

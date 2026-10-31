@@ -4,7 +4,20 @@ This document describes the behavior **currently implemented** in The Arcane Baz
 
 ## Purpose
 
-The application presents a catalog of D&D items and calculates buying and selling prices for campaigns. Calculated prices are a campaign aid, not official rules. The interface and displayed data use the original English names.
+The application presents a catalog of D&D items and calculates buying and selling prices for campaigns. Calculated prices are a campaign aid, not official rules. The interface supports English and Brazilian Portuguese; catalog names and descriptions retain their original English content.
+
+## Interface language
+
+- The toolbar exposes an accessible English / Português selector on desktop and mobile. The initial language is `pt-BR` for a Portuguese browser and `en-US` otherwise. A valid choice stored in localStorage under `the-arcane-bazaar:language` takes precedence; absent, invalid, or inaccessible storage falls back to the browser language.
+- Language changes apply immediately, including open dialogs, status and validation messages, accessibility labels, document language, and browser-tab title. If localStorage cannot be written, switching still works for the current session. English is the translation fallback.
+- Type, rarity, category, structured field labels, and pricing modifier labels are translated only for presentation. Internal IDs, filter values, source codes, artwork resolution, variant selections, and pricing formulas remain unchanged. The community glossary is used contextually, preferring 2024 terminology when available and otherwise 2014 terminology.
+- Item names, subtypes, descriptions, other item-specific content, publication names, user profile names, and custom modifier names remain unchanged. The internal `default` profile is displayed as `Default` or `Padrão`. Search and name sorting continue to use original item names.
+- Numbers and currency displays use the selected locale. Portuguese uses PO/PP/PC; English uses GP/SP/CP. Prices and manual price inputs still represent GP internally.
+- Language is global, independent of profiles, and excluded from backup version 1. Importing a backup does not change the language. A successful local-data reset removes the saved language preference and returns to the browser language.
+
+Translation text is maintained in separate [English](src/app/i18n/locales/en-US.json) and [Portuguese](src/app/i18n/locales/pt-BR.json) JSON files with matching semantic keys, such as `toolbar.settings`. Internal labels and stored error messages are mapped explicitly to these keys, so editing English wording does not change the lookup identifiers. Tests verify key and interpolation-placeholder equivalence between both languages.
+
+References: [language configuration](src/app/i18n/index.ts), [translation resources](src/app/i18n/resources.ts), [internal label mapping](src/app/i18n/label-keys.ts), [language tests](src/app/i18n/i18n.test.tsx).
 
 ## Catalog and data sources
 
@@ -49,7 +62,7 @@ References: [groups](src/features/catalog/model/items/build-item-groups.ts), [va
 - Deselecting a source hides its items. It also removes group options originating from that source and variant bases whose source was deselected. A group or variant with no remaining options disappears.
 - Profile data is stored in IndexedDB. A legacy source selection is migrated into the `Default` profile. On load, unknown source codes are discarded and the known source order is restored. If storage is unavailable, changes may last only for the current session; if saving a source selection fails, the previous selection is restored.
 - IndexedDB database `the-arcane-bazaar` (version 1) stores the complete profile state in the `settings` object store under `profile-state`; the legacy `app-settings` record is migrated. Stored catalog filters are normalized against the same allowed values used by backup validation. Catalog source filters are matched without case or surrounding whitespace and stored in uppercase, while unsupported stored filter values are discarded.
-- “Reset local data” asks for confirmation in a warning dialog, then deletes the local database and recreates only the `Default` profile with all sources selected.
+- “Reset local data” asks for confirmation in a warning dialog, then deletes the local database and recreates only the `Default` profile with all sources selected. It also removes the global language preference and restores the browser language.
 
 - The Local Data view can download a versioned JSON backup of all profiles, the active profile, source choices, and catalog preferences. Backup version 1 uses `{ version: 1, data: { profiles, activeProfileId } }`; each profile contains `id`, `name`, `settings`, and `catalog`. Import first warns that current local data will be overwritten and recommends a backup. It then accepts a JSON file of at most 1 MB, validates its format and profile data, accepts known catalog source codes regardless of case, and replaces the stored profile state. Invalid or unsafe files leave the existing data unchanged.
 
@@ -71,6 +84,7 @@ References: [filtering](src/features/catalog/model/filtering.ts), [catalog state
 - The calculator requires a finite base price **greater than zero**. If an item has no base price, the user may enter a manual value in GP. An explicit price of zero remains valid in the catalog but produces no calculator result; the manual value is used only when the base price is `null`.
 - With no adjustments, buying costs 100% of the base price and selling returns 50%. Buying (`B`) and selling (`S`) percentage adjustments are summed separately. Each total is limited to the range from -90% to +300%.
 - Economy, market, party reputation, and negotiation apply to all items. Magic frequency applies only to `Magic` items. Custom modifiers apply the same percentage to buying and selling.
+- Built-in price adjustments carry group and option identifiers separately from their English labels. The UI translates their option labels and breakdown without changing the underlying percentages; custom modifier names are preserved.
 - The default options (`stable`, `regular`, `neutral`, `standard`, and `standard`) apply 0%. The other currently implemented options are:
 
 | Group | Option | Buy | Sell |

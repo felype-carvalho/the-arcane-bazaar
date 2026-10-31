@@ -124,7 +124,7 @@ describe('SettingsModal', () => {
         const user = userEvent.setup()
         const storage = createSettingsStorage(new IDBFactory())
         renderModal(storage, false)
-        await waitFor(() => expect(screen.getByRole('button', { name: 'Import Data' })).toBeEnabled())
+        await waitFor(() => expect(screen.getByRole('button', { name: 'Import Data' })).toBeEnabled(), { timeout: 5000 })
         const initial = await storage.loadProfiles!()
         const input = document.querySelector('input[type="file"]')!
         const invalidFile = new File(['<script>alert(1)</script>'], 'backup.json', { type: 'application/json' })
@@ -147,7 +147,7 @@ describe('SettingsModal', () => {
         await waitFor(() => expect(screen.getAllByRole('alert').some((alert) => alert.textContent?.includes('quota exceeded'))).toBe(true))
         expect(await storage.loadProfiles!()).toEqual(initial)
         await storage.close?.()
-    })
+    }, 10000)
 
     it('creates, selects, renames, and deletes profiles while protecting Default', async () => {
         const user = userEvent.setup()

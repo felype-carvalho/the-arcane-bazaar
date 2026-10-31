@@ -5,31 +5,34 @@ export type Negotiation = 'success' | 'standard' | 'failure'
 export type MagicFrequency = 'rare' | 'standard' | 'abundant'
 
 export interface CustomModifier {
-  id: string
-  name: string
-  percent: number
+    id: string
+    name: string
+    percent: number
 }
 
 export interface PricingModifiers {
-  economy: Economy
-  market: Market
-  reputation: Reputation
-  negotiation: Negotiation
-  magicFrequency: MagicFrequency
-  custom: CustomModifier[]
+    economy: Economy
+    market: Market
+    reputation: Reputation
+    negotiation: Negotiation
+    magicFrequency: MagicFrequency
+    custom: CustomModifier[]
 }
 
 export interface PricingAdjustment {
-  label: string
-  buyPercent: number
-  sellPercent: number
+    group?: 'Economy' | 'Market' | 'Party Reputation' | 'NPC Negotiation' | 'Magic Frequency'
+    optionId?: string
+    optionLabel?: string
+    label: string
+    buyPercent: number
+    sellPercent: number
 }
 
 export interface PricingResult {
-  basePrice: number
-  buyTotalPercent: number
-  sellTotalPercent: number
-  buyPrice: number
-  sellPrice: number
-  adjustments: PricingAdjustment[]
+    basePrice: number
+    buyTotalPercent: number
+    sellTotalPercent: number
+    buyPrice: number
+    sellPrice: number
+    adjustments: PricingAdjustment[]
 }
