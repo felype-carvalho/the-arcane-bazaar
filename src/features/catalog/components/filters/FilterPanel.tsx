@@ -156,10 +156,12 @@ function CategoryFilterSection({ options, selected, onSelect, itemType }: {
     onSelect: (value: Category | 'All') => void
     itemType: ItemType
 }) {
-    const { t, label } = useInterfaceTranslation()
+    const { t, label, language } = useInterfaceTranslation()
     const [isOpen, setIsOpen] = useState(true)
     const instanceId = useId()
     const optionsId = `filter-categories-${instanceId}-options`
+    const collator = new Intl.Collator(language, { sensitivity: 'base' })
+    const sortedCategories = [...options].sort((left, right) => collator.compare(label(left), label(right)))
 
     useEffect(() => {
         if (itemType === 'Magic') setIsOpen(true)
@@ -181,7 +183,7 @@ function CategoryFilterSection({ options, selected, onSelect, itemType }: {
             <div id={optionsId} className="mt-3 flex flex-wrap gap-2" hidden={!isOpen}>
                 <button type="button" className="category-chip" aria-pressed={selected.length === 0} onClick={() => onSelect('All')}>
                     {t("common.all")}</button>
-                {options.map((category) => (
+                {sortedCategories.map((category) => (
                     <button key={category} type="button" className="category-chip" aria-pressed={selected.includes(category)} onClick={() => onSelect(category)}>
                         <span aria-hidden="true">{CATEGORY_ICONS[category]}</span>
                         <span>{label(category)}</span>
