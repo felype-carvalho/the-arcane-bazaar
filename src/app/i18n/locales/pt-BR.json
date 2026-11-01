@@ -1,4 +1,10 @@
 {
+    "navigation.home": "Início",
+    "navigation.catalog": "Catálogo",
+    "navigation.merchant": "Mercador",
+    "merchant.comingSoon": "Em Breve",
+    "navigation.label": "Navegação principal",
+    "navigation.toggle": "Abrir navegação",
     "common.warning": "Aviso",
     "common.cancel": "Cancelar",
     "common.continue": "Continuar",

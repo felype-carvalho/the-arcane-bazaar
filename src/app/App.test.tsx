@@ -106,11 +106,59 @@ vi.mock('@/features/catalog/api/catalog', async () => {
 })
 
 describe('Arcane Bazaar app', () => {
-    it('redirects the root route to the catalog', async () => {
+    it('renders an empty Home at the root route', async () => {
         renderApp(['/'])
 
-        expect(await screen.findByLabelText('Current path')).toHaveTextContent('/catalog')
+        expect(await screen.findByLabelText('Current path')).toHaveTextContent(/^\/$/)
         expect(screen.getByRole('heading', { name: 'The Arcane Bazaar' })).toBeInTheDocument()
+        expect(screen.getByRole('main', { name: 'Home' })).toBeEmptyDOMElement()
+        expect(screen.queryByRole('table')).not.toBeInTheDocument()
+        expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page')
+    })
+
+    it('navigates through Home and restores catalog preferences', async () => {
+        const user = userEvent.setup()
+        renderApp()
+        await screen.findByRole('table')
+        await user.type(screen.getByRole('textbox', { name: 'Search items' }), 'Rope')
+        await user.click(screen.getByRole('link', { name: 'Home' }))
+        expect(screen.getByRole('main', { name: 'Home' })).toBeEmptyDOMElement()
+        await user.click(screen.getByRole('link', { name: 'Catalog' }))
+        await screen.findByRole('table')
+        expect(screen.getByLabelText('Current path')).toHaveTextContent('/catalog')
+        expect(screen.getByRole('link', { name: 'Catalog' })).toHaveAttribute('aria-current', 'page')
+        expect(screen.getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current')
+        expect(screen.getByRole('textbox', { name: 'Search items' })).toHaveValue('Rope')
+    })
+
+    it('opens Merchant over the catalog without replacing its state and restores focus', async () => {
+        const user = userEvent.setup()
+        renderApp()
+        await screen.findByRole('table')
+        const search = screen.getByRole('textbox', { name: 'Search items' })
+        await user.type(search, 'Rope')
+        const merchant = screen.getByRole('link', { name: 'Merchant' })
+        await user.click(merchant)
+        expect(screen.getByRole('dialog', { name: 'Merchant' })).toHaveTextContent('Coming Soon')
+        expect(screen.getByLabelText('Current path')).toHaveTextContent('/catalog')
+        await user.keyboard('{Escape}')
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+        expect(merchant).toHaveFocus()
+        expect(screen.getByRole('textbox', { name: 'Search items' })).toBe(search)
+        expect(search).toHaveValue('Rope')
+    })
+
+    it('opens a one-time Merchant notice on Home for direct access', async () => {
+        const user = userEvent.setup()
+        renderApp(['/merchant'])
+        expect(await screen.findByRole('dialog', { name: 'Merchant' })).toBeInTheDocument()
+        expect(screen.getByLabelText('Current path')).toHaveTextContent(/^\/$/)
+        expect(screen.getByRole('main', { name: 'Home' })).toBeEmptyDOMElement()
+        await user.click(screen.getByRole('button', { name: 'Close merchant' }))
+        await user.click(screen.getByRole('link', { name: 'Catalog' }))
+        await screen.findByRole('table')
+        await user.click(screen.getByRole('link', { name: 'Home' }))
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
 
     it('renders the catalog directly at its canonical route', async () => {

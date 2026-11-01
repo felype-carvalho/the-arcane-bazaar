@@ -3,8 +3,11 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { Check, ChevronLeft, Info, Languages, Settings, Shield, Swords } from 'lucide-react'
 import { SettingsModal } from '@/features/settings'
 import { SystemInfoModal } from './SystemInfoModal'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { MerchantNoticeModal } from '@/features/merchant'
+import { PrimaryNavigation } from './PrimaryNavigation'
 
-type ToolbarModal = 'settings' | 'about' | null
+type ToolbarModal = 'settings' | 'about' | 'merchant' | null
 
 const LANGUAGE_OPTIONS = [
     { value: 'en-US', label: 'English' },
@@ -13,6 +16,8 @@ const LANGUAGE_OPTIONS = [
 
 export function Toolbar() {
     const { t, language } = useInterfaceTranslation()
+    const location = useLocation()
+    const navigate = useNavigate()
     const [openModal, setOpenModal] = useState<ToolbarModal>(null)
     const [menuOpen, setMenuOpen] = useState(false)
     const [languageMenuOpen, setLanguageMenuOpen] = useState(false)
@@ -23,6 +28,14 @@ export function Toolbar() {
     const languageMenuCloseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const focusLanguageMenuRef = useRef(false)
     const languageMenuId = useId()
+
+    useEffect(() => {
+        const state: unknown = location.state
+        if (location.pathname !== '/' || !state || typeof state !== 'object' || !('showMerchantNotice' in state) || state.showMerchantNotice !== true) return
+        setOpenModal('merchant')
+        const { showMerchantNotice: _, ...remainingState } = state
+        void navigate({ pathname: location.pathname, search: location.search, hash: location.hash }, { replace: true, state: remainingState })
+    }, [location, navigate])
 
     useEffect(() => {
         if (languageMenuOpen && focusLanguageMenuRef.current) {
@@ -64,16 +77,17 @@ export function Toolbar() {
 
     return (
         <>
-            <header className="flex h-15 shrink-0 items-center justify-between border-b border-gold/35 bg-header px-4 md:px-5">
+            <header className="flex h-15 shrink-0 items-center justify-between gap-2 border-b border-gold/35 bg-header px-4 md:px-5">
                 <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
                     <img src={`${import.meta.env.BASE_URL}wizard-pouch.svg`} alt="" width={36} height={36} className="size-8 shrink-0 sm:size-9" />
                     <div className="min-w-0">
-                        <h1 className="font-display text-sm font-semibold tracking-wide text-gold-bright md:text-base">The Arcane Bazaar</h1>
+                        <h1 className="truncate font-display text-sm font-semibold tracking-wide text-gold-bright md:text-base">The Arcane Bazaar</h1>
                         <p className="mt-0.5 hidden text-[9px] tracking-wide text-violet-300/70 sm:block">{t("toolbar.subtitle")}</p>
                     </div>
+                    <PrimaryNavigation onMerchantOpen={() => openSelectedModal('merchant')} />
                 </div>
-                <div className="flex items-center gap-2 text-muted">
-                    <span className="hidden items-center gap-2 font-display text-[10px] uppercase tracking-[0.15em] md:flex"><Swords size={17} /> D&amp;D 5.5e</span>
+                <div className="flex shrink-0 items-center gap-2 text-muted">
+                    <span className="hidden items-center gap-2 font-display text-[10px] uppercase tracking-[0.15em] lg:flex"><Swords size={17} /> D&amp;D 5.5e</span>
                     <div ref={menuContainerRef} className="relative">
                         <button
                             ref={menuButtonRef}
@@ -163,6 +177,7 @@ export function Toolbar() {
 
             {openModal === 'settings' && <SettingsModal onClose={() => setOpenModal(null)} />}
             {openModal === 'about' && <SystemInfoModal onClose={() => setOpenModal(null)} />}
+            {openModal === 'merchant' && <MerchantNoticeModal onClose={() => setOpenModal(null)} />}
         </>
     )
 }

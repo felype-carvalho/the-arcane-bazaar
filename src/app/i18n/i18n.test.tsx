@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useState } from 'react'
@@ -95,7 +96,7 @@ describe('interface language', () => {
     })
 
     it('updates an open dialog and existing validation errors, preserving user profile names', async () => {
-        render(<SettingsProvider storage={storage}><Toolbar /></SettingsProvider>)
+        render(<MemoryRouter><SettingsProvider storage={storage}><Toolbar /></SettingsProvider></MemoryRouter>)
         fireEvent.click(screen.getByRole('button', { name: 'Open system menu' }))
         fireEvent.click(screen.getByRole('menuitem', { name: 'Settings' }))
         fireEvent.click(screen.getByRole('button', { name: 'Profile' }))
@@ -115,7 +116,7 @@ describe('interface language', () => {
     it('resets the language through local data reset', async () => {
         vi.spyOn(navigator, 'language', 'get').mockReturnValue('en-US')
         await changeLanguage('pt-BR')
-        render(<SettingsProvider storage={storage}><Toolbar /></SettingsProvider>)
+        render(<MemoryRouter><SettingsProvider storage={storage}><Toolbar /></SettingsProvider></MemoryRouter>)
         fireEvent.click(screen.getByRole('button', { name: 'Abrir menu do sistema' }))
         fireEvent.click(screen.getByRole('menuitem', { name: 'Configurações' }))
         fireEvent.click(await screen.findByRole('button', { name: 'Redefinir dados locais' }))

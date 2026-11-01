@@ -53,7 +53,12 @@ export function ModalDialog({ children, dialogHeight, dialogWidth, eyebrow, icon
     }, [inactive])
 
     return (
-        <div className="modal-backdrop" inert={inactive} aria-hidden={inactive || undefined} onMouseDown={(event) => { if (!inactive && event.currentTarget === event.target) onClose() }}>
+        <div className="modal-backdrop" inert={inactive} aria-hidden={inactive || undefined} onMouseDown={(event) => {
+            if (!inactive && event.currentTarget === event.target) {
+                event.preventDefault()
+                onClose()
+            }
+        }}>
             <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby={titleId} tabIndex={-1} className="modal-card modal-dialog" style={{ height: dialogHeight, width: dialogWidth }}>
                 <div className="modal-header">
                     <div className="flex items-center gap-4">

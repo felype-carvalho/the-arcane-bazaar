@@ -73,6 +73,11 @@ References: [source registry](src/features/catalog/model/sources.ts), [visibilit
 
 ## Search, filters, and navigation
 
+- The initial route `/` shows an empty Home page with the shared toolbar and application background; `/catalog` opens the existing catalog. Routes respect the deployment base path.
+- Primary navigation appears beside the project brand, with House, BookOpen, and Store icons for Home, Catalog, and Merchant. Desktop links show the active page; below the medium breakpoint, a navigation button opens the same links. Labels follow the interface language.
+- Selecting Merchant normally opens a dismissible Coming Soon notice over the current page without changing its URL or catalog state. Direct access to `/merchant` redirects to Home and opens the notice once. Closing it does not reopen it on subsequent navigation. Modified link clicks retain the real `/merchant` destination.
+- The mobile navigation closes on selection, Escape, outside click, or focus leaving the navigation. The Merchant notice closes with its close button, Escape, or backdrop; focus returns to its desktop link or mobile navigation button.
+
 - Search matches text against an item's name and tags without distinguishing letter case. Type, rarity, category, and source also participate in filtering.
 - Only one item type is selected at a time; the screen starts with `Common`. Available rarities, categories, and sources are calculated from visible items of the selected type. Incompatible selections are removed when the type or available sources change.
 - The Item type and Category filter sections start expanded. Category also expands when switching to `Magic`.

@@ -1,3 +1,4 @@
+import { MemoryRouter } from 'react-router-dom'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
@@ -14,10 +15,50 @@ const storage: SettingsStorage = {
 }
 
 function renderToolbar() {
-  return render(<SettingsProvider storage={storage}><Toolbar /></SettingsProvider>)
+  return render(<MemoryRouter><SettingsProvider storage={storage}><Toolbar /></SettingsProvider></MemoryRouter>)
 }
 
 describe('Toolbar', () => {
+    it('closes mobile navigation and returns focus after the Merchant notice', async () => {
+        const user = userEvent.setup()
+        renderToolbar()
+        const toggle = screen.getByRole('button', { name: 'Toggle navigation' })
+        await user.click(toggle)
+        expect(toggle).toHaveAttribute('aria-expanded', 'true')
+        await user.click(screen.getByRole('link', { name: 'Merchant' }))
+        expect(toggle).toHaveAttribute('aria-expanded', 'false')
+        const dialog = screen.getByRole('dialog', { name: 'Merchant' })
+        await user.click(dialog.parentElement!)
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+        expect(toggle).toHaveFocus()
+        await user.click(toggle)
+        await user.keyboard('{Escape}')
+        expect(toggle).toHaveAttribute('aria-expanded', 'false')
+        expect(toggle).toHaveFocus()
+        await user.click(toggle)
+        await user.click(screen.getByRole('heading', { name: 'The Arcane Bazaar' }))
+        expect(toggle).toHaveAttribute('aria-expanded', 'false')
+        await user.click(toggle)
+        await user.click(screen.getByRole('link', { name: 'Catalog' }))
+        expect(toggle).toHaveAttribute('aria-expanded', 'false')
+        expect(screen.getByRole('link', { name: 'Catalog' })).toHaveAttribute('aria-current', 'page')
+    })
+
+    it('translates navigation and the Merchant notice together', async () => {
+        const user = userEvent.setup()
+        renderToolbar()
+        await user.click(screen.getByRole('link', { name: 'Merchant' }))
+        try {
+            await act(() => i18n.changeLanguage('pt-BR'))
+            expect(screen.getByRole('link', { name: 'Início' })).toBeInTheDocument()
+            expect(screen.getByRole('link', { name: 'Catálogo' })).toBeInTheDocument()
+            expect(screen.getByRole('link', { name: 'Mercador' })).toBeInTheDocument()
+            expect(screen.getByRole('dialog', { name: 'Mercador' })).toHaveTextContent('Em Breve')
+        } finally {
+            await act(() => i18n.changeLanguage('en-US'))
+        }
+    })
+
     it('opens the language submenu on hover and persists a selected language', async () => {
         const user = userEvent.setup()
         renderToolbar()

@@ -1,4 +1,10 @@
 {
+    "navigation.home": "Home",
+    "navigation.catalog": "Catalog",
+    "navigation.merchant": "Merchant",
+    "merchant.comingSoon": "Coming Soon",
+    "navigation.label": "Primary navigation",
+    "navigation.toggle": "Toggle navigation",
     "common.warning": "Warning",
     "common.cancel": "Cancel",
     "common.continue": "Continue",
