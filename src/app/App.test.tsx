@@ -106,12 +106,12 @@ vi.mock('@/features/catalog/api/catalog', async () => {
 })
 
 describe('Arcane Bazaar app', () => {
-    it('renders an empty Home at the root route', async () => {
+    it('renders the landing page at the root route', async () => {
         renderApp(['/'])
 
         expect(await screen.findByLabelText('Current path')).toHaveTextContent(/^\/$/)
         expect(screen.getByRole('heading', { name: 'The Arcane Bazaar' })).toBeInTheDocument()
-        expect(screen.getByRole('main', { name: 'Home' })).toBeEmptyDOMElement()
+        expect(within(screen.getByRole('main', { name: 'Home' })).getByRole('heading', { level: 1 })).toHaveTextContent('Your item marketplace for D&D adventures')
         expect(screen.queryByRole('table')).not.toBeInTheDocument()
         expect(screen.getByRole('link', { name: 'Home' })).toHaveAttribute('aria-current', 'page')
     })
@@ -122,7 +122,7 @@ describe('Arcane Bazaar app', () => {
         await screen.findByRole('table')
         await user.type(screen.getByRole('textbox', { name: 'Search items' }), 'Rope')
         await user.click(screen.getByRole('link', { name: 'Home' }))
-        expect(screen.getByRole('main', { name: 'Home' })).toBeEmptyDOMElement()
+        expect(within(screen.getByRole('main', { name: 'Home' })).getByRole('heading', { level: 1 })).toHaveTextContent('Your item marketplace for D&D adventures')
         await user.click(screen.getByRole('link', { name: 'Catalog' }))
         await screen.findByRole('table')
         expect(screen.getByLabelText('Current path')).toHaveTextContent('/catalog')
@@ -153,7 +153,7 @@ describe('Arcane Bazaar app', () => {
         renderApp(['/merchant'])
         expect(await screen.findByRole('dialog', { name: 'Merchant' })).toBeInTheDocument()
         expect(screen.getByLabelText('Current path')).toHaveTextContent(/^\/$/)
-        expect(screen.getByRole('main', { name: 'Home' })).toBeEmptyDOMElement()
+        expect(within(screen.getByRole('main', { name: 'Home' })).getByRole('heading', { level: 1 })).toHaveTextContent('Your item marketplace for D&D adventures')
         await user.click(screen.getByRole('button', { name: 'Close merchant' }))
         await user.click(screen.getByRole('link', { name: 'Catalog' }))
         await screen.findByRole('table')
