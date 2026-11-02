@@ -1,5 +1,7 @@
+import { MEASUREMENT_CATEGORIES } from '@/features/measurements/model/preferences'
+import type { MeasurementSystem } from '@/features/measurements/types'
 import { useInterfaceTranslation } from '@/app/i18n'
-import { Database, Download, LibraryBig, Pencil, Save, Settings, Trash2, Upload, UserRound } from 'lucide-react'
+import { Database, Download, LibraryBig, PencilRuler, Pencil, Save, Settings, Trash2, Upload, UserRound } from 'lucide-react'
 import { useRef, useState, type ChangeEvent } from 'react'
 import { AlertDialog } from '@/components/ui/AlertDialog'
 import { ModalDialog } from '@/components/ui/ModalDialog'
@@ -18,7 +20,7 @@ interface SettingsModalProps {
     onClose: () => void
 }
 
-type SettingsSection = 'local-data' | 'profile' | 'content-sources'
+type SettingsSection = 'local-data' | 'profile' | 'measurements' | 'content-sources'
 
 const SOURCE_GROUP_LABELS: Readonly<Record<SourceGroup, string>> = {
     core: 'Core',
@@ -30,7 +32,7 @@ const SOURCE_GROUP_LABELS: Readonly<Record<SourceGroup, string>> = {
 
 export function SettingsModal({ onClose }: SettingsModalProps) {
     const { t, label, message } = useInterfaceTranslation()
-    const { settings, profiles, activeProfileId, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup, createProfile, renameProfile, deleteProfile, selectProfile } = useSettings()
+    const { settings, setMeasurements, profiles, activeProfileId, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup, createProfile, renameProfile, deleteProfile, selectProfile } = useSettings()
     const [showResetAlert, setShowResetAlert] = useState(false)
     const [showImportAlert, setShowImportAlert] = useState(false)
     const [importError, setImportError] = useState('')
@@ -174,16 +176,32 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
             titleId="settings-modal-title"
         >
             <div className="grid gap-6 md:grid-cols-[180px_minmax(0,1fr)] md:gap-8">
-                <nav aria-label={t("settings.sections")} className="flex gap-2 border-b border-border pb-4 md:sticky md:top-0 md:flex-col md:self-start md:border-b-0 md:border-r md:pb-0 md:pr-4">
+                <nav aria-label={t("settings.sections")} className="flex flex-wrap gap-2 border-b border-border pb-4 md:sticky md:top-0 md:flex-col md:self-start md:border-b-0 md:border-r md:pb-0 md:pr-4">
                     <button type="button" aria-current={activeSection === 'local-data' ? 'page' : undefined} aria-controls="local-data-section" onClick={() => setActiveSection('local-data')} className={`flex items-center gap-2 rounded px-3 py-2 text-left text-xs transition-colors ${activeSection === 'local-data' ? 'bg-gold/15 text-gold-bright' : 'text-muted hover:bg-white/5 hover:text-cream'}`}>
                         <Database size={15} aria-hidden="true" /> {t("settings.localData")}</button>
                     <button type="button" aria-current={activeSection === 'profile' ? 'page' : undefined} aria-controls="profile-section" onClick={() => setActiveSection('profile')} className={`flex items-center gap-2 rounded px-3 py-2 text-left text-xs transition-colors ${activeSection === 'profile' ? 'bg-gold/15 text-gold-bright' : 'text-muted hover:bg-white/5 hover:text-cream'}`}>
                         <UserRound size={15} aria-hidden="true" /> {t("settings.profile")}</button>
+                    <button type="button" aria-current={activeSection === 'measurements' ? 'page' : undefined} aria-controls="measurements-section" onClick={() => setActiveSection('measurements')} className={`flex items-center gap-2 rounded px-3 py-2 text-left text-xs transition-colors ${activeSection === 'measurements' ? 'bg-gold/15 text-gold-bright' : 'text-muted hover:bg-white/5 hover:text-cream'}`}>
+                        <PencilRuler size={15} className="shrink-0" aria-hidden="true" /> {t('measurements.title')}</button>
                     <button type="button" aria-current={activeSection === 'content-sources' ? 'page' : undefined} aria-controls="content-sources-section" onClick={() => setActiveSection('content-sources')} className={`flex items-center gap-2 rounded px-3 py-2 text-left text-xs transition-colors ${activeSection === 'content-sources' ? 'bg-gold/15 text-gold-bright' : 'text-muted hover:bg-white/5 hover:text-cream'}`}>
                         <LibraryBig size={15} aria-hidden="true" /> {t("settings.contentSources")}</button>
                 </nav>
 
                 <div className="min-w-0">
+                    <section id="measurements-section" aria-labelledby="measurements-title" hidden={activeSection !== 'measurements'}>
+                        <h3 id="measurements-title" className="font-display text-xs uppercase tracking-[0.12em] text-gold">{t('measurements.title')}</h3>
+                        <p className="mt-2 text-xs leading-5 text-muted">{t('measurements.hint')}</p>
+                        <div className="mt-5 grid gap-4">
+                            {MEASUREMENT_CATEGORIES.map((category) => <label key={category} className="grid gap-2 rounded-md border border-border bg-black/10 p-4 text-sm text-cream">
+                                <span>{t(`measurements.${category}`)}</span>
+                                <select className="w-full min-w-0 rounded border border-border bg-panel px-3 py-2 text-xs text-cream" value={settings.measurements[category]} disabled={!isReady || isSaving}
+                                    onChange={(event) => { void setMeasurements({ ...settings.measurements, [category]: event.target.value as MeasurementSystem }) }}>
+                                    <option value="imperial">{t(`measurements.${category}.imperial`)}</option>
+                                    <option value="metric">{t(`measurements.${category}.metric`)}</option>
+                                </select>
+                            </label>)}
+                        </div>
+                    </section>
                     <section id="content-sources-section" aria-labelledby="content-sources-title" hidden={activeSection !== 'content-sources'}>
                         <h3 id="content-sources-title" className="font-display text-xs uppercase tracking-[0.12em] text-gold">{t("settings.contentSourcesTitle")}</h3>
                         <p className="mt-2 text-[11px] leading-5 text-muted">{t("settings.contentSourcesHint")}</p>

@@ -1,3 +1,5 @@
+import { MeasurementProvider } from '@/features/measurements/model/MeasurementProvider'
+import type { MeasurementPreferences } from '@/features/measurements/types'
 import { resetLanguage } from '@/app/i18n'
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createSettingsStorage } from '../api/settings-database'
@@ -114,10 +116,12 @@ export function SettingsProvider({ children, storage: providedStorage }: Setting
                 if (enabled) selected.add(source)
                 else selected.delete(source)
             }
-            return { settings: { selectedSources: ALL_SOURCE_CODES.filter((source) => selected.has(normalizeSource(source))) } }
+            return { settings: { ...settings, selectedSources: ALL_SOURCE_CODES.filter((source) => selected.has(normalizeSource(source))) } }
         }, true)
     }, [updateActive])
     const setSourceEnabled = useCallback((source: string, enabled: boolean) => setSourcesEnabled([source], enabled), [setSourcesEnabled])
+    const setMeasurements = useCallback((measurements: MeasurementPreferences) => updateActive((settings) => ({ settings: { ...settings, measurements } }), true), [updateActive])
+
     const updateCatalog = useCallback((catalog: CatalogPreferences) => { void updateActive(() => ({ catalog })) }, [updateActive])
 
     const validateName = (name: string, excludeId?: string) => {
@@ -158,8 +162,14 @@ export function SettingsProvider({ children, storage: providedStorage }: Setting
         try {
             const defaults = storage.resetProfiles ? await storage.resetProfiles() : createDefaultProfileState(await storage.reset())
             persistenceAvailableRef.current = true
-            updateState(defaults)
+
             await resetLanguage()
+
+            const resetState = { ...defaults, profiles: defaults.profiles.map((profile) => ({ ...profile, settings: { ...profile.settings, measurements: createDefaultSettings().measurements } })) }
+            if (storage.saveProfiles) await storage.saveProfiles(resetState)
+            else await storage.save(resetState.profiles[0].settings)
+
+            updateState(resetState)
             setResetVersion((current) => current + 1)
         } catch (resetError) {
             persistenceAvailableRef.current = false
@@ -180,9 +190,9 @@ export function SettingsProvider({ children, storage: providedStorage }: Setting
     const value = useMemo<SettingsContextValue>(() => ({
         settings: active.settings, catalog: active.catalog, profiles: state.profiles, activeProfileId: state.activeProfileId, resetVersion,
         isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup,
-        createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog,
-    }), [active, state, resetVersion, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup, createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog])
-    return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>
+        createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog, setMeasurements,
+    }), [active, state, resetVersion, isReady, isSaving, error, setSourceEnabled, setSourcesEnabled, resetLocalData, exportSettingsBackup, importSettingsBackup, createProfile, renameProfile, deleteProfile, selectProfile, updateCatalog, setMeasurements])
+    return <SettingsContext.Provider value={value}><MeasurementProvider preferences={active.settings.measurements ?? createDefaultSettings().measurements}>{children}</MeasurementProvider></SettingsContext.Provider>
 }
 
 export function useSettings(): SettingsContextValue {

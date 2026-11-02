@@ -1,9 +1,11 @@
+import i18n from '@/app/i18n'
+import { defaultMeasurements, isMeasurementPreferences } from '@/features/measurements/model/preferences'
 import { ALL_SOURCE_CODES } from '@/features/catalog'
 import { isValidCatalogFilters, normalizeCatalogFilters } from './catalog-filter-schema'
 import { DEFAULT_PROFILE_ID } from './defaults'
 import type { ProfileState } from '../types'
 
-export const BACKUP_VERSION = 1
+export const BACKUP_VERSION = 2
 export const MAX_BACKUP_FILE_SIZE = 1024 * 1024
 
 const DANGEROUS_KEYS = new Set(['__proto__', 'constructor', 'prototype'])
@@ -49,7 +51,7 @@ export function parseSettingsBackup(json: string): ProfileState {
         throw new Error('The selected file is not valid JSON.')
     }
     if (hasDangerousKeys(value)) throw new Error('The selected file contains unsafe keys.')
-    if (!record(value, ['version', 'data']) || value.version !== BACKUP_VERSION) {
+    if (!record(value, ['version', 'data']) || (value.version !== 1 && value.version !== BACKUP_VERSION)) {
         throw new Error('The backup format or version is not supported.')
     }
     const data = value.data
@@ -65,9 +67,12 @@ export function parseSettingsBackup(json: string): ProfileState {
             throw new Error('The backup contains an invalid or duplicate profile.')
         }
         ids.add(profile.id)
-        if (!record(profile.settings, ['selectedSources'])
+        if (!record(profile.settings, value.version === 1 ? ['selectedSources'] : ['selectedSources', 'measurements'])
             || !stringList(profile.settings.selectedSources, ALL_SOURCE_CODES)) {
             throw new Error('The backup contains invalid source settings.')
+        }
+        if (value.version === 2 && !isMeasurementPreferences(profile.settings.measurements)) {
+            throw new Error('The backup contains invalid measurement settings.')
         }
         const catalog = profile.catalog
         if (!record(catalog, ['filters', 'sortKey', 'direction', 'pageSize'])
@@ -89,6 +94,7 @@ export function parseSettingsBackup(json: string): ProfileState {
         ...state,
         profiles: state.profiles.map((profile) => ({
             ...profile,
+            settings: { ...profile.settings, measurements: value.version === 1 ? defaultMeasurements(i18n.language) : { ...profile.settings.measurements } },
             catalog: { ...profile.catalog, filters: normalizeCatalogFilters(profile.catalog.filters) },
         })),
     }

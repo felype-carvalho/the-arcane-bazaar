@@ -1,3 +1,4 @@
+import { defaultMeasurements } from '@/features/measurements/model/preferences'
 import { MemoryRouter } from 'react-router-dom'
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
@@ -29,9 +30,9 @@ afterEach(async () => {
 })
 
 const storage: SettingsStorage = {
-    load: async () => ({ selectedSources: [] }),
+    load: async () => ({ measurements: defaultMeasurements('en-US'), selectedSources: [] }),
     save: async () => undefined,
-    reset: async () => ({ selectedSources: [] }),
+    reset: async () => ({ measurements: defaultMeasurements('en-US'), selectedSources: [] }),
 }
 
 describe('interface language', () => {
@@ -138,7 +139,7 @@ describe('interface language', () => {
     it('localizes structured numeric costs and source tooltips without translating publication names', async () => {
         render(<><ItemInformationValue field="Personal Travel Cost" value="1,200.5 GP per mile per passenger" /><SourceChip source="PHB" /></>)
         await act(() => changeLanguage('pt-BR'))
-        expect(screen.getByText('1.200,5 PO por milha por passageiro')).toBeInTheDocument()
+        expect(document.body).toHaveTextContent('1.200,5 PO por 1 milha por passageiro')
         expect(screen.getByTitle("Fonte: Player's Handbook (2014)")).toBeInTheDocument()
     })
 

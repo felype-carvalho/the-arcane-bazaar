@@ -90,8 +90,8 @@ describe('ItemModal', () => {
         const dialog = screen.getByRole('dialog', { name: 'Bag of Holding' })
         const heading = within(dialog).getByRole('heading', { name: 'Description' })
         const section = heading.closest('section')
-        const firstProperty = within(section as HTMLElement).getByText('Carries up to 500 lb')
-        const secondProperty = within(section as HTMLElement).getByText('Interior volume of 64 cubic feet')
+        const firstProperty = within(section as HTMLElement).getByText((_, element) => element?.tagName === 'P' && element.textContent === 'Carries up to 500 lb')
+        const secondProperty = within(section as HTMLElement).getByText((_, element) => element?.tagName === 'P' && element.textContent === 'Interior volume of 64 ft³')
         expect(firstProperty.tagName).toBe('P')
         expect(secondProperty.tagName).toBe('P')
         expect(within(section as HTMLElement).getByText(ITEM_FIXTURES[0].description)).toBeInTheDocument()
@@ -154,7 +154,7 @@ it('hides absent data and preserves valid zero values', () => {
 
 it('shows estimates, source, attunement and structured equipment information', () => {
     render(<ItemModal item={{ ...ITEM_FIXTURES[0], hasExplicitPrice: false, sourcePage: 153, attunement: true, attunementRequirement: 'by a wizard', weaponInformation: [{ label: 'Range', value: '150/600 ft.' }, { label: 'Mastery', value: 'Slow' }], characteristics: ['First paragraph', 'Second paragraph', 'First paragraph'] }} onClose={vi.fn()} />)
-    for (const text of ['Estimated', 'p. 153', 'by a wizard', '150/600 ft.', 'Slow', 'Second paragraph']) expect(screen.getByText(text)).toBeInTheDocument()
+    for (const text of ['Estimated', 'p. 153', 'by a wizard', '150/600 ft. (30/120)', 'Slow', 'Second paragraph']) expect(screen.getByText(text)).toBeInTheDocument()
     expect(screen.getAllByText('First paragraph')).toHaveLength(1)
     expect(screen.getByTitle(/Source:/)).toHaveClass('source-chip')
     expect(screen.queryByText('Armor information')).not.toBeInTheDocument()
@@ -271,7 +271,7 @@ it('closes by button, Escape and backdrop, traps focus and restores it', () => {
     const close = screen.getByRole('button', { name: 'Close item sheet' })
     expect(dialog).toHaveFocus()
     fireEvent.keyDown(document, { key: 'Tab', shiftKey: true })
-    expect(close).toHaveFocus()
+    expect(within(dialog).getAllByRole('button').at(-1)).toHaveFocus()
     fireEvent.keyDown(document, { key: 'Tab' })
     expect(close).toHaveFocus()
     fireEvent.mouseDown(dialog)

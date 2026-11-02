@@ -217,6 +217,8 @@ describe('Arcane Bazaar app', () => {
         expect(categoryNames).toEqual(['All', 'Adventuring Gear', 'Weapon'])
         expect(new Set(categoryNames).size).toBe(categoryNames.length)
 
+        // Source facets can appear before the persisted profile has finished loading.
+        await screen.findByRole('table')
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
         await user.click(await screen.findByRole('button', { name: 'Rarity' }))
         const rarityFilter = screen.getByRole('group', { name: 'Rarity' })

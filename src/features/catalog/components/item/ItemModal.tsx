@@ -1,3 +1,4 @@
+import { MeasurementText, MeasurementValue, tableMeasurement, MeasurementTableHeading } from '@/features/measurements'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, MessageCircleCheck, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
@@ -83,18 +84,18 @@ function EquipmentSection({ title, information, kind = 'weapon' }: { title: stri
 
 function DescriptionParagraph({ text }: { text: string }) {
     const label = text.match(/^([^:\n.!?]{1,80}:)(?=\s|$)/)?.[1]
-    return <p className="mb-[18px] whitespace-pre-line text-sm leading-[1.85] text-cream">{label ? <><strong className="font-semibold">{label}</strong>{text.slice(label.length)}</> : text}</p>
+    return <p className="mb-[18px] whitespace-pre-line text-sm leading-[1.85] text-cream">{label ? <><strong className="font-semibold"><MeasurementText text={label} context={text} /></strong><MeasurementText text={text.slice(label.length)} context={text} /></> : <MeasurementText text={text} />}</p>
 }
 
 function DescriptionTable({ block }: { block: Extract<ItemDescriptionBlock, { type: 'table' }> }) {
     return <div className="mb-[18px] overflow-x-auto rounded-lg border border-border">
         <table className="w-full border-collapse text-left text-sm leading-[1.6]">
-            {block.caption && <caption className="bg-panel-strong px-4 py-3 text-left font-display text-gold-bright">{block.caption}</caption>}
+            {block.caption && <caption className="bg-panel-strong px-4 py-3 text-left font-display text-gold-bright"><MeasurementText text={block.caption} /></caption>}
             {block.columns.length > 0 && <thead className="bg-panel-strong text-gold-bright"><tr>
-                {block.columns.map((column, index) => <th key={index} scope="col" className="min-w-[30px] border-b border-border px-4 py-2.5 font-semibold">{column}</th>)}
+                {block.columns.map((column, index) => <th key={index} scope="col" className="min-w-[30px] border-b border-border px-4 py-2.5 font-semibold"><MeasurementTableHeading text={column} /></th>)}
             </tr></thead>}
             <tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex} className="border-b border-border even:bg-surface last:border-b-0">
-                {row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-[30px] px-4 py-2.5 text-cream">{cell}</td>)}
+                {row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-[30px] px-4 py-2.5 text-cream">{tableMeasurement(cell, block.columns[cellIndex] ?? '') ? <MeasurementValue measurement={tableMeasurement(cell, block.columns[cellIndex] ?? '')!} /> : <MeasurementText text={cell} context={row.join(' ')} />}</td>)}
             </tr>)}</tbody>
         </table>
     </div>
@@ -166,7 +167,7 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                     <span className="item-icon-tile small" aria-hidden="true">{item.icon}</span>
                     <div className="min-w-0 flex-1">
                         <h2 id="item-modal-title" className="font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2>
-                        {!tradeGoodSubtype && hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]">{item.subtype}</p>}
+                        {!tradeGoodSubtype && hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]"><MeasurementText text={item.subtype} /></p>}
                     </div>
                     <button className="icon-button shrink-0" onClick={onClose} aria-label={t("item.closeSheet")}><X size={24} /></button>
                 </header>

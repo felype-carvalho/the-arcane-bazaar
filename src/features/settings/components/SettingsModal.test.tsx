@@ -1,3 +1,4 @@
+import { defaultMeasurements } from '@/features/measurements/model/preferences'
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, vi } from 'vitest'
@@ -12,16 +13,16 @@ import { serializeSettingsBackup } from '../model/settings-backup'
 import { IDBFactory } from 'fake-indexeddb'
 
 function cloneSettings(settings: AppSettings): AppSettings {
-    return { selectedSources: [...settings.selectedSources] }
+    return { measurements: { ...settings.measurements }, selectedSources: [...settings.selectedSources] }
 }
 
-function memoryStorage(initial: AppSettings = { selectedSources: [...ALL_SOURCE_CODES] }): SettingsStorage {
+function memoryStorage(initial: AppSettings = { measurements: defaultMeasurements('en-US'), selectedSources: [...ALL_SOURCE_CODES] }): SettingsStorage {
     let stored = cloneSettings(initial)
     return {
         load: vi.fn(async () => cloneSettings(stored)),
         save: vi.fn(async (settings) => { stored = cloneSettings(settings) }),
         reset: vi.fn(async () => {
-            stored = { selectedSources: [...ALL_SOURCE_CODES] }
+            stored = { measurements: defaultMeasurements('en-US'), selectedSources: [...ALL_SOURCE_CODES] }
             return cloneSettings(stored)
         }),
     }
@@ -70,7 +71,7 @@ describe('SettingsModal', () => {
                 reader.onerror = () => reject(reader.error)
                 reader.readAsText(blob)
             })
-            expect(JSON.parse(contents)).toEqual({ version: 1, data: createDefaultProfileState() })
+            expect(JSON.parse(contents)).toEqual({ version: 2, data: createDefaultProfileState() })
             expect(downloadedName).toMatch(/^arcane-bazaar-backup-\d{4}-\d{2}-\d{2}\.json$/)
         } finally {
             if (originalCreateUrl) Object.defineProperty(URL, 'createObjectURL', originalCreateUrl)
@@ -104,7 +105,7 @@ describe('SettingsModal', () => {
         expect(screen.getByRole('button', { name: 'Import Data' })).toHaveFocus()
 
         const state = createDefaultProfileState()
-        state.profiles.push({ ...state.profiles[0], id: 'campaign', name: 'Campaign', settings: { selectedSources: ['DMG'] }, catalog: { ...state.profiles[0].catalog, pageSize: 50 } })
+        state.profiles.push({ ...state.profiles[0], id: 'campaign', name: 'Campaign', settings: { measurements: defaultMeasurements('en-US'), selectedSources: ['DMG'] }, catalog: { ...state.profiles[0].catalog, pageSize: 50 } })
         state.activeProfileId = 'campaign'
         const contents = serializeSettingsBackup(state)
         const file = new File([contents], 'backup.json', { type: 'application/json' })
@@ -136,7 +137,7 @@ describe('SettingsModal', () => {
         await waitFor(() => expect(screen.getByRole('alert')).toHaveTextContent('not valid JSON'))
         expect(await storage.loadProfiles!()).toEqual(initial)
 
-        const changed = { ...initial, profiles: [{ ...initial.profiles[0], settings: { selectedSources: ['DMG'] } }] }
+        const changed = { ...initial, profiles: [{ ...initial.profiles[0], settings: { measurements: defaultMeasurements('en-US'), selectedSources: ['DMG'] } }] }
         const contents = serializeSettingsBackup(changed)
         const validFile = new File([contents], 'backup.json', { type: 'application/json' })
         Object.defineProperty(validFile, 'text', { value: async () => contents })
@@ -236,6 +237,7 @@ describe('SettingsModal', () => {
         await user.click(sourceChip)
 
         await waitFor(() => expect(storage.save).toHaveBeenCalledWith({
+            measurements: defaultMeasurements('en-US'),
             selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG'),
         }))
         expect(sourceChip).toHaveAttribute('aria-pressed', 'false')
@@ -270,12 +272,13 @@ describe('SettingsModal', () => {
 
         const modernSources = new Set(SOURCES_BY_EDITION['5.5e'].map(({ source }) => source))
         await waitFor(() => expect(storage.save).toHaveBeenCalledWith({
+            measurements: defaultMeasurements('en-US'),
             selectedSources: ALL_SOURCE_CODES.filter((source) => !modernSources.has(source)),
         }))
         expect(within(modernGroup).getByText(`0/${SOURCES_BY_EDITION['5.5e'].length} selected`)).toBeInTheDocument()
 
         await user.click(within(modernGroup).getByRole('button', { name: 'Select all' }))
-        await waitFor(() => expect(storage.save).toHaveBeenLastCalledWith({ selectedSources: [...ALL_SOURCE_CODES] }))
+        await waitFor(() => expect(storage.save).toHaveBeenLastCalledWith({ measurements: defaultMeasurements('en-US'), selectedSources: [...ALL_SOURCE_CODES] }))
     })
 
     it('disables source controls while a setting is being persisted', async () => {
@@ -328,7 +331,7 @@ describe('SettingsModal', () => {
 
     it('supports canceling and confirming a database reset', async () => {
         const user = userEvent.setup()
-        const storage = memoryStorage({ selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG') })
+        const storage = memoryStorage({ measurements: defaultMeasurements('en-US'), selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG') })
         renderModal(storage)
         const dialog = screen.getByRole('dialog', { name: 'Settings' })
         const sourceChip = within(dialog).getByRole('button', { name: formatSourceTitle('DMG') })
@@ -355,7 +358,7 @@ describe('SettingsModal', () => {
 
     it('keeps the current selections and reports a failed database reset', async () => {
         const user = userEvent.setup()
-        const storage = memoryStorage({ selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG') })
+        const storage = memoryStorage({ measurements: defaultMeasurements('en-US'), selectedSources: ALL_SOURCE_CODES.filter((source) => source !== 'DMG') })
         storage.reset = vi.fn(async () => { throw new Error('database blocked') })
         renderModal(storage)
         const sourceChip = dmgChip()

@@ -2,6 +2,7 @@ import type { InterfaceKey } from './resources'
 
 // Map internal labels and stored messages to stable translation keys.
 export const labelKeys = {
+    'The backup contains invalid measurement settings.': 'measurements.invalidBackup',
     "Local data reset to defaults.": "settings.resetSuccess",
     "Local data imported successfully.": "settings.importSuccess",
     "Evolution stage": "variants.evolutionStage",

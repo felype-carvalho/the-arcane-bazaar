@@ -1,55 +1,58 @@
+import type { MeasurementPreferences } from '@/features/measurements/types'
 import type { ItemFilters, SortDirection, SortKey } from '@/features/catalog/types'
 
 export interface AppSettings {
-  selectedSources: string[]
+    selectedSources: string[]
+    measurements: MeasurementPreferences
 }
 
 export interface CatalogPreferences {
-  filters: ItemFilters
-  sortKey: SortKey
-  direction: SortDirection
-  pageSize: number
+    filters: ItemFilters
+    sortKey: SortKey
+    direction: SortDirection
+    pageSize: number
 }
 
 export interface Profile {
-  id: string
-  name: string
-  settings: AppSettings
-  catalog: CatalogPreferences
+    id: string
+    name: string
+    settings: AppSettings
+    catalog: CatalogPreferences
 }
 
 export interface ProfileState {
-  profiles: Profile[]
-  activeProfileId: string
+    profiles: Profile[]
+    activeProfileId: string
 }
 
 export interface SettingsStorage {
-  load: () => Promise<AppSettings>
-  save: (settings: AppSettings) => Promise<void>
-  reset: () => Promise<AppSettings>
-  close?: () => Promise<void> | void
-  loadProfiles?: () => Promise<ProfileState>
-  saveProfiles?: (state: ProfileState) => Promise<void>
-  resetProfiles?: () => Promise<ProfileState>
+    load: () => Promise<AppSettings>
+    save: (settings: AppSettings) => Promise<void>
+    reset: () => Promise<AppSettings>
+    close?: () => Promise<void> | void
+    loadProfiles?: () => Promise<ProfileState>
+    saveProfiles?: (state: ProfileState) => Promise<void>
+    resetProfiles?: () => Promise<ProfileState>
 }
 
 export interface SettingsContextValue {
-  settings: AppSettings
-  catalog: CatalogPreferences
-  profiles: readonly Profile[]
-  activeProfileId: string
-  resetVersion: number
-  isReady: boolean
-  isSaving: boolean
-  error: string | null
-  setSourceEnabled: (source: string, enabled: boolean) => Promise<void>
-  setSourcesEnabled: (sources: readonly string[], enabled: boolean) => Promise<void>
-  resetLocalData: () => Promise<void>
-  exportSettingsBackup: () => string
-  importSettingsBackup: (state: ProfileState) => Promise<void>
-  createProfile: (name: string) => Promise<void>
-  renameProfile: (id: string, name: string) => Promise<void>
-  deleteProfile: (id: string) => Promise<void>
-  selectProfile: (id: string) => Promise<void>
-  updateCatalog: (catalog: CatalogPreferences) => void
+    settings: AppSettings
+    catalog: CatalogPreferences
+    profiles: readonly Profile[]
+    activeProfileId: string
+    resetVersion: number
+    isReady: boolean
+    isSaving: boolean
+    error: string | null
+    setMeasurements: (preferences: MeasurementPreferences) => Promise<void>
+    setSourceEnabled: (source: string, enabled: boolean) => Promise<void>
+    setSourcesEnabled: (sources: readonly string[], enabled: boolean) => Promise<void>
+    resetLocalData: () => Promise<void>
+    exportSettingsBackup: () => string
+    importSettingsBackup: (state: ProfileState) => Promise<void>
+    createProfile: (name: string) => Promise<void>
+    renameProfile: (id: string, name: string) => Promise<void>
+    deleteProfile: (id: string) => Promise<void>
+    selectProfile: (id: string) => Promise<void>
+    updateCatalog: (catalog: CatalogPreferences) => void
 }

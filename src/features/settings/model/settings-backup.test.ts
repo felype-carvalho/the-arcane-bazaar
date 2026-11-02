@@ -1,3 +1,4 @@
+import { defaultMeasurements } from '@/features/measurements/model/preferences'
 import { describe, expect, it } from 'vitest'
 import { createDefaultProfileState } from './defaults'
 import { MAX_BACKUP_FILE_SIZE, parseSettingsBackup, readSettingsBackup, serializeSettingsBackup } from './settings-backup'
@@ -9,7 +10,7 @@ describe('settings backup', () => {
             ...state.profiles[0],
             id: 'campaign',
             name: 'Campaign',
-            settings: { selectedSources: ['DMG'] },
+            settings: { measurements: defaultMeasurements('en-US'), selectedSources: ['DMG'] },
             catalog: { ...state.profiles[0].catalog, pageSize: 50, filters: { ...state.profiles[0].catalog.filters, search: 'sword' } },
         }
         state.profiles.push(campaign)

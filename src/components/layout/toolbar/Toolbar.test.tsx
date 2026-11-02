@@ -1,3 +1,4 @@
+import { defaultMeasurements } from '@/features/measurements/model/preferences'
 import { MemoryRouter } from 'react-router-dom'
 import { act, render, screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
@@ -9,9 +10,9 @@ import { Toolbar } from './Toolbar'
 import i18n, { LANGUAGE_STORAGE_KEY } from '@/app/i18n'
 
 const storage: SettingsStorage = {
-  load: async () => ({ selectedSources: [...ALL_SOURCE_CODES] }),
+  load: async () => ({ measurements: defaultMeasurements('en-US'), selectedSources: [...ALL_SOURCE_CODES] }),
   save: async () => undefined,
-  reset: async () => ({ selectedSources: [...ALL_SOURCE_CODES] }),
+  reset: async () => ({ measurements: defaultMeasurements('en-US'), selectedSources: [...ALL_SOURCE_CODES] }),
 }
 
 function renderToolbar() {
