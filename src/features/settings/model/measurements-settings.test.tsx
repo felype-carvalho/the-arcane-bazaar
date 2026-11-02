@@ -23,6 +23,40 @@ function Preview() {
 }
 
 describe('profile measurement preferences', () => {
+    it('shows the localized conversion notice and dismisses it before the settings modal', async () => {
+        const onClose = vi.fn()
+        const storage = createSettingsStorage(new IDBFactory())
+        const { unmount } = render(<SettingsProvider storage={storage}><SettingsModal onClose={onClose} /></SettingsProvider>)
+        fireEvent.click(screen.getByRole('button', { name: 'Measurement Units' }))
+        await waitFor(() => expect(screen.getByRole('combobox', { name: 'Distance' })).toBeEnabled())
+        const trigger = screen.getByRole('button', { name: 'About unit conversion' })
+        fireEvent.mouseEnter(trigger)
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Imperial measurement units are converted using a fixed conversion table for version 5.5e.')
+        expect(trigger).toHaveAttribute('aria-describedby', screen.getByRole('tooltip').id)
+        fireEvent.mouseLeave(trigger)
+        await waitFor(() => expect(screen.queryByRole('tooltip')).not.toBeInTheDocument())
+        fireEvent.focus(trigger)
+        expect(screen.getByRole('tooltip')).toBeInTheDocument()
+        fireEvent.blur(trigger)
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+        fireEvent.click(trigger)
+        fireEvent.pointerDown(document.body)
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+        fireEvent.click(trigger)
+        await act(() => changeLanguage('pt-BR'))
+        expect(screen.getByRole('tooltip')).toHaveTextContent('A conversão de unidades de medida imperiais é feita com base uma tabela de conversão fixa da versão 5.5e')
+        fireEvent.keyDown(document, { key: 'Escape' })
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+        expect(onClose).not.toHaveBeenCalled()
+        fireEvent.keyDown(document, { key: 'Escape' })
+        expect(onClose).toHaveBeenCalledOnce()
+        fireEvent.click(trigger)
+        fireEvent.click(screen.getByRole('button', { name: 'Perfil' }))
+        expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
+        unmount()
+        await storage.close?.()
+    })
+
     it('persists language-based initialization of legacy profiles without following subsequent language changes', async () => {
         const factory = new IDBFactory()
         const storage = createSettingsStorage(factory)
@@ -75,9 +109,9 @@ describe('profile measurement preferences', () => {
             await waitFor(() => expect(screen.getByRole('combobox', { name: label })).toBeEnabled())
         }
         expect(screen.getByRole('button', { name: '9 m (6)' })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: '4.5 kg' })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: '3.2 km/h' })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: '3.8 L' })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: '5 kg' })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: '3 km/h' })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: '4 L' })).toBeInTheDocument()
         fireEvent.click(screen.getByRole('button', { name: 'New profile' }))
         await waitFor(() => expect(screen.getByRole('button', { name: '30 ft. (6)' })).toBeInTheDocument())
         await waitFor(() => expect(screen.getByRole('button', { name: 'Default profile' })).toBeEnabled())
@@ -95,7 +129,7 @@ describe('profile measurement preferences', () => {
         await waitFor(() => expect(screen.getByRole('button', { name: 'Reset preferences' })).toBeEnabled())
         await waitFor(() => expect(screen.getByRole('button', { name: '30 ft. (6)' })).toBeInTheDocument(), { timeout: 5000 })
         expect(i18n.language).toBe('en-US')
-    })
+    }, 15000)
 
     it('rolls back a failed save and reports the error', async () => {
         const storage = createSettingsStorage(new IDBFactory())

@@ -15,12 +15,12 @@ describe('measurements in real catalog items', () => {
     beforeAll(() => { catalog = buildCatalog({ items, base, variants } as unknown as ItemJsonFiles) })
 
     it.each([
-        ['Riding Horse', 'PHB', ['18 m (12)', '217.7 kg']],
-        ['Longbow', 'PHB', ['45/180 m (30/120)', '0.9 kg']],
-        ['Bag of Holding', 'DMG', ['6.8 kg', '226.8 kg', '1.7 m³']],
-        ['Alchemy Jug', 'DMG', ['236.6 ml', '14.8 ml', '946.4 ml']],
-        ['Barrel', 'PHB', ['151.4 L', '0.1 m³']],
-        ['Galley', 'DMG', ['6.4 km/h']],
+        ['Riding Horse', 'PHB', ['18 m (12)', '240 kg']],
+        ['Longbow', 'PHB', ['45/180 m (30/120)', '1 kg']],
+        ['Bag of Holding', 'DMG', ['7.5 kg', '250 kg', '1.7 m³']],
+        ['Alchemy Jug', 'DMG', ['240 ml', '15 ml', '1 L']],
+        ['Barrel', 'PHB', ['160 L', '0.1 m³']],
+        ['Galley', 'DMG', ['6 km/h']],
     ])('converts %s fields and descriptions without changing its source', (name, source, expected) => {
         const item = catalog.find((candidate) => candidate.name === name && candidate.source === source)!
         expect(item).toBeDefined()

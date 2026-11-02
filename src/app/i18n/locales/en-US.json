@@ -317,6 +317,8 @@
     "errors.backupActiveProfile": "The backup has no Default profile or a missing active profile.",
     "errors.jsonFileRequired": "Select a JSON file.",
     "errors.fileTooLarge": "The JSON file is too large (maximum 1 MB).",
+    "measurements.conversionInfoLabel": "About unit conversion",
+    "measurements.conversionInfo": "Imperial measurement units are converted using a fixed conversion table for version 5.5e.",
     "measurements.title": "Measurement Units",
     "measurements.hint": "Choose the units used in this profile’s items. Hover over or select a gold measurement to compare both systems.",
     "measurements.distance": "Distance",
@@ -333,7 +335,7 @@
     "measurements.liquids.metric": "Liters / Milliliters",
     "measurements.imperial": "Imperial",
     "measurements.metric": "Metric",
-    "measurements.squares": "Squares",
+    "measurements.squares": "Grid Squares",
     "measurements.squareHint": "1 square = 5 feet = 1.5 m",
     "measurements.invalidBackup": "The backup contains invalid measurement settings."
 }

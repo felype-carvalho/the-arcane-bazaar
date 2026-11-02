@@ -79,7 +79,7 @@ export function MeasurementValue({ measurement }: { measurement: Measurement }) 
             className="fixed z-[1000] grid max-w-[calc(100vw-16px)] gap-1 rounded-md border border-gold/60 bg-panel-strong px-3 py-2 text-xs leading-5 text-cream shadow-xl">
             <span>{t('measurements.imperial')}: {imperial}</span>
             <span>{t('measurements.metric')}: {metric}</span>
-            {measurement.unit === 'foot' && <span>{t('measurements.squares')}: {measurement.values.map((value) => formatMeasurementNumber(value / 5, language)).join(measurement.separator)} · {t('measurements.squareHint')}</span>}
+            {measurement.unit === 'foot' && <span>{t('measurements.squares')}: ({measurement.values.map((value) => formatMeasurementNumber(value / 5, language)).join(measurement.separator)})</span>}
         </span>, document.body)}
     </>
 }

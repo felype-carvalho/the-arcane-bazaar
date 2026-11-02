@@ -1,18 +1,20 @@
 import type { Measurement, MeasurementCategory, MeasurementSystem, MeasurementUnit } from '../types'
 
+// Fixed practical equivalents from tabela_conversao_dd_5e_completa.pdf apply to all editions.
+// Units absent from that guide retain their existing conversion factors.
 const units: Record<MeasurementUnit, { category: MeasurementCategory; factor: number; metric: string; en: string; pt: string }> = {
     foot: { category: 'distance', factor: 0.3, metric: 'm', en: 'ft.', pt: 'pés' },
-    mile: { category: 'distance', factor: 1.609344, metric: 'km', en: 'mi', pt: 'milhas' },
+    mile: { category: 'distance', factor: 1.5, metric: 'km', en: 'mi', pt: 'milhas' },
     inch: { category: 'distance', factor: 2.54, metric: 'cm', en: 'in', pt: 'pol.' },
-    pound: { category: 'weight', factor: 0.45359237, metric: 'kg', en: 'lb', pt: 'lb' },
+    pound: { category: 'weight', factor: 0.5, metric: 'kg', en: 'lb', pt: 'lb' },
     ounce: { category: 'weight', factor: 0.028349523125, metric: 'kg', en: 'oz', pt: 'oz' },
-    mph: { category: 'speed', factor: 1.609344, metric: 'km/h', en: 'mph', pt: 'mph' },
+    mph: { category: 'speed', factor: 1.5, metric: 'km/h', en: 'mph', pt: 'mph' },
     squareFoot: { category: 'distance', factor: 0.09, metric: 'm²', en: 'ft²', pt: 'pés²' },
     cubicFoot: { category: 'distance', factor: 0.027, metric: 'm³', en: 'ft³', pt: 'pés³' },
-    fluidOunce: { category: 'liquids', factor: 3.785411784 / 128, metric: 'L', en: 'fl oz', pt: 'onças fluidas' },
-    pint: { category: 'liquids', factor: 3.785411784 / 8, metric: 'L', en: 'pt', pt: 'pintas' },
-    quart: { category: 'liquids', factor: 3.785411784 / 4, metric: 'L', en: 'qt', pt: 'quartos' },
-    gallon: { category: 'liquids', factor: 3.785411784, metric: 'L', en: 'gal', pt: 'galões' },
+    fluidOunce: { category: 'liquids', factor: 0.03, metric: 'L', en: 'fl oz', pt: 'onças fluidas' },
+    pint: { category: 'liquids', factor: 0.5, metric: 'L', en: 'pt', pt: 'pintas' },
+    quart: { category: 'liquids', factor: 1, metric: 'L', en: 'qt', pt: 'quartos' },
+    gallon: { category: 'liquids', factor: 4, metric: 'L', en: 'gal', pt: 'galões' },
 }
 
 export function measurementCategory(unit: MeasurementUnit): MeasurementCategory {

@@ -14,6 +14,7 @@ import {
     type SourceGroup,
 } from '@/features/catalog'
 import { useSettings } from '../model/SettingsProvider'
+import { MeasurementConversionInfo } from './MeasurementConversionInfo'
 import { readSettingsBackup } from '../model/settings-backup'
 
 interface SettingsModalProps {
@@ -189,12 +190,15 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
 
                 <div className="min-w-0">
                     <section id="measurements-section" aria-labelledby="measurements-title" hidden={activeSection !== 'measurements'}>
-                        <h3 id="measurements-title" className="font-display text-xs uppercase tracking-[0.12em] text-gold">{t('measurements.title')}</h3>
+                        <div className="flex items-center gap-2">
+                            <h3 id="measurements-title" className="font-display text-xs uppercase tracking-[0.12em] text-gold">{t('measurements.title')}</h3>
+                            {activeSection === 'measurements' && <MeasurementConversionInfo />}
+                        </div>
                         <p className="mt-2 text-xs leading-5 text-muted">{t('measurements.hint')}</p>
-                        <div className="mt-5 grid gap-4">
+                        <div className="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
                             {MEASUREMENT_CATEGORIES.map((category) => <label key={category} className="grid gap-2 rounded-md border border-border bg-black/10 p-4 text-sm text-cream">
                                 <span>{t(`measurements.${category}`)}</span>
-                                <select className="w-full min-w-0 rounded border border-border bg-panel px-3 py-2 text-xs text-cream" value={settings.measurements[category]} disabled={!isReady || isSaving}
+                                <select className="w-full min-w-0 rounded border border-border bg-panel px-3 py-2 text-xs text-cream transition-none hover:border-border hover:bg-panel hover:text-cream hover:shadow-none" value={settings.measurements[category]} disabled={!isReady || isSaving}
                                     onChange={(event) => { void setMeasurements({ ...settings.measurements, [category]: event.target.value as MeasurementSystem }) }}>
                                     <option value="imperial">{t(`measurements.${category}.imperial`)}</option>
                                     <option value="metric">{t(`measurements.${category}.metric`)}</option>

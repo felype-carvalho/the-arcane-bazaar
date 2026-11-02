@@ -14,7 +14,7 @@ describe('measurement text', () => {
         expect(screen.getByRole('button', { name: '9 m (6)' })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: '10 lb' })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: '2 mph' })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: '3.8 L' })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: '4 L' })).toBeInTheDocument()
         expect(document.body).toHaveTextContent('cargo 150 tons')
     })
 
@@ -25,7 +25,8 @@ describe('measurement text', () => {
         const trigger = screen.getByRole('button', { name: '30 ft. (6)' })
         fireEvent.mouseEnter(trigger)
         expect(screen.getByRole('tooltip')).toHaveTextContent('Metric: 9 m (6)')
-        expect(screen.getByRole('tooltip')).toHaveTextContent('Squares: 6')
+        expect(screen.getByRole('tooltip')).toHaveTextContent('Grid Squares: (6)')
+        expect(screen.getByRole('tooltip')).not.toHaveTextContent('1 square =')
         expect(trigger).toHaveAttribute('aria-describedby', screen.getByRole('tooltip').id)
         fireEvent.keyDown(document, { key: 'Escape' })
         expect(screen.queryByRole('tooltip')).not.toBeInTheDocument()
@@ -47,7 +48,7 @@ describe('measurement text', () => {
             <MeasurementText text="2 GP per 100 lb per mile" />
             <MeasurementTableHeading text="Length (feet)" />
         </MeasurementProvider>)
-        expect(document.body).toHaveTextContent('2 GP per 45.4 kg per 1.6 km')
+        expect(document.body).toHaveTextContent('2 GP per 50 kg per 1.5 km')
         expect(document.body).toHaveTextContent('Length (m)')
     })
 })

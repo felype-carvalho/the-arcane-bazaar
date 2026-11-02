@@ -317,6 +317,8 @@
     "errors.backupActiveProfile": "O backup não tem o perfil Padrão ou o perfil ativo está ausente.",
     "errors.jsonFileRequired": "Selecione um arquivo JSON.",
     "errors.fileTooLarge": "O arquivo JSON é muito grande (máximo de 1 MB).",
+    "measurements.conversionInfoLabel": "Informações sobre a conversão de unidades",
+    "measurements.conversionInfo": "A conversão de unidades de medida imperiais é feita com base uma tabela de conversão fixa da versão 5.5e",
     "measurements.title": "Unidade de Medida",
     "measurements.hint": "Escolha as unidades usadas nos itens deste perfil. Passe o mouse ou selecione uma medida dourada para comparar os dois sistemas.",
     "measurements.distance": "Distância",
@@ -333,7 +335,7 @@
     "measurements.liquids.metric": "Litros / Mililitros",
     "measurements.imperial": "Imperial",
     "measurements.metric": "Métrico",
-    "measurements.squares": "Quadrados",
+    "measurements.squares": "Quadrados do Grid",
     "measurements.squareHint": "1 quadrado = 5 pés = 1,5 m",
     "measurements.invalidBackup": "O backup contém configurações de unidades inválidas."
 }
