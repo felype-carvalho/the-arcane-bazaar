@@ -1,16 +1,7 @@
-import portuguese from '../data/translations/pt-BR.json'
-import type { Item, ItemGroupOption, VariantBaseOption } from '../types'
+import portuguese from '../data/translations/pt-BR'
+import type { CatalogTranslations, Item, ItemGroupOption, VariantBaseOption } from '../types'
 
-export interface ItemTranslation {
-    name?: string
-    /** Exact original text prevents a revised source from receiving a stale translation. */
-    texts?: Record<string, string>
-}
-
-export interface CatalogTranslations {
-    items: Record<string, ItemTranslation>
-    shared: Record<string, string>
-}
+export type { CatalogTranslations, ItemTranslation } from '../types'
 
 export const catalogTranslations: CatalogTranslations = portuguese
 

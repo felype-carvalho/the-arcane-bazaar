@@ -25,3 +25,4 @@ export type {
     PricingResult,
     Reputation,
 } from './pricing'
+export type { CatalogTranslations, ItemTranslation } from './translations'

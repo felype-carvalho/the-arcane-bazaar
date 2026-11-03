@@ -11,7 +11,7 @@ try {
     const { getCatalogTextFields, isPreservedCatalogText } = await server.ssrLoadModule('/src/features/catalog/model/translation-coverage.ts')
     const inputs = ['items', 'items-base', 'magicvariants']
     const [items, base, variants] = await Promise.all(inputs.map((name) => readJson(`${dataDirectory}/${name}.json`)))
-    const resources = await readJson(`${dataDirectory}/translations/pt-BR.json`)
+    const { default: resources } = await server.ssrLoadModule('/src/features/catalog/data/translations/pt-BR/index.ts')
     const catalog = buildCatalog({ items, base, variants })
     const inventory = new Map()
     const families = new Map()

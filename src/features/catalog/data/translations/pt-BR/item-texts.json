@@ -1,0 +1,43 @@
+{
+    "item--dmg--alchemy-jug": {
+        "This ceramic jug appears to be able to hold a gallon of liquid and weighs 12 pounds whether full or empty. Sloshing sounds can be heard from within the jug when it is shaken, even if the jug is empty.": "Este jarro de cerâmica parece comportar um galão de líquido e pesa 12 pounds, cheio ou vazio. Sons de líquido se agitando podem ser ouvidos de dentro do jarro quando ele é sacudido, mesmo que esteja vazio.",
+        "You can use an action and name one liquid from the table below to cause the jug to produce the chosen liquid. Afterward, you can uncork the jug as an action and pour that liquid out, up to 2 gallons per minute. The maximum amount of liquid the jug can produce depends on the liquid you named.": "Você pode usar uma ação e dizer o nome de um líquido da tabela abaixo para fazer o jarro produzir o líquido escolhido. Depois disso, pode destampar o jarro como uma ação e despejar esse líquido, até 2 gallons per minute. A quantidade máxima que o jarro pode produzir depende do líquido escolhido.",
+        "Once the jug starts producing a liquid, it can't produce a different one, or more of one that has reached its maximum, until the next dawn.": "Depois que o jarro começa a produzir um líquido, ele não pode produzir outro, nem uma quantidade adicional de um líquido que já tenha atingido seu limite, até o próximo amanhecer.",
+        "Liquid": "Líquido",
+        "Max Amount": "Quantidade Máxima",
+        "Acid": "Ácido",
+        "Basic poison": "Veneno Básico",
+        "Beer": "Cerveja",
+        "Honey": "Mel",
+        "Mayonnaise": "Maionese",
+        "Oil": "Óleo",
+        "Vinegar": "Vinagre",
+        "Water, fresh": "Água Doce",
+        "Water, salt": "Água Salgada",
+        "Wine": "Vinho"
+    },
+    "item--phb--backpack": {
+        "A backpack can hold one cubic foot or 30 pounds of gear. You can also strap items, such as a bedroll or a coil of rope, to the outside of a backpack.": "Uma mochila pode comportar um pé cúbico ou 30 pounds de equipamento. Você também pode prender itens, como um saco de dormir ou um rolo de corda, à parte externa da mochila."
+    },
+    "item--xdmg--alchemy-jug": {
+        "This ceramic jug appears to be able to hold a gallon of liquid and weighs 12 pounds whether full or empty. The jug sloshes when it is shaken, even if the jug is empty.": "Este jarro de cerâmica parece comportar um galão de líquido e pesa 12 pounds, cheio ou vazio. O jarro emite sons de líquido se agitando quando é sacudido, mesmo que esteja vazio.",
+        "You can take a Magic action and name one liquid from the Alchemy Jug Liquids table to cause the jug to produce the chosen liquid. Afterward, you can uncork the jug as a Utilize action and pour that liquid out, up to 2 gallons per minute. The maximum amount of liquid the jug can produce depends on the liquid you named.": "Você pode realizar a ação Magia e dizer o nome de um líquido da tabela Líquidos do Jarro Alquímico para fazer o jarro produzir o líquido escolhido. Depois disso, pode destampar o jarro com a ação Usar Objeto e despejar esse líquido, até 2 gallons per minute. A quantidade máxima que o jarro pode produzir depende do líquido escolhido.",
+        "Once the jug starts producing a liquid, it can't produce a different one, or more of one that has reached its maximum, until the next dawn.": "Depois que o jarro começa a produzir um líquido, ele não pode produzir outro, nem uma quantidade adicional de um líquido que já tenha atingido seu limite, até o próximo amanhecer.",
+        "Alchemy Jug Liquids": "Líquidos do Jarro Alquímico",
+        "Liquid": "Líquido",
+        "Max. Amount": "Quantidade Máxima",
+        "Acid": "Ácido",
+        "Basic Poison": "Veneno Básico",
+        "Beer": "Cerveja",
+        "Honey": "Mel",
+        "Mayonnaise": "Maionese",
+        "Oil": "Óleo",
+        "Vinegar": "Vinagre",
+        "Water, fresh": "Água Doce",
+        "Water, salt": "Água Salgada",
+        "Wine": "Vinho"
+    },
+    "item--xphb--backpack": {
+        "A Backpack holds up to 30 pounds within 1 cubic foot. It can also serve as a saddlebag.": "Uma Mochila comporta até 30 pounds em 1 cubic foot. Ela também pode servir como alforje."
+    }
+}
