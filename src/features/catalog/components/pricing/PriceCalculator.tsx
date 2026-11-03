@@ -1,4 +1,5 @@
 import { useInterfaceTranslation } from '@/app/i18n'
+import { baseOptionName } from '../../model/item-translations'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import { ChevronDown, Plus, SlidersHorizontal, Trash2 } from 'lucide-react'
 import { CurrencyDisplay } from './CurrencyDisplay'
@@ -31,7 +32,7 @@ function PriceValue({ value }: { value: number | null | undefined }) {
 }
 
 export function PriceCalculator({ item, effectiveItem, pendingSelection, selectedOption, modifiers, setModifiers, manualPrice, setManualPrice }: PriceCalculatorProps) {
-    const { t, label, percent } = useInterfaceTranslation()
+    const { t, label, percent, language } = useInterfaceTranslation()
     const [customName, setCustomName] = useState('')
     const [customPercent, setCustomPercent] = useState('')
     const manualValue = manualPrice === '' ? null : Number(manualPrice)
@@ -60,7 +61,7 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
             {selectedOption && (
                 <div className="selected-base-price-card mb-4">
                     <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
-                        <span className="truncate font-display text-xs text-cream">{selectedOption.baseName}</span>
+                        <span className="truncate font-display text-xs text-cream">{baseOptionName(selectedOption, language)}</span>
                         <SourceChip source={selectedOption.baseSource} />
                     </div>
                     <dl className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 text-[11px]">

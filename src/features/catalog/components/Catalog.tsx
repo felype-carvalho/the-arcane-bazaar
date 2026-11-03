@@ -5,6 +5,7 @@ import { getItems } from '../api/catalog'
 import { applySourceSelection } from '../model/content-visibility'
 import { ALL_SOURCE_CODES, normalizeSource } from '../model/sources'
 import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '../model/filtering'
+import { configurationName } from '../model/item-translations'
 import { resolveItemSelection } from '../model/items/resolve-item-selection'
 import { DEFAULT_MODIFIERS } from '../model/pricing'
 import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../types'
@@ -26,7 +27,7 @@ export interface CatalogProps {
 }
 
 export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = true, preferences, onPreferencesChange }: CatalogProps) {
-    const { t, number } = useInterfaceTranslation()
+    const { t, number, language } = useInterfaceTranslation()
     const [items, setItems] = useState<Item[]>([])
     const [loading, setLoading] = useState(true)
     const [loadError, setLoadError] = useState(false)
@@ -81,7 +82,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
         if (readyAppliedRef.current) onPreferencesChange?.({ filters, sortKey, direction, pageSize })
     }, [filters, sortKey, direction, pageSize, settingsReady, onPreferencesChange])
 
-    useEffect(() => { setPage(1) }, [filters, sortKey, direction])
+    useEffect(() => { setPage(1) }, [filters, sortKey, direction, language])
     useEffect(() => { setManualPrice(''); setModifiers(DEFAULT_MODIFIERS); setSelectedGroupOptionId(''); setSelectedBaseOptionId('') }, [selected?.id])
     useEffect(() => { setManualPrice('') }, [selectedGroupOptionId, selectedBaseOptionId])
     useEffect(() => {
@@ -93,7 +94,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     const visibleItems = useMemo(() => applySourceSelection(items, selectedSources), [items, selectedSources])
     const selectedType = filters.types[0] ?? 'Common'
     const availableFilterOptions = useMemo(() => getAvailableFilterOptions(visibleItems, selectedType), [selectedType, visibleItems])
-    const filtered = useMemo(() => filterAndSortItems(visibleItems, filters, sortKey, direction), [visibleItems, filters, sortKey, direction])
+    const filtered = useMemo(() => filterAndSortItems(visibleItems, filters, sortKey, direction, language), [visibleItems, filters, sortKey, direction, language])
     const totalPages = Math.ceil(filtered.length / pageSize)
     const safePage = Math.min(page, Math.max(totalPages, 1))
     const pageItems = filtered.slice((safePage - 1) * pageSize, safePage * pageSize)
@@ -246,7 +247,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
                 </div>
             )}
 
-            {modalItem && <ItemModal configurationSummary={selection?.configurationSummary} item={modalItem} selectedVariantOption={selectedVariantOption} onClose={() => setModalItem(null)} />}
+            {modalItem && <ItemModal configurationSummary={configurationName(selection?.selectedGroupOption, selection?.selectedBaseOption, language)} item={modalItem} selectedVariantOption={selectedVariantOption} onClose={() => setModalItem(null)} />}
             <button className="help-button" aria-label={t("catalog.prototypeHelp")} title={t("catalog.pricingDisclaimer")}><CircleHelp size={18} /></button>
         </>
     )

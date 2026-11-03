@@ -1,6 +1,7 @@
 import type { Category, Item, ItemFilters, ItemType, Rarity, SortDirection, SortKey } from '../types'
 import { CATEGORIES } from './items/categories'
 import { normalizeSource } from './sources'
+import { formatCatalogItemName, itemName, itemSearchText, normalizeCatalogSearch } from './item-translations'
 
 export const RARITIES: readonly Rarity[] = ['None', 'Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact', 'Varies', 'Unknown']
 
@@ -34,11 +35,13 @@ export function getAvailableFilterOptions(items: readonly Item[], type: ItemType
     }
 }
 
-export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey: SortKey, direction: SortDirection): Item[] {
-    const query = filters.search.trim().toLocaleLowerCase()
+export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey: SortKey, direction: SortDirection, language = 'en-US'): Item[] {
+    const query = normalizeCatalogSearch(filters.search)
+    const collator = new Intl.Collator(language)
+    const compareNames = (left: Item, right: Item) => collator.compare(formatCatalogItemName(itemName(left, language)), formatCatalogItemName(itemName(right, language))) || left.id.localeCompare(right.id)
     const sources = new Set(filters.sources.map(normalizeSource))
     const filtered = items.filter((item) => {
-        if (query && !item.name.toLocaleLowerCase().includes(query) && !item.tags.some((tag) => tag.toLocaleLowerCase().includes(query))) return false
+        if (query && !itemSearchText(item).includes(query)) return false
         if (filters.types.length && !filters.types.includes(item.type)) return false
         if (filters.rarities.length && !filters.rarities.includes(item.rarity) && !item.availableRarities?.some((rarity) => filters.rarities.includes(rarity))) return false
         if (filters.categories.length && !item.categories.some((category) => filters.categories.includes(category))) return false
@@ -49,16 +52,17 @@ export function filterAndSortItems(items: Item[], filters: ItemFilters, sortKey:
 
     return filtered.sort((a, b) => {
         let result = 0
-        if (sortKey === 'name') result = a.name.localeCompare(b.name)
+        if (sortKey === 'name') result = compareNames(a, b)
         if (sortKey === 'type') result = a.type.localeCompare(b.type)
         if (sortKey === 'category') result = a.category.localeCompare(b.category)
         if (sortKey === 'rarity') result = RARITY_ORDER[a.rarity] - RARITY_ORDER[b.rarity]
         if (sortKey === 'price') {
-            if (a.basePriceGp == null && b.basePriceGp == null) result = a.name.localeCompare(b.name)
+            if (a.basePriceGp == null && b.basePriceGp == null) result = compareNames(a, b)
             else if (a.basePriceGp == null) result = 1
             else if (b.basePriceGp == null) result = -1
             else result = a.basePriceGp - b.basePriceGp
         }
-        return direction === 'asc' ? result : -result
+        const order = result || compareNames(a, b)
+        return direction === 'asc' ? order : -order
     })
 }

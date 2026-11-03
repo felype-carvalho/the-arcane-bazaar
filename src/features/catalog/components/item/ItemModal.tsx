@@ -1,4 +1,6 @@
 import { MeasurementText, MeasurementValue, tableMeasurement, MeasurementTableHeading } from '@/features/measurements'
+import { baseOptionName, itemText, presentItem } from '../../model/item-translations'
+import { isPreservedCatalogText } from '../../model/translation-coverage'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { Axe, BicepsFlexed, BookOpen, BowArrow, CircleGauge, CircleDashedCheck, Coins, HandCoins, HatGlasses, HeartPlus, MessageCircleCheck, Package, Package2, Panda, Shield, ShieldCog, ShieldLock, Sparkles, Sword, Swords, TableProperties, UserStar, WandSparkles, Weight, X } from 'lucide-react'
@@ -82,27 +84,29 @@ function EquipmentSection({ title, information, kind = 'weapon' }: { title: stri
     </dl></section>
 }
 
-function DescriptionParagraph({ text }: { text: string }) {
+function DescriptionParagraph({ text, originalText }: { text: string; originalText: string }) {
     const label = text.match(/^([^:\n.!?]{1,80}:)(?=\s|$)/)?.[1]
-    return <p className="mb-[18px] whitespace-pre-line text-sm leading-[1.85] text-cream">{label ? <><strong className="font-semibold"><MeasurementText text={label} context={text} /></strong><MeasurementText text={text.slice(label.length)} context={text} /></> : <MeasurementText text={text} />}</p>
+    return <p className="mb-[18px] whitespace-pre-line text-sm leading-[1.85] text-cream">{label ? <><strong className="font-semibold"><MeasurementText text={label} context={originalText} /></strong><MeasurementText text={text.slice(label.length)} context={originalText} /></> : <MeasurementText text={text} context={originalText} />}</p>
 }
 
-function DescriptionTable({ block }: { block: Extract<ItemDescriptionBlock, { type: 'table' }> }) {
+function DescriptionTable({ block, translate }: { block: Extract<ItemDescriptionBlock, { type: 'table' }>; translate: (text: string) => string }) {
     return <div className="mb-[18px] overflow-x-auto rounded-lg border border-border">
         <table className="w-full border-collapse text-left text-sm leading-[1.6]">
-            {block.caption && <caption className="bg-panel-strong px-4 py-3 text-left font-display text-gold-bright"><MeasurementText text={block.caption} /></caption>}
+            {block.caption && <caption className="bg-panel-strong px-4 py-3 text-left font-display text-gold-bright"><MeasurementText text={translate(block.caption)} context={block.caption} /></caption>}
             {block.columns.length > 0 && <thead className="bg-panel-strong text-gold-bright"><tr>
-                {block.columns.map((column, index) => <th key={index} scope="col" className="min-w-[30px] border-b border-border px-4 py-2.5 font-semibold"><MeasurementTableHeading text={column} /></th>)}
+                {block.columns.map((column, index) => <th key={index} scope="col" className={`min-w-[30px] border-b border-border px-4 py-2.5 font-semibold ${isPreservedCatalogText(column) ? 'whitespace-nowrap' : ''}`}><MeasurementTableHeading text={translate(column)} /></th>)}
             </tr></thead>}
             <tbody>{block.rows.map((row, rowIndex) => <tr key={rowIndex} className="border-b border-border even:bg-surface last:border-b-0">
-                {row.map((cell, cellIndex) => <td key={cellIndex} className="min-w-[30px] px-4 py-2.5 text-cream">{tableMeasurement(cell, block.columns[cellIndex] ?? '') ? <MeasurementValue measurement={tableMeasurement(cell, block.columns[cellIndex] ?? '')!} /> : <MeasurementText text={cell} context={row.join(' ')} />}</td>)}
+                {row.map((cell, cellIndex) => <td key={cellIndex} className={`min-w-[30px] px-4 py-2.5 text-cream ${isPreservedCatalogText(cell) ? 'whitespace-nowrap' : ''}`}>{tableMeasurement(cell, block.columns[cellIndex] ?? '') ? <MeasurementValue measurement={tableMeasurement(cell, block.columns[cellIndex] ?? '')!} /> : <MeasurementText text={translate(cell)} context={row.join(' ')} />}</td>)}
             </tr>)}</tbody>
         </table>
     </div>
 }
 
-export function ItemModal({ item, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
-    const { t } = useInterfaceTranslation()
+export function ItemModal({ item: originalItem, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
+    const { t, language } = useInterfaceTranslation()
+    const item = presentItem(originalItem, language)
+    const translate = (text: string) => itemText(originalItem, text, language)
     const dialogRef = useRef<HTMLDivElement>(null)
     const thumbnailRef = useRef<HTMLButtonElement>(null)
     const [images, setImages] = useState<ItemImage[]>([])
@@ -111,11 +115,11 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
     const hasItemImage = images.length > 0 && !imageFailed
     const displayedPrice = item.basePriceGp ?? item.variantPriceGp
     const hasPrice = displayedPrice != null && Number.isFinite(displayedPrice) && displayedPrice >= 0
-    const characteristics = [...new Set((item.characteristics ?? [item.description, ...item.properties]).map((text) => text.trim()).filter(hasText))]
+    const characteristics = [...new Set((originalItem.characteristics ?? [originalItem.description, ...originalItem.properties]).map((text) => text.trim()).filter(hasText))]
     const tradeGoodSubtype = item.category === 'Trade Good' && hasText(item.subtype) ? item.subtype : null
     const descriptionBlocks = [
-        ...(tradeGoodSubtype ? [{ type: 'paragraph' as const, text: tradeGoodSubtype }] : []),
-        ...(item.descriptionBlocks ?? characteristics.map((text): ItemDescriptionBlock => ({ type: 'paragraph', text }))),
+        ...(tradeGoodSubtype ? [{ type: 'paragraph' as const, text: originalItem.subtype }] : []),
+        ...(originalItem.descriptionBlocks ?? characteristics.map((text): ItemDescriptionBlock => ({ type: 'paragraph', text }))),
     ]
     const hasWeight = hasText(item.weight)
     const sourceName = getSourceName(item.source)
@@ -130,11 +134,11 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
         setImages([])
         setImageFailed(false)
         setActiveImageIndex(null)
-        getItemImages(item.name, item.source, item.imageFallback)
+        getItemImages(originalItem.name, originalItem.source, originalItem.imageFallback)
             .then((result) => { if (active) setImages(result) })
             .catch(() => { if (active) setImages([]) })
         return () => { active = false }
-    }, [item.name, item.source, item.imageFallback])
+    }, [originalItem.name, originalItem.source, originalItem.imageFallback])
 
     useEffect(() => {
         const previous = document.activeElement as HTMLElement | null
@@ -220,11 +224,11 @@ export function ItemModal({ item, configurationSummary, selectedVariantOption, o
                         <EquipmentSection title={t("item.focusSection")} information={item.spellcastingFocusInformation} kind="spellcastingFocus" />
                         {descriptionBlocks.length > 0 && <section><h3 className={`${sectionHeadingClass} flex items-center gap-[14px] after:h-px after:flex-1 after:bg-border after:content-['']`}>{t("item.description")}</h3>
                             {descriptionBlocks.map((block, index) => block.type === 'table'
-                                ? <DescriptionTable key={index} block={block} />
-                                : <DescriptionParagraph key={index} text={block.text} />)}
+                                ? <DescriptionTable key={index} block={block} translate={translate} />
+                                : <DescriptionParagraph key={index} text={translate(block.text)} originalText={block.text} />)}
                         </section>}
                         {configurationSummary && <p className={noteClass}>{t("item.configurationLabel")} {configurationSummary}</p>}
-                        {!configurationSummary && selectedVariantOption && <p className={noteClass}>{t("item.configuredWith")} {selectedVariantOption.baseName} {t("item.configurationSource")} {selectedVariantOption.baseSource}.</p>}
+                        {!configurationSummary && selectedVariantOption && <p className={noteClass}>{t("item.configuredWith")} {baseOptionName(selectedVariantOption, language)} {t("item.configurationSource")} {selectedVariantOption.baseSource}.</p>}
                     </div>
                 </div>
             </div>

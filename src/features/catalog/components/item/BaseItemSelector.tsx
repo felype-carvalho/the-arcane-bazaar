@@ -1,4 +1,5 @@
 import { useInterfaceTranslation } from '@/app/i18n'
+import { baseOptionName } from '../../model/item-translations'
 import { useId } from 'react'
 import { Layers3 } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
@@ -17,7 +18,7 @@ const SOURCE_PRIORITY = new Map([
     ['DMG', 3],
 ])
 
-function compareBaseOptions(left: VariantBaseOption, right: VariantBaseOption): number {
+function compareBaseOptions(left: VariantBaseOption, right: VariantBaseOption, language: string): number {
     const leftSource = left.baseSource.trim().toLocaleUpperCase('en-US')
     const rightSource = right.baseSource.trim().toLocaleUpperCase('en-US')
     const leftPriority = SOURCE_PRIORITY.get(leftSource)
@@ -32,12 +33,12 @@ function compareBaseOptions(left: VariantBaseOption, right: VariantBaseOption): 
         if (sourceOrder) return sourceOrder
     }
 
-    return left.baseName.localeCompare(right.baseName)
+    return new Intl.Collator(language).compare(baseOptionName(left, language), baseOptionName(right, language)) || left.id.localeCompare(right.id)
 }
 
 export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSelectorProps) {
-    const { t } = useInterfaceTranslation()
-    const options = [...(item.variantOptions ?? [])].sort(compareBaseOptions)
+    const { t, language } = useInterfaceTranslation()
+    const options = [...(item.variantOptions ?? [])].sort((left, right) => compareBaseOptions(left, right, language))
     const titleId = useId()
 
     return (
@@ -57,7 +58,7 @@ export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSel
                         <select className="field mt-1.5 w-full" value={selectedOption?.id ?? ''} onChange={(event) => onSelect(event.target.value)}>
                             <option value="" disabled>{t("variants.selectBase")}</option>
                             {options.map((option) => (
-                                <option key={option.id} value={option.id}>{option.baseName} · {formatSourceLabel(option.baseSource)}</option>
+                                <option key={option.id} value={option.id}>{baseOptionName(option, language)} · {formatSourceLabel(option.baseSource)}</option>
                             ))}
                         </select>
                     </label>

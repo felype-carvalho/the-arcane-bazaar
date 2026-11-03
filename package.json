@@ -10,6 +10,8 @@
         "preview": "vite preview",
         "test": "vitest run",
         "test:watch": "vitest",
+        "translations:report": "node scripts/catalog-translation-report.mjs",
+        "translations:check": "node scripts/catalog-translation-report.mjs --check",
         "browser:snapshot": "node --experimental-strip-types scripts/browser-snapshot.mts",
         "predeploy": "npm run build",
         "deploy": "gh-pages -d dist"

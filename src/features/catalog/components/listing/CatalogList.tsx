@@ -1,4 +1,5 @@
 import { useInterfaceTranslation } from '@/app/i18n'
+import { formatCatalogItemName, itemName } from '../../model/item-translations'
 import { Search } from 'lucide-react'
 import { ItemCategories } from '../item/ItemCategories'
 import type { Item, SortDirection, SortKey } from '../../types'
@@ -15,13 +16,10 @@ interface CatalogListProps {
     onSelect: (item: Item) => void
 }
 
-export function formatCatalogItemName(name: string): string {
-    const match = name.match(/^(\+[1-3])\s+(.+)$/)
-    return match ? `${match[2]}, ${match[1]}` : name
-}
+export { formatCatalogItemName } from '../../model/item-translations'
 
 export function CatalogList({ items, selectedId, sortKey, direction, onSort, onSelect }: CatalogListProps) {
-    const { t } = useInterfaceTranslation()
+    const { t, language } = useInterfaceTranslation()
     const showRarity = items.some((item) => item.type === 'Magic')
     const SortHeader = ({ label, column, className = '' }: { label: string, column: SortKey, className?: string }) => (
         <th className={className} scope="col">
@@ -66,7 +64,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                             >
                                 <td>
                                     <span className="flex flex-wrap items-center gap-2">
-                                        <span className="font-display text-[13px] font-semibold text-cream">{formatCatalogItemName(item.name)}</span>
+                                        <span className="font-display text-[13px] font-semibold text-cream">{formatCatalogItemName(itemName(item, language))}</span>
                                         <SourceChip source={item.source} />
                                     </span>
                                 </td>
@@ -86,7 +84,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                         <span className="text-2xl" aria-hidden="true">{item.icon}</span>
                         <span className="min-w-0 flex-1">
                             <span className="flex min-w-0 items-center gap-1.5">
-                                <span className="min-w-0 truncate font-display text-xs font-semibold text-cream">{formatCatalogItemName(item.name)}</span>
+                                <span className="min-w-0 truncate font-display text-xs font-semibold text-cream">{formatCatalogItemName(itemName(item, language))}</span>
                                 <SourceChip source={item.source} />
                             </span>
                             <span className="mt-1 block text-[10px] text-muted">
