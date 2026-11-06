@@ -1,3 +1,4 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { MEASUREMENT_CATEGORIES } from '@/features/measurements/model/preferences'
 import type { MeasurementSystem } from '@/features/measurements/types'
 import { useInterfaceTranslation } from '@/app/i18n'
@@ -253,15 +254,15 @@ export function SettingsModal({ onClose }: SettingsModalProps) {
                                         }}>
                                             <label className="sr-only" htmlFor={`edit-profile-${profile.id}`}>{t("settings.editProfileName")}</label>
                                             <input id={`edit-profile-${profile.id}`} className="min-w-0 flex-1 rounded border border-border bg-panel px-3 py-2 text-xs text-cream" value={editingName} onChange={(event) => setEditingName(event.target.value)} />
-                                            <button className="primary-button size-9 !min-h-0 !p-0" type="submit" aria-label={t("settings.saveProfileName")} title={t("settings.saveProfileName")} disabled={isSaving}><Save size={16} aria-hidden="true" /></button>
+                                            <Tooltip content={t("settings.saveProfileName")}><button className="primary-button size-9 !min-h-0 !p-0" type="submit" aria-label={t("settings.saveProfileName")} disabled={isSaving}><Save size={16} aria-hidden="true" /></button></Tooltip>
                                             <button className="secondary-button shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" type="button" onClick={() => setEditingId(null)}>{t("common.cancel")}</button>
                                         </form>
                                     ) : (
                                         <div className="flex min-h-9 flex-wrap items-center gap-2">
                                             <button type="button" aria-current={activeProfileId === profile.id ? 'true' : undefined} className="min-w-0 flex-1 text-left text-sm text-cream hover:text-gold-bright" disabled={!isReady || isSaving || activeProfileId === profile.id} onClick={() => void runProfileAction(() => selectProfile(profile.id))}>{profile.id === 'default' ? t("settings.defaultProfile") : profile.name}{activeProfileId === profile.id ? t("settings.activeSuffix") : ''}</button>
                                             {profile.id !== 'default' && <>
-                                                <button type="button" className="secondary-button size-9 !min-h-0 !border-orange-600 !bg-orange-900 !p-0 !text-orange-50 shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" aria-label={t("common.renameNamed", { name: profile.name })} title={t("common.renameNamed", { name: profile.name })} disabled={isSaving} onClick={() => { setEditingId(profile.id); setEditingName(profile.name); setDeletingId(null) }}><Pencil size={16} aria-hidden="true" /></button>
-                                                <button type="button" className="secondary-button size-9 !min-h-0 !border-red-600 !bg-red-900 !p-0 !text-red-50 shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" aria-label={t("common.deleteNamed", { name: profile.name })} title={t("common.deleteNamed", { name: profile.name })} disabled={isSaving} onClick={() => { setDeletingId(profile.id); setEditingId(null) }}><Trash2 size={16} aria-hidden="true" /></button>
+                                                <Tooltip content={t("common.renameNamed", { name: profile.name })}><button type="button" className="secondary-button size-9 !min-h-0 !border-orange-600 !bg-orange-900 !p-0 !text-orange-50 shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" aria-label={t("common.renameNamed", { name: profile.name })} disabled={isSaving} onClick={() => { setEditingId(profile.id); setEditingName(profile.name); setDeletingId(null) }}><Pencil size={16} aria-hidden="true" /></button></Tooltip>
+                                                <Tooltip content={t("common.deleteNamed", { name: profile.name })}><button type="button" className="secondary-button size-9 !min-h-0 !border-red-600 !bg-red-900 !p-0 !text-red-50 shadow-[0_5px_16px_rgba(80,8,25,0.25)] hover:!brightness-[1.14]" aria-label={t("common.deleteNamed", { name: profile.name })} disabled={isSaving} onClick={() => { setDeletingId(profile.id); setEditingId(null) }}><Trash2 size={16} aria-hidden="true" /></button></Tooltip>
                                             </>}
                                         </div>
                                     )}

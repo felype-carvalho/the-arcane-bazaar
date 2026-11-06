@@ -31,7 +31,7 @@ export function formatMeasurementNumber(value: number, language: string): string
     return new Intl.NumberFormat(language, { maximumFractionDigits: digits }).format(value)
 }
 
-export function formatMeasurement(measurement: Measurement, system: MeasurementSystem, language: string): string {
+export function formatMeasurement(measurement: Measurement, system: MeasurementSystem, language: string, options: { includeSquares?: boolean } = {}): string {
     const definition = units[measurement.unit]
     const values = measurement.values.map((value) => value * (system === 'metric' ? definition.factor : 1))
     const milliliters = system === 'metric' && definition.category === 'liquids' && Math.max(...values) < 1
@@ -40,6 +40,6 @@ export function formatMeasurement(measurement: Measurement, system: MeasurementS
         unit = ({ foot: 'pé', mile: 'milha', fluidOunce: 'onça fluida', pint: 'pinta', quart: 'quarto', gallon: 'galão' } as Partial<Record<MeasurementUnit, string>>)[measurement.unit] ?? unit
     }
     const display = values.map((value) => formatMeasurementNumber(value * (milliliters ? 1000 : 1), language)).join(measurement.separator)
-    const squares = measurement.unit === 'foot' ? ` (${measurement.values.map((value) => formatMeasurementNumber(value / 5, language)).join(measurement.separator)})` : ''
+    const squares = measurement.unit === 'foot' && options.includeSquares !== false ? ` (${measurement.values.map((value) => formatMeasurementNumber(value / 5, language)).join(measurement.separator)})` : ''
     return `${display} ${unit}${measurement.perMinute ? '/min' : ''}${squares}`
 }

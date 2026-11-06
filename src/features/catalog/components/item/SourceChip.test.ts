@@ -1,5 +1,5 @@
 import { createElement } from 'react'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
 import { formatSourceLabel, formatSourceTitle, getSourceChipColors, SourceChip } from './SourceChip'
@@ -50,7 +50,10 @@ describe('SourceChip', () => {
   it('keeps static chips non-interactive', () => {
     render(createElement(SourceChip, { source: 'TCE' }))
 
-    expect(screen.getByTitle("Source: Tasha's Cauldron of Everything").tagName).toBe('SPAN')
+    const chip = screen.getByText('TCE')
+    expect(chip.tagName).toBe('SPAN')
+    fireEvent.mouseEnter(chip)
+    expect(screen.getByRole('tooltip')).toHaveTextContent("Source: Tasha's Cauldron of Everything")
   })
 
   it('exposes a selectable chip as a pressed button', async () => {

@@ -1,5 +1,6 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
-import { groupOptionName } from '../../model/item-translations'
+import { groupOptionName, groupOptionNameTooltip } from '../../model/item-translations'
 import { useId } from 'react'
 import type { Item, ItemGroupOption } from '../../types'
 
@@ -23,10 +24,10 @@ export function GroupOptionSelector({ item, selectedOption, onSelect }: GroupOpt
             {options.length ? (
                 <label className="mt-4 block min-w-0">
                     <span className="field-label">{label(title)}</span>
-                    <select className="field mt-1.5 w-full min-w-0" value={selectedOption?.id ?? ''} onChange={(event) => onSelect(event.target.value)}>
+                    <Tooltip content={selectedOption && groupOptionNameTooltip(selectedOption)}><select className="field mt-1.5 w-full min-w-0" value={selectedOption?.id ?? ''} onChange={(event) => onSelect(event.target.value)}>
                         <option value="" disabled>{t("variants.selectVersion")}</option>
                         {options.map((option) => <option key={option.id} value={option.id}>{groupOptionName(option, language)} — {label(option.resolvedItem.rarity)}{option.rarityOrigin === 'inferred' ? t("variants.inferredSuffix") : ''}</option>)}
-                    </select>
+                    </select></Tooltip>
                 </label>
             ) : <p className="mt-3 text-[11px] text-red-300">{t("variants.noVersions")}</p>}
             {selectedOption?.rarityOrigin === 'inferred' && <p className="mt-3 text-[11px] text-muted">{t("variants.inferredRarityHint")}</p>}

@@ -1,5 +1,6 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
-import { baseOptionName } from '../../model/item-translations'
+import { baseOptionName, baseOptionNameTooltip } from '../../model/item-translations'
 import { useState, type Dispatch, type SetStateAction } from 'react'
 import { ChevronDown, Plus, SlidersHorizontal, Trash2 } from 'lucide-react'
 import { CurrencyDisplay } from './CurrencyDisplay'
@@ -61,7 +62,7 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
             {selectedOption && (
                 <div className="selected-base-price-card mb-4">
                     <div className="mb-3 flex min-w-0 items-center justify-between gap-3">
-                        <span className="truncate font-display text-xs text-cream">{baseOptionName(selectedOption, language)}</span>
+                        <Tooltip content={baseOptionNameTooltip(selectedOption)}><span className="truncate font-display text-xs text-cream">{baseOptionName(selectedOption, language)}</span></Tooltip>
                         <SourceChip source={selectedOption.baseSource} />
                     </div>
                     <dl className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1.5 text-[11px]">

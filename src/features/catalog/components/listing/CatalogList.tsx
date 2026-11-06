@@ -1,5 +1,6 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
-import { formatCatalogItemName, itemName } from '../../model/item-translations'
+import { formatCatalogItemName, itemName, itemNameTooltip } from '../../model/item-translations'
 import { Search } from 'lucide-react'
 import { ItemCategories } from '../item/ItemCategories'
 import type { Item, SortDirection, SortKey } from '../../types'
@@ -64,7 +65,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                             >
                                 <td>
                                     <span className="flex flex-wrap items-center gap-2">
-                                        <span className="font-display text-[13px] font-semibold text-cream">{formatCatalogItemName(itemName(item, language))}</span>
+                                        <Tooltip content={itemNameTooltip(item)}><span className="font-display text-[13px] font-semibold text-cream">{formatCatalogItemName(itemName(item, language))}</span></Tooltip>
                                         <SourceChip source={item.source} />
                                     </span>
                                 </td>
@@ -84,7 +85,7 @@ export function CatalogList({ items, selectedId, sortKey, direction, onSort, onS
                         <span className="text-2xl" aria-hidden="true">{item.icon}</span>
                         <span className="min-w-0 flex-1">
                             <span className="flex min-w-0 items-center gap-1.5">
-                                <span className="min-w-0 truncate font-display text-xs font-semibold text-cream">{formatCatalogItemName(itemName(item, language))}</span>
+                                <Tooltip content={itemNameTooltip(item)}><span className="min-w-0 truncate font-display text-xs font-semibold text-cream">{formatCatalogItemName(itemName(item, language))}</span></Tooltip>
                                 <SourceChip source={item.source} />
                             </span>
                             <span className="mt-1 block text-[10px] text-muted">

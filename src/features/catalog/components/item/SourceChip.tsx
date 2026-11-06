@@ -1,3 +1,4 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import type { CSSProperties } from 'react'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { getSourceName, normalizeSource } from '../../model/sources'
@@ -66,20 +67,19 @@ export function SourceChip(props: SourceChipProps) {
 
     if (typeof props.onSelectedChange === 'function') {
         return (
-            <button
+            <Tooltip content={title}><button
                 type="button"
                 className="source-chip selectable"
                 style={style}
-                title={title}
                 aria-label={title}
                 aria-pressed={props.selected}
                 disabled={props.disabled}
                 onClick={() => props.onSelectedChange(!props.selected)}
             >
                 {content}
-            </button>
+            </button></Tooltip>
         )
     }
 
-    return <span className="source-chip" style={style} title={title}>{content}</span>
+    return <Tooltip content={title}><span className="source-chip" style={style} tabIndex={0}>{content}</span></Tooltip>
 }

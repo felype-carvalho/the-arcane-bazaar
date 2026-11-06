@@ -1,9 +1,10 @@
 import { useInterfaceTranslation } from '@/app/i18n'
+import { Tooltip } from '@/components/ui/Tooltip'
 import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { BookOpen, X } from 'lucide-react'
 import type { Item, ItemGroupOption, PricingModifiers, VariantBaseOption } from '../../types'
 import { resolveItemSelection } from '../../model/items/resolve-item-selection'
-import { itemName } from '../../model/item-translations'
+import { itemName, itemNameTooltip } from '../../model/item-translations'
 import { GroupOptionSelector } from './GroupOptionSelector'
 import { BaseItemSelector } from './BaseItemSelector'
 import { itemTypeLabel, RarityBadge } from './ItemBadges'
@@ -36,7 +37,7 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
                     <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                             <div className="flex min-w-0 flex-wrap items-center gap-2">
-                                <h2 className="font-display text-base leading-6 text-gold-bright">{itemName(sheetItem, language)}</h2>
+                                <Tooltip content={itemNameTooltip(sheetItem)}><h2 className="font-display text-base leading-6 text-gold-bright">{itemName(sheetItem, language)}</h2></Tooltip>
                                 <SourceChip source={sheetItem.source} />
                             </div>
                             {onClose && <button className="icon-button shrink-0" onClick={onClose} aria-label={t("item.closeDetails")}><X size={18} /></button>}
@@ -50,7 +51,7 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
                 {/* <p className="mt-4 font-display text-[11px] leading-6 text-gold-bright/90">{item.description}</p> */}
             </div>
 
-            {sheetItem.id !== item.id && <p className="px-5 pt-3 text-xs text-muted">{itemName(item, language)}</p>}
+            {sheetItem.id !== item.id && <p className="px-5 pt-3 text-xs text-muted"><Tooltip content={itemNameTooltip(item)}><span>{itemName(item, language)}</span></Tooltip></p>}
             {item.groupOptions && <GroupOptionSelector item={item} selectedOption={selectedGroupOption} onSelect={onGroupOptionSelect} />}
             {groupResolvedItem.variantOptions && <BaseItemSelector item={groupResolvedItem} selectedOption={selectedVariantOption} onSelect={onVariantOptionSelect} />}
 

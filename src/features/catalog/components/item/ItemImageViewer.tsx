@@ -1,3 +1,4 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, useState, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
@@ -72,7 +73,7 @@ export function ItemImageViewer({ itemName, images, activeIndex, returnFocusRef,
                 </div>
                 <div className="flex shrink-0 items-center justify-between gap-3 pt-2 text-xs text-silver">
                     <span>{activeIndex + 1} / {images.length}</span>
-                    {image.credit && <span className="min-w-0 truncate" title={image.credit}>{t("images.credit")} {image.credit}</span>}
+                    {image.credit && <Tooltip content={image.credit}><span className="min-w-0 truncate">{t("images.credit")} {image.credit}</span></Tooltip>}
                 </div>
             </div>
         </div>,

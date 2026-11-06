@@ -1,3 +1,4 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { changeLanguage, useInterfaceTranslation, type Language } from '@/app/i18n'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Check, ChevronLeft, Info, Languages, Settings, Shield, Swords } from 'lucide-react'
@@ -89,17 +90,16 @@ export function Toolbar() {
                 <div className="flex shrink-0 items-center gap-2 text-muted">
                     <span className="hidden items-center gap-2 font-display text-[10px] uppercase tracking-[0.15em] lg:flex"><Swords size={17} /> D&amp;D 5.5e</span>
                     <div ref={menuContainerRef} className="relative">
-                        <button
+                        <Tooltip content={t("toolbar.menu")}><button
                             ref={menuButtonRef}
                             className="icon-button"
                             onClick={() => { setMenuOpen((open) => !open); setLanguageMenuOpen(false) }}
                             aria-label={t("toolbar.openMenu")}
                             aria-haspopup="menu"
                             aria-expanded={menuOpen}
-                            title={t("toolbar.menu")}
                         >
                             <Shield size={17} className="text-gold-bright" />
-                        </button>
+                        </button></Tooltip>
                         {menuOpen && (
                             <div role="menu" aria-label={t("toolbar.menu")} className="absolute right-0 top-full z-50 mt-2 w-44 rounded border border-gold/40 bg-panel-strong py-1 shadow-2xl">
                                 <button role="menuitem" className="flex w-full items-center gap-3 px-3 py-2 text-left text-xs text-cream hover:bg-white/5 hover:text-gold-bright" onClick={() => openSelectedModal('settings')}>

@@ -1,5 +1,4 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { formatMeasurement, formatMeasurementNumber, measurementCategory } from '../model/conversion'
 import { useMeasurements } from '../model/MeasurementProvider'
@@ -8,78 +7,16 @@ import type { Measurement } from '../types'
 export function MeasurementValue({ measurement }: { measurement: Measurement }) {
     const { language, t } = useInterfaceTranslation()
     const preferences = useMeasurements()
-    const [open, setOpen] = useState(false)
-    const [position, setPosition] = useState({ left: 8, top: 8 })
-    const anchor = useRef<HTMLButtonElement>(null)
-    const tooltip = useRef<HTMLSpanElement>(null)
-    const closeTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
-    const id = useId()
-    const imperial = formatMeasurement(measurement, 'imperial', language)
-    const metric = formatMeasurement(measurement, 'metric', language)
-    const displayed = preferences[measurementCategory(measurement.unit)] === 'metric' ? metric : imperial
-    const show = () => {
-        clearTimeout(closeTimer.current)
-        setOpen(true)
-    }
-    const leave = () => {
-        if (document.activeElement === anchor.current) return
-        closeTimer.current = setTimeout(() => setOpen(false), 150)
-    }
-
-    useEffect(() => () => clearTimeout(closeTimer.current), [])
-
-    useLayoutEffect(() => {
-        if (!open) return
-        const update = () => {
-            const rect = anchor.current?.getBoundingClientRect()
-            const tip = tooltip.current?.getBoundingClientRect()
-            if (!rect || !tip) return
-            setPosition({
-                left: Math.max(8, Math.min(rect.left, window.innerWidth - tip.width - 8)),
-                top: Math.max(8, rect.bottom + tip.height + 8 < window.innerHeight ? rect.bottom + 8 : rect.top - tip.height - 8),
-            })
-        }
-        update()
-        window.addEventListener('resize', update)
-        window.addEventListener('scroll', update, true)
-        return () => {
-            window.removeEventListener('resize', update)
-            window.removeEventListener('scroll', update, true)
-        }
-    }, [open, displayed, imperial, metric])
-
-    useEffect(() => {
-        if (!open) return
-        const dismiss = (event: PointerEvent) => {
-            if (!anchor.current?.contains(event.target as Node) && !tooltip.current?.contains(event.target as Node)) setOpen(false)
-        }
-        const escape = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                event.preventDefault()
-                event.stopImmediatePropagation()
-                setOpen(false)
-            }
-        }
-        document.addEventListener('pointerdown', dismiss, true)
-        document.addEventListener('keydown', escape, true)
-        return () => {
-            document.removeEventListener('pointerdown', dismiss, true)
-            document.removeEventListener('keydown', escape, true)
-        }
-    }, [open])
-
-    return <>
-        <button ref={anchor} type="button" aria-describedby={open ? id : undefined} aria-expanded={open}
-            className="inline cursor-help rounded-sm text-left text-gold-bright underline decoration-gold/70 underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
-            onMouseEnter={show} onMouseLeave={leave}
-            onFocus={show} onBlur={() => setOpen(false)} onClick={show}>
+    const imperial = formatMeasurement(measurement, 'imperial', language, { includeSquares: false })
+    const metric = formatMeasurement(measurement, 'metric', language, { includeSquares: false })
+    const displayed = formatMeasurement(measurement, preferences[measurementCategory(measurement.unit)], language)
+    return <Tooltip openOnClick content={<>
+        <span>{t('measurements.imperial')}: {imperial}</span>
+        <span>{t('measurements.metric')}: {metric}</span>
+        {measurement.unit === 'foot' && <span>{t('measurements.squares')}: ({measurement.values.map((value) => formatMeasurementNumber(value / 5, language)).join(measurement.separator)})</span>}
+    </>}>
+        <button type="button" className="inline cursor-help rounded-sm text-left text-gold-bright underline decoration-gold/70 underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold">
             {displayed}
         </button>
-        {open && createPortal(<span ref={tooltip} id={id} role="tooltip" style={position} onMouseEnter={show} onMouseLeave={leave}
-            className="fixed z-[1000] grid max-w-[calc(100vw-16px)] gap-1 rounded-md border border-gold/60 bg-panel-strong px-3 py-2 text-xs leading-5 text-cream shadow-xl">
-            <span>{t('measurements.imperial')}: {imperial}</span>
-            <span>{t('measurements.metric')}: {metric}</span>
-            {measurement.unit === 'foot' && <span>{t('measurements.squares')}: ({measurement.values.map((value) => formatMeasurementNumber(value / 5, language)).join(measurement.separator)})</span>}
-        </span>, document.body)}
-    </>
+    </Tooltip>
 }

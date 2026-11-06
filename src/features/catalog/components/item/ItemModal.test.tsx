@@ -156,7 +156,9 @@ it('shows estimates, source, attunement and structured equipment information', (
     render(<ItemModal item={{ ...ITEM_FIXTURES[0], hasExplicitPrice: false, sourcePage: 153, attunement: true, attunementRequirement: 'by a wizard', weaponInformation: [{ label: 'Range', value: '150/600 ft.' }, { label: 'Mastery', value: 'Slow' }], characteristics: ['First paragraph', 'Second paragraph', 'First paragraph'] }} onClose={vi.fn()} />)
     for (const text of ['Estimated', 'p. 153', 'by a wizard', '150/600 ft. (30/120)', 'Slow', 'Second paragraph']) expect(screen.getByText(text)).toBeInTheDocument()
     expect(screen.getAllByText('First paragraph')).toHaveLength(1)
-    expect(screen.getByTitle(/Source:/)).toHaveClass('source-chip')
+    const sourceChip = document.querySelector('.source-chip')!
+    fireEvent.mouseEnter(sourceChip)
+    expect(screen.getByRole('tooltip')).toHaveTextContent('Source:')
     expect(screen.queryByText('Armor information')).not.toBeInTheDocument()
 })
 

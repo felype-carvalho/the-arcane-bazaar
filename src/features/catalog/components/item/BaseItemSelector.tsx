@@ -1,5 +1,6 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
-import { baseOptionName } from '../../model/item-translations'
+import { baseOptionName, baseOptionNameTooltip } from '../../model/item-translations'
 import { useId } from 'react'
 import { Layers3 } from 'lucide-react'
 import type { Item, VariantBaseOption } from '../../types'
@@ -55,12 +56,12 @@ export function BaseItemSelector({ item, selectedOption, onSelect }: BaseItemSel
                 <>
                     <label className="mt-4 block">
                         <span className="field-label">{t("variants.compatibleBase")}</span>
-                        <select className="field mt-1.5 w-full" value={selectedOption?.id ?? ''} onChange={(event) => onSelect(event.target.value)}>
+                        <Tooltip content={selectedOption && baseOptionNameTooltip(selectedOption)}><select className="field mt-1.5 w-full" value={selectedOption?.id ?? ''} onChange={(event) => onSelect(event.target.value)}>
                             <option value="" disabled>{t("variants.selectBase")}</option>
                             {options.map((option) => (
                                 <option key={option.id} value={option.id}>{baseOptionName(option, language)} · {formatSourceLabel(option.baseSource)}</option>
                             ))}
-                        </select>
+                        </select></Tooltip>
                     </label>
 
                     {!selectedOption && (

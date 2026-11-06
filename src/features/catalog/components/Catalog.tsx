@@ -1,3 +1,4 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { CircleHelp, Filter, Menu, Sparkles } from 'lucide-react'
@@ -248,7 +249,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
             )}
 
             {modalItem && <ItemModal configurationSummary={configurationName(selection?.selectedGroupOption, selection?.selectedBaseOption, language)} item={modalItem} selectedVariantOption={selectedVariantOption} onClose={() => setModalItem(null)} />}
-            <button className="help-button" aria-label={t("catalog.prototypeHelp")} title={t("catalog.pricingDisclaimer")}><CircleHelp size={18} /></button>
+            <Tooltip content={t("catalog.pricingDisclaimer")}><button className="help-button" aria-label={t("catalog.prototypeHelp")}><CircleHelp size={18} /></button></Tooltip>
         </>
     )
 }

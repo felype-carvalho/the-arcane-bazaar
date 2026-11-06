@@ -140,7 +140,8 @@ describe('interface language', () => {
         render(<><ItemInformationValue field="Personal Travel Cost" value="1,200.5 GP per mile per passenger" /><SourceChip source="PHB" /></>)
         await act(() => changeLanguage('pt-BR'))
         expect(document.body).toHaveTextContent('1.200,5 PO por 1 milha por passageiro')
-        expect(screen.getByTitle("Fonte: Player's Handbook (2014)")).toBeInTheDocument()
+        fireEvent.mouseEnter(screen.getByText("PHB'14"))
+        expect(screen.getByRole('tooltip')).toHaveTextContent("Fonte: Player's Handbook (2014)")
     })
 
     it('preserves filter values while translating their labels', async () => {

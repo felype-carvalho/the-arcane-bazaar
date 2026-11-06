@@ -9,6 +9,22 @@ export function itemName(item: Pick<Item, 'id' | 'name'>, language: string): str
     return language === 'pt-BR' ? catalogTranslations.items[item.id]?.name || item.name : item.name
 }
 
+function nameTooltip(name: (language: string) => string): string {
+    return `English: ${name('en-US')}\nPortuguês: ${name('pt-BR')}`
+}
+
+export function itemNameTooltip(item: Pick<Item, 'id' | 'name'>): string {
+    return nameTooltip((language) => itemName(item, language))
+}
+
+export function baseOptionNameTooltip(option: VariantBaseOption): string {
+    return nameTooltip((language) => baseOptionName(option, language))
+}
+
+export function groupOptionNameTooltip(option: ItemGroupOption): string {
+    return nameTooltip((language) => groupOptionName(option, language))
+}
+
 export function formatCatalogItemName(name: string): string {
     const match = name.match(/^(\+[1-3])\s+(.+)$/)
     return match ? `${match[2]}, ${match[1]}` : name

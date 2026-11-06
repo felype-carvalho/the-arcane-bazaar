@@ -1,5 +1,6 @@
+import { Tooltip } from '@/components/ui/Tooltip'
 import { MeasurementText, MeasurementValue, tableMeasurement, MeasurementTableHeading } from '@/features/measurements'
-import { baseOptionName, itemText, presentItem } from '../../model/item-translations'
+import { baseOptionName, baseOptionNameTooltip, itemNameTooltip, itemText, presentItem } from '../../model/item-translations'
 import { isPreservedCatalogText } from '../../model/translation-coverage'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -170,7 +171,7 @@ export function ItemModal({ item: originalItem, configurationSummary, selectedVa
                 <header className="flex shrink-0 items-center gap-5 border-b border-[#80662c] bg-[linear-gradient(110deg,var(--color-catalog),var(--color-panel))] px-7 py-[22px] max-[900px]:gap-3 max-[900px]:p-4">
                     <span className="item-icon-tile small" aria-hidden="true">{item.icon}</span>
                     <div className="min-w-0 flex-1">
-                        <h2 id="item-modal-title" className="font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2>
+                        <Tooltip content={itemNameTooltip(originalItem)}><h2 id="item-modal-title" className="font-display text-[clamp(11px,1.5vw,19px)] leading-[1.25] [overflow-wrap:anywhere]">{item.name}</h2></Tooltip>
                         {!tradeGoodSubtype && hasText(item.subtype) && <p className="mt-1 text-xs text-silver [overflow-wrap:anywhere]"><MeasurementText text={item.subtype} /></p>}
                     </div>
                     <button className="icon-button shrink-0" onClick={onClose} aria-label={t("item.closeSheet")}><X size={24} /></button>
@@ -203,7 +204,7 @@ export function ItemModal({ item: originalItem, configurationSummary, selectedVa
                             <h3 className={sectionHeadingClass}>{t("filters.source")}</h3><div className="flex items-center gap-3 whitespace-nowrap [&_.source-chip]:text-xs!">
                                 <BookOpen className="shrink-0 text-gold" aria-hidden="true" />
                                 {(sourceName || sourcePage != null) && <span className="flex min-w-0 items-center gap-1 text-[13px] leading-[1.6] italic">
-                                    {sourceName && <span className="min-w-0 overflow-hidden text-ellipsis" title={sourceName}>{sourceName}</span>}
+                                    {sourceName && <Tooltip content={sourceName}><span className="min-w-0 overflow-hidden text-ellipsis">{sourceName}</span></Tooltip>}
                                     {sourceName && sourcePage != null && <span aria-hidden="true">-</span>}
                                     {sourcePage != null && <span className="shrink-0">{t("item.sourcePage")} {sourcePage}</span>}
                                 </span>}
@@ -228,7 +229,7 @@ export function ItemModal({ item: originalItem, configurationSummary, selectedVa
                                 : <DescriptionParagraph key={index} text={translate(block.text)} originalText={block.text} />)}
                         </section>}
                         {configurationSummary && <p className={noteClass}>{t("item.configurationLabel")} {configurationSummary}</p>}
-                        {!configurationSummary && selectedVariantOption && <p className={noteClass}>{t("item.configuredWith")} {baseOptionName(selectedVariantOption, language)} {t("item.configurationSource")} {selectedVariantOption.baseSource}.</p>}
+                        {!configurationSummary && selectedVariantOption && <p className={noteClass}>{t("item.configuredWith")} <Tooltip content={baseOptionNameTooltip(selectedVariantOption)}><span>{baseOptionName(selectedVariantOption, language)}</span></Tooltip> {t("item.configurationSource")} {selectedVariantOption.baseSource}.</p>}
                     </div>
                 </div>
             </div>
