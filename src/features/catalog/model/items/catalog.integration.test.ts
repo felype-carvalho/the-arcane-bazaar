@@ -146,6 +146,44 @@ describe('magic groups in the real corpus', () => {
     let catalog: ReturnType<typeof buildCatalog>
     beforeAll(() => { catalog = buildCatalog({ items: itemsJson, base: itemsBaseJson, variants: magicVariantsJson } as unknown as ItemJsonFiles) })
 
+    it('applies Warcraft copy operations to the correct weapon states and apparatus text', () => {
+        const find = (name: string) => catalog.find((item) => item.name === name && item.source === 'WoW')!
+        const text = (name: string) => find(name).characteristics!.join('\n')
+        const original = text('Ashbringer')
+        const restored = text('Ashbringer (True State)')
+        const corrupted = text('Corrupted Ashbringer')
+        expect(original).toContain('Steal Life (Corrupted State Only):')
+        expect(original).toContain('Wake of Ashes (True State Only):')
+        expect(restored).not.toContain('Steal Life (Corrupted State Only):')
+        expect(restored).toContain('Wake of Ashes (True State Only):')
+        expect(restored).toContain('It is Lawful Good in its True State.')
+        expect(corrupted).toContain('Steal Life (Corrupted State Only):')
+        expect(corrupted).not.toContain('Wake of Ashes (True State Only):')
+        expect(corrupted).toContain('It is Lawful Evil in its Corrupted State.')
+        expect(text("Shalamayne (Shalla'tor)")).not.toContain('Dual Mastery:')
+        expect(text("Shalamayne (Shalla'tor)")).not.toContain('Random Properties:')
+        expect(text('Staff of Light and Shadow (Anathema)')).not.toContain('Benediction:')
+        expect(text('Staff of Light and Shadow (Anathema)')).toContain('Anathema:')
+        expect(text('Staff of Light and Shadow (Benediction)')).not.toContain('Anathema:')
+        expect(text('Staff of Light and Shadow (Benediction)')).toContain('Benediction:')
+        const apparatus = find('Steamwheedle Apparatus')
+        expect(text('Steamwheedle Apparatus')).not.toContain('Apparatus of Kwalish')
+        expect(apparatus.descriptionBlocks).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'table', caption: 'Steamwheedle Apparatus Levers' }),
+        ]))
+    })
+
+    it('retains new consumable memberships and clears mithral armor requirements', () => {
+        expect(catalog.find((item) => item.name === '+1 Ammunition' && item.source === 'XDMG')?.categories).toContain('Consumable')
+        const mithral = catalog.find((item) => item.name === 'Mithral Armor' && item.source === 'XDMG')!
+        const plate = mithral.variantOptions!.find((option) => option.baseName === 'Plate Armor')!.resolvedItem
+        expect(plate.armorInformation?.map((entry) => entry.label)).not.toContain('Strength requirement')
+        expect(plate.armorInformation?.map((entry) => entry.label)).not.toContain('Stealth')
+        expect(plate.characteristics).not.toContain('The wearer has disadvantage on Dexterity (Stealth) checks.')
+        expect(plate.characteristics?.some((text) => text.startsWith('If the wearer has a Strength score lower than'))).toBe(false)
+        expect(catalog.find((item) => item.name === 'Potions of Mana' && item.source === 'WoW')?.groupOptions?.map((option) => option.resolvedItem.rarity)).toEqual(['Common', 'Uncommon', 'Rare'])
+    })
+
     it.each([
         ['Spellwrought Tattoo', 'TCE', ['Common', 'Common', 'Uncommon', 'Uncommon', 'Rare', 'Rare']],
         ['Staff of Skulls', 'AU', ['Common', 'Uncommon', 'Rare', 'Very Rare']],
@@ -200,7 +238,7 @@ it('resolves every raw group reference by name and source, including marked gene
         aliasCounts.set(alias, (aliasCounts.get(alias) ?? 0) + 1)
     }
     const references = itemsJson.itemGroup.flatMap((group) => group.items)
-    expect(references).toHaveLength(669)
+    expect(references).toHaveLength(699)
     const unresolved = itemsJson.itemGroup.flatMap((group) => group.items.filter((uid) => {
         const [name, source] = uid.toLowerCase().split('|')
         if (keys.has(name + '|' + (source ?? group.source.toLowerCase()))) return false

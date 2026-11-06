@@ -19810,5 +19810,314 @@
     },
     "specificvariant--xge--walloping-sling-bullet--base--phb--sling-bullet--variant--xge--walloping-ammunition": {
         "name": "Munição de Impacto (Bala de Funda)"
+    },
+    "item--wow--ashbringer": {
+        "name": "Ashbringer"
+    },
+    "item--wow--ashbringer-true-state": {
+        "name": "Ashbringer (Estado Verdadeiro)"
+    },
+    "item--wow--aviana-s-feather": {
+        "name": "Pena de Aviana"
+    },
+    "item--icc--bauble-of-true-blood": {
+        "name": "Bugiganga de Sangue Verdadeiro"
+    },
+    "item--icc--bloodvenom-blade": {
+        "name": "Lâmina de Sangue Venenoso"
+    },
+    "item--wow--cenarion-war-hippogryph": {
+        "name": "Hipogrifo de Guerra Cenariano"
+    },
+    "item--wow--corrupted-ashbringer": {
+        "name": "Ashbringer Corrompida"
+    },
+    "item--wow--crown-of-the-ogre-king": {
+        "name": "Coroa do Rei Ogro"
+    },
+    "item--wow--defias-leather": {
+        "name": "Armadura de Couro Défias"
+    },
+    "item--wow--dire-wolf": {
+        "name": "Lobo Atroz"
+    },
+    "item--wow--doomhammer": {
+        "name": "Doomhammer"
+    },
+    "item--wow--elekk": {
+        "name": "Elekk"
+    },
+    "item--wow--experimental-goblin-jetpack": {
+        "name": "Mochila a Jato Goblin Experimental"
+    },
+    "item--wow--figurine-of-wondrous-power-jeweled-panther": {
+        "name": "Estatueta de Poder Maravilhoso (Pantera de Joias)"
+    },
+    "item--wow--flask-of-the-titans": {
+        "name": "Frasco dos Titãs"
+    },
+    "item--wow--flying-machine": {
+        "name": "Máquina Voadora"
+    },
+    "item--icc--fragment-of-frozen-bone": {
+        "name": "Fragmento de Osso Congelado"
+    },
+    "item--wow--frostmourne": {
+        "name": "Frostmourne"
+    },
+    "item--wow--fuel": {
+        "name": "Combustível"
+    },
+    "item--wow--giant-goat": {
+        "name": "Bode Gigante"
+    },
+    "item--wow--giant-hyena": {
+        "name": "Hiena Gigante"
+    },
+    "item--wow--giant-seahorse": {
+        "name": "Cavalo-marinho Gigante"
+    },
+    "item--wow--gnomeregan-engineering-device": {
+        "name": "Dispositivo de Engenharia de Gnomeregan"
+    },
+    "item--wow--goblin-jumper-cables": {
+        "name": "Cabos de Reanimação Goblins"
+    },
+    "item--wow--goblin-trike": {
+        "name": "Triciclo Goblin"
+    },
+    "item--wow--gryphon": {
+        "name": "Grifo"
+    },
+    "item--wow--hawkstrider": {
+        "name": "Falcostruz"
+    },
+    "item--wow--hearthstone": {
+        "name": "Pedra de Regresso"
+    },
+    "item--wow--helm-of-domination": {
+        "name": "Elmo da Dominação"
+    },
+    "item--icc--invincible-s-reins": {
+        "name": "Rédeas de Invencível"
+    },
+    "item--wow--judgment-armor": {
+        "name": "Armadura do Julgamento"
+    },
+    "item--wow--kodo": {
+        "name": "Kodo"
+    },
+    "item--wow--life-staff-of-the-web-lair": {
+        "name": "Cajado da Vida do Covil de Teias"
+    },
+    "item--icc--light-s-vengeance": {
+        "name": "Vingança da Luz"
+    },
+    "item--wow--mechano-hog": {
+        "name": "Mecanojavali"
+    },
+    "item--wow--mechanostrider": {
+        "name": "Mecanostruz"
+    },
+    "item--wow--mekgineer-s-chopper": {
+        "name": "Chopper do Mekgineer"
+    },
+    "item--wow--nightsaber": {
+        "name": "Sabre da Noite"
+    },
+    "item--wow--noggenfogger-elixir": {
+        "name": "Elixir de Noggenfogger"
+    },
+    "item--wow--pandarian-dragon-turtle": {
+        "name": "Tartaruga-dragão Pandariana"
+    },
+    "item--wow--philosopher-s-stone": {
+        "name": "Pedra Filosofal"
+    },
+    "item--wow--raptor": {
+        "name": "Raptor"
+    },
+    "item--icc--ring-of-maddening-whispers": {
+        "name": "Anel dos Sussurros Enlouquecedores"
+    },
+    "item--wow--rod-of-the-sleepwalker": {
+        "name": "Cetro do Sonâmbulo"
+    },
+    "item--icc--shadow-s-edge": {
+        "name": "Limiar das Sombras"
+    },
+    "item--wow--shadowfang": {
+        "name": "Presa Sombria"
+    },
+    "item--icc--shadowmourne": {
+        "name": "Lamento Sombrio"
+    },
+    "item--wow--shalamayne": {
+        "name": "Shalamayne"
+    },
+    "item--wow--shalamayne-ellemayne": {
+        "name": "Shalamayne (Ellemayne)"
+    },
+    "item--wow--shalamayne-shalla-tor": {
+        "name": "Shalamayne (Shalla'tor)"
+    },
+    "item--wow--staff-of-light-and-shadow": {
+        "name": "Cajado de Luz e Sombra"
+    },
+    "item--wow--staff-of-light-and-shadow-anathema": {
+        "name": "Cajado de Luz e Sombra (Anátema)"
+    },
+    "item--wow--staff-of-light-and-shadow-benediction": {
+        "name": "Cajado de Luz e Sombra (Bênção)"
+    },
+    "item--wow--steamwheedle-apparatus": {
+        "name": "Dispositivo de Steamwheedle"
+    },
+    "item--wow--sulfuras-hand-of-ragnaros": {
+        "name": "Sulfuras, Mão de Ragnaros"
+    },
+    "item--icc--sundial-of-eternal-dusk": {
+        "name": "Relógio de Sol do Crepúsculo Eterno"
+    },
+    "item--wow--talbuk": {
+        "name": "Talbuk"
+    },
+    "item--icc--thrice-fanged-signet": {
+        "name": "Sinete de Três Presas"
+    },
+    "item--icc--tiny-abomination-in-a-jar": {
+        "name": "Abominação Minúscula em um Jarro"
+    },
+    "item--wow--twin-blades-of-azzinoth": {
+        "name": "Lâminas Gêmeas de Azzinoth"
+    },
+    "item--wow--vithrak-gaze-of-the-deadman": {
+        "name": "Vithrak, Olhar do Morto"
+    },
+    "item--wow--warhorse": {
+        "name": "Cavalo de Guerra"
+    },
+    "item--wow--warhorse-skeleton": {
+        "name": "Esqueleto de Cavalo de Guerra"
+    },
+    "item--wow--wind-rider": {
+        "name": "Montaria do Vento"
+    },
+    "item--wow--zhevra": {
+        "name": "Zhevra"
+    },
+    "itemgroup--icc--ashen-bands-of-courage": {
+        "name": "Anéis Cinéreos da Coragem"
+    },
+    "item--icc--ashen-band-of-courage": {
+        "name": "Anel Cinéreo da Coragem"
+    },
+    "item--icc--ashen-band-of-greater-courage": {
+        "name": "Anel Cinéreo da Coragem Maior"
+    },
+    "item--icc--ashen-band-of-unmatched-courage": {
+        "name": "Anel Cinéreo da Coragem Inigualável"
+    },
+    "item--icc--ashen-band-of-endless-courage": {
+        "name": "Anel Cinéreo da Coragem Infinita"
+    },
+    "itemgroup--icc--ashen-bands-of-destruction": {
+        "name": "Anéis Cinéreos da Destruição"
+    },
+    "item--icc--ashen-band-of-destruction": {
+        "name": "Anel Cinéreo da Destruição"
+    },
+    "item--icc--ashen-band-of-greater-destruction": {
+        "name": "Anel Cinéreo da Destruição Maior"
+    },
+    "item--icc--ashen-band-of-unmatched-destruction": {
+        "name": "Anel Cinéreo da Destruição Inigualável"
+    },
+    "item--icc--ashen-band-of-endless-destruction": {
+        "name": "Anel Cinéreo da Destruição Infinita"
+    },
+    "itemgroup--icc--ashen-bands-of-might": {
+        "name": "Anéis Cinéreos do Poder"
+    },
+    "item--icc--ashen-band-of-might": {
+        "name": "Anel Cinéreo do Poder"
+    },
+    "item--icc--ashen-band-of-greater-might": {
+        "name": "Anel Cinéreo do Poder Maior"
+    },
+    "item--icc--ashen-band-of-unmatched-might": {
+        "name": "Anel Cinéreo do Poder Inigualável"
+    },
+    "item--icc--ashen-band-of-endless-might": {
+        "name": "Anel Cinéreo do Poder Infinito"
+    },
+    "itemgroup--icc--ashen-bands-of-vengeance": {
+        "name": "Anéis Cinéreos da Vingança"
+    },
+    "item--icc--ashen-band-of-vengeance": {
+        "name": "Anel Cinéreo da Vingança"
+    },
+    "item--icc--ashen-band-of-greater-vengeance": {
+        "name": "Anel Cinéreo da Vingança Maior"
+    },
+    "item--icc--ashen-band-of-unmatched-vengeance": {
+        "name": "Anel Cinéreo da Vingança Inigualável"
+    },
+    "item--icc--ashen-band-of-endless-vengeance": {
+        "name": "Anel Cinéreo da Vingança Infinita"
+    },
+    "itemgroup--icc--ashen-bands-of-wisdom": {
+        "name": "Anéis Cinéreos da Sabedoria"
+    },
+    "item--icc--ashen-band-of-wisdom": {
+        "name": "Anel Cinéreo da Sabedoria"
+    },
+    "item--icc--ashen-band-of-greater-wisdom": {
+        "name": "Anel Cinéreo da Sabedoria Maior"
+    },
+    "item--icc--ashen-band-of-unmatched-wisdom": {
+        "name": "Anel Cinéreo da Sabedoria Inigualável"
+    },
+    "item--icc--ashen-band-of-endless-wisdom": {
+        "name": "Anel Cinéreo da Sabedoria Infinita"
+    },
+    "itemgroup--wow--potions-of-mana": {
+        "name": "Poções de Mana"
+    },
+    "item--wow--potion-of-mana": {
+        "name": "Poção de Mana"
+    },
+    "item--wow--potion-of-mana-greater": {
+        "name": "Poção de Mana (Maior)"
+    },
+    "item--wow--potion-of-mana-superior": {
+        "name": "Poção de Mana (Superior)"
+    },
+    "itemgroup--wow--potions-of-rejuvenation": {
+        "name": "Poções de Rejuvenescimento"
+    },
+    "item--wow--potion-of-rejuvenation": {
+        "name": "Poção de Rejuvenescimento"
+    },
+    "item--wow--potion-of-rejuvenation-greater": {
+        "name": "Poção de Rejuvenescimento (Maior)"
+    },
+    "item--wow--potion-of-rejuvenation-superior": {
+        "name": "Poção de Rejuvenescimento (Superior)"
+    },
+    "itemgroup--wow--troll-s-blood-elixirs": {
+        "name": "Elixires de Sangue de Troll"
+    },
+    "item--wow--troll-s-blood-elixir": {
+        "name": "Elixir de Sangue de Troll"
+    },
+    "item--wow--troll-s-blood-elixir-greater": {
+        "name": "Elixir de Sangue de Troll (Maior)"
+    },
+    "item--wow--troll-s-blood-elixir-superior": {
+        "name": "Elixir de Sangue de Troll (Superior)"
+    },
+    "item--wow--troll-s-blood-elixir-supreme": {
+        "name": "Elixir de Sangue de Troll (Supremo)"
     }
 }

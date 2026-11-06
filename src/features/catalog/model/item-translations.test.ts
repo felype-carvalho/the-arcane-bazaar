@@ -36,6 +36,21 @@ beforeAll(() => {
 })
 
 describe('catalog presentation translations', () => {
+    it('presents Warcraft names, copied text and grouped options in Portuguese', () => {
+        const feather = allItems.get('item--wow--aviana-s-feather')!
+        expect(itemName(feather, 'pt-BR')).toBe('Pena de Aviana')
+        expect(filterAndSortItems([feather], { ...EMPTY_FILTERS, search: 'pena de aviana' }, 'name', 'asc', 'pt-BR')).toEqual([feather])
+        const ring = allItems.get('item--icc--ashen-band-of-unmatched-destruction')!
+        expect(itemName(ring, 'pt-BR')).toBe('Anel Cinéreo da Destruição Inigualável')
+        const apparatus = presentItem(allItems.get('item--wow--steamwheedle-apparatus')!, 'pt-BR')
+        expect(apparatus.descriptionBlocks).toEqual(expect.arrayContaining([
+            expect.objectContaining({ type: 'table', caption: 'Alavancas do Dispositivo de Steamwheedle' }),
+        ]))
+        const mana = allItems.get('itemgroup--wow--potions-of-mana')!
+        expect(mana.groupOptions?.map((option) => groupOptionName(option, 'pt-BR'))).toEqual(['Poção de Mana', 'Poção de Mana (Maior)', 'Poção de Mana (Superior)'])
+        expect(itemText(allItems.get('item--wow--helm-of-domination')!, 'Toll the Dead', 'pt-BR')).toBe('Badalar Fúnebre')
+    })
+
     it('uses stable IDs and field fallback without sharing names across sources', () => {
         const item = allItems.get('item--phb--backpack')!
         expect(itemName(item, 'pt-BR')).toBe('Mochila')
