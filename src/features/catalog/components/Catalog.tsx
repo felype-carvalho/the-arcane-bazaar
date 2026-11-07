@@ -207,7 +207,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     return (
         <>
             <div className="flex min-h-0 flex-1">
-                <div className="hidden w-[242px] shrink-0 border-r border-border lg:block">
+                <div className="hidden w-[270px] shrink-0 border-r border-border lg:block">
                     <FilterPanel filters={filters} availableRarities={availableFilterOptions.rarities} availableCategories={availableFilterOptions.categories} availableSources={availableFilterOptions.sources} onSearch={(search) => { markPreferenceChange(); setFilters((current) => ({ ...current, search })) }} onTypeSelect={selectType} onToggle={toggleFilter} onCategorySelect={selectCategory} onSourceSelect={selectSource} onClear={() => { markPreferenceChange(); setFilters(INITIAL_FILTERS) }} />
                 </div>
 

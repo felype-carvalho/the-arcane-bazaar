@@ -1,7 +1,7 @@
 import { Tooltip } from '@/components/ui/Tooltip'
 import { changeLanguage, useInterfaceTranslation, type Language } from '@/app/i18n'
 import { useEffect, useId, useRef, useState } from 'react'
-import { Check, ChevronLeft, Info, Languages, Settings, Shield, Swords } from 'lucide-react'
+import { Check, ChevronLeft, Info, Languages, Menu, Settings, Swords } from 'lucide-react'
 import { SettingsModal } from '@/features/settings'
 import { SystemInfoModal } from './SystemInfoModal'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -98,7 +98,7 @@ export function Toolbar() {
                             aria-haspopup="menu"
                             aria-expanded={menuOpen}
                         >
-                            <Shield size={17} className="text-gold-bright" />
+                            <Menu size={17} className="text-gold-bright" />
                         </button></Tooltip>
                         {menuOpen && (
                             <div role="menu" aria-label={t("toolbar.menu")} className="absolute right-0 top-full z-50 mt-2 w-44 rounded border border-gold/40 bg-panel-strong py-1 shadow-2xl">

@@ -8,6 +8,8 @@ The application presents a catalog of D&D items and calculates buying and sellin
 
 ## Interface language
 
+The toolbar's system-menu button uses the Lucide Menu icon.
+
 The Wizard Pouch logo appears to the left of the project title in the toolbar and is used as the browser-tab icon. Both locations resolve the logo relative to the application deployment base path. The toolbar uses `wizard-pouch.svg`; the browser-tab icon provides `wizard-pouch.svg` and `wizard-pouch.png`. Both assets use the artwork from `.docs/logo-concepts/`, enlarged proportionally within the original 512 × 512 canvas to reduce transparent margins. The PNG is rendered from the SVG to keep both versions consistent.
 
 - The toolbar's system menu shows Language directly below Settings and above About, with the same menu-row styling. Hovering Language opens an English / Português submenu to the left; clicking or tapping also opens it. The current language is marked. Keyboard users can open it with Enter, Space, Left, or Down, navigate choices with Up/Down or Home/End, and return to Language with Right or Escape. Selecting a language closes both menus. The initial language is `pt-BR` for a Portuguese browser and `en-US` otherwise. A valid choice stored in localStorage under `the-arcane-bazaar:language` takes precedence; absent, invalid, or inaccessible storage falls back to the browser language.
@@ -73,6 +75,7 @@ References: [groups](src/features/catalog/model/items/build-item-groups.ts), [va
 
 ## Sources and settings
 
+- Source chips throughout the application use 10 px text by default; existing larger sizes, such as the 12 px chips in the full item sheet, are preserved.
 - The Settings dialog uses a left-side navigation on wide screens, with `Local Data`, `Profile`, `Measurement Units`, and `Content Sources` as separate views. The first view, `Local Data`, opens by default and shows Import / Export Data above Reset local data; on narrow screens the navigation appears above the active view. The dialog keeps its maximum available height when switching between views, regardless of their content length.
 - Profiles keep source selection, catalog search, filters, sorting, and items per page independently. The `Default` profile always exists and cannot be renamed or deleted. New profiles start with default preferences and become active immediately. Deleting the active profile selects `Default`.
 - Available sources are organized by edition (`5e` or `5.5e`) and group. All are selected by default. Source code comparisons ignore letter case and surrounding whitespace.
