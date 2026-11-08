@@ -6,8 +6,9 @@ import type { /* Availability, */ Category, ItemFilters, ItemType, Rarity } from
 import { TypeMark } from '../item/ItemBadges'
 import { formatSourceLabel, SourceChip } from '../item/SourceChip'
 import { normalizeSource } from '../../model/sources'
+import { RarityFilterSection } from './RarityFilterSection'
 
-const TYPES: ItemType[] = ['Common', 'Magic']
+const TYPES: ItemType[] = ['Magic', 'Common']
 // const AVAILABILITIES: Availability[] = ['Available', 'Limited', 'Unavailable']
 
 export type FilterGroup = Exclude<keyof ItemFilters, 'search'>
@@ -48,7 +49,7 @@ export function FilterPanel({ filters, availableRarities, availableCategories, a
                 </label>
 
                 <FilterGroupSection title={t("filters.type")} group="types" options={TYPES} selected={filters.types} onToggle={onToggle} onSingleSelect={(value) => onTypeSelect(value as ItemType)} selectionMode="single" showTypeMarks defaultOpen />
-                {filters.types[0] === 'Magic' && <FilterGroupSection title={t("filters.rarity")} group="rarities" options={availableRarities} selected={filters.rarities} onToggle={onToggle} colorize />}
+                {filters.types[0] === 'Magic' && <RarityFilterSection options={availableRarities} selected={filters.rarities} onToggle={(rarity) => onToggle('rarities', rarity)} />}
                 <CategoryFilterSection options={availableCategories} selected={filters.categories} onSelect={onCategorySelect} itemType={filters.types[0] ?? 'Common'} />
                 <SourceFilterSection options={availableSources} selected={filters.sources} onSelect={onSourceSelect} />
                 {/* <FilterGroupSection title="Availability" group="availabilities" options={AVAILABILITIES} selected={filters.availabilities} onToggle={onToggle} /> */}
@@ -130,19 +131,22 @@ function FilterGroupSection({ title, group, options, selected, onToggle, onSingl
                     {title}<ChevronDown size={12} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                 </button>
             </legend>
-            <div id={optionsId} className="mt-3 space-y-2.5" hidden={!isOpen}>
+            <div id={optionsId} className={selectionMode === 'single' ? 'mt-3 grid grid-cols-2 overflow-hidden rounded-lg border border-gold/40 bg-panel-strong' : 'mt-3 space-y-2.5'} hidden={!isOpen}>
                 {options.map((option) => (
-                    <label key={option} className="group flex cursor-pointer items-center gap-2.5 text-xs text-cream transition-colors hover:text-gold-bright">
+                    <label key={option} className={selectionMode === 'single'
+                        ? `relative flex min-h-9 cursor-pointer items-center justify-center px-2 transition-[background-color,filter] first:border-r first:border-border motion-reduce:transition-none ${selected.includes(option) ? option === 'Magic' ? 'bg-violet-400/15 shadow-[inset_0_0_0_1px_var(--color-violet-400)]' : 'bg-slate-400/15 shadow-[inset_0_0_0_1px_var(--color-slate-400)]' : 'brightness-50 shadow-[inset_0_2px_6px_#00000080] hover:bg-white/5 hover:brightness-75 focus-within:brightness-100'}`
+                        : 'group flex cursor-pointer items-center gap-2.5 text-xs text-cream transition-colors hover:text-gold-bright'}>
                         <input
                             type={selectionMode === 'single' ? 'radio' : 'checkbox'}
                             name={selectionMode === 'single' ? `filter-${group}-${instanceId}` : undefined}
                             checked={selected.includes(option)}
                             onChange={() => selectionMode === 'single' ? onSingleSelect?.(option) : onToggle(group, option)}
-                            className={selectionMode === 'single' ? 'accent-gold' : 'arcane-checkbox'}
+                            className={selectionMode === 'single' ? 'peer sr-only' : 'arcane-checkbox'}
                         />
                         {showTypeMarks
                             ? <TypeMark type={option as ItemType} />
                             : <span className={colorize ? `filter-${option.toLowerCase().replaceAll(' ', '-')}` : ''}>{label(option)}</span>}
+                        {selectionMode === 'single' && <span aria-hidden="true" className="pointer-events-none absolute inset-0 peer-focus-visible:outline-2 peer-focus-visible:-outline-offset-2 peer-focus-visible:outline-gold-bright" />}
                     </label>
                 ))}
             </div>

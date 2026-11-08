@@ -228,7 +228,7 @@ describe('Arcane Bazaar app', () => {
         expect(within(categoryFilter).getAllByRole('button')
             .filter((button) => button.hasAttribute('aria-pressed'))
             .map((button) => button.querySelector('span:last-child')?.textContent ?? button.textContent)).toEqual(['All', 'Bag/Container', 'Gem', 'Weapon'])
-        expect(within(rarityFilter).getAllByRole('checkbox').map((checkbox) => checkbox.parentElement?.textContent)).toEqual(['Uncommon', 'Rare', 'Legendary'])
+        expect(within(rarityFilter).getAllByRole('checkbox').map((checkbox) => checkbox.closest('label')?.textContent)).toEqual(['Uncommon', 'Rare', 'Legendary'])
     })
 
     it('applies the All category rules and supports multiple category chips', async () => {
@@ -300,9 +300,9 @@ describe('Arcane Bazaar app', () => {
 
         const itemTypeFilter = screen.getByRole('group', { name: 'Item type' })
         const radios = within(itemTypeFilter).getAllByRole('radio')
-        const [common, magic] = radios
+        const [magic, common] = radios
 
-        expect(radios.map((radio) => radio.parentElement?.textContent)).toEqual(['📦Mundane', '✨Magic'])
+        expect(radios.map((radio) => radio.parentElement?.textContent)).toEqual(['✨Magic', '📦Mundane'])
         expect(within(itemTypeFilter).getByText('Mundane')).toHaveClass('text-[11px]', 'font-medium', 'uppercase')
 
         expect(magic).not.toBeChecked()
