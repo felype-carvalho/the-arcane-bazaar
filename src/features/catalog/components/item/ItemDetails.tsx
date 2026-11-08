@@ -1,6 +1,6 @@
 import { useInterfaceTranslation } from '@/app/i18n'
 import { Tooltip } from '@/components/ui/Tooltip'
-import { type Dispatch, type ReactNode, type SetStateAction } from 'react'
+import { useEffect, useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react'
 import { BookOpen, X } from 'lucide-react'
 import type { Item, ItemGroupOption, PricingModifiers, VariantBaseOption } from '../../types'
 import { resolveItemSelection } from '../../model/items/resolve-item-selection'
@@ -10,6 +10,37 @@ import { BaseItemSelector } from './BaseItemSelector'
 import { itemTypeLabel, RarityBadge } from './ItemBadges'
 import { PriceCalculator } from '../pricing/PriceCalculator'
 import { SourceChip } from './SourceChip'
+import { getItemImages, type ItemImage } from '../../model/items/item-images'
+import { ItemImageViewer } from './ItemImageViewer'
+
+function ItemDetailsThumbnail({ item }: { item: Item }) {
+    const { t, language } = useInterfaceTranslation()
+    const thumbnailRef = useRef<HTMLButtonElement>(null)
+    const [images, setImages] = useState<ItemImage[]>([])
+    const [imageFailed, setImageFailed] = useState(false)
+    const [activeImageIndex, setActiveImageIndex] = useState<number | null>(null)
+    const name = itemName(item, language)
+    const hasItemImage = images.length > 0 && !imageFailed
+
+    useEffect(() => {
+        let active = true
+        getItemImages(item.name, item.source, item.imageFallback)
+            .then((result) => { if (active) setImages(result) })
+            .catch(() => { if (active) setImages([]) })
+        return () => { active = false }
+    }, [item.name, item.source, item.imageFallback])
+
+    return <>
+        <div className="item-icon-tile overflow-hidden">
+            {hasItemImage
+                ? <button ref={thumbnailRef} type="button" className="grid size-full min-h-0 min-w-0 cursor-zoom-in place-items-center rounded-[7px] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-gold-bright" aria-label={t("images.open", { name })} onClick={() => setActiveImageIndex(0)}>
+                    <img className="block size-full min-h-0 min-w-0 object-contain p-1" src={images[0].src} alt={name} onError={() => setImageFailed(true)} />
+                </button>
+                : <span aria-hidden="true">{item.icon}</span>}
+        </div>
+        {activeImageIndex !== null && hasItemImage && <ItemImageViewer itemName={name} images={images} activeIndex={activeImageIndex} returnFocusRef={thumbnailRef} onIndexChange={setActiveImageIndex} onClose={() => setActiveImageIndex(null)} />}
+    </>
+}
 
 interface ItemDetailsProps {
     item: Item
@@ -31,9 +62,9 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
 
     return (
         <aside className="arcane-scrollbar h-full overflow-y-auto bg-panel" aria-label={t("item.detailsLabel", { name: itemName(sheetItem, language) })}>
-            <div className="border-b border-border px-5 py-5">
+            <div className="px-5 py-5">
                 <div className="flex items-start gap-4">
-                    <div className="item-icon-tile" aria-hidden="true">{sheetItem.icon}</div>
+                    <ItemDetailsThumbnail key={JSON.stringify([sheetItem.id, sheetItem.name, sheetItem.source, sheetItem.imageFallback])} item={sheetItem} />
                     <div className="min-w-0 flex-1">
                         <div className="flex items-start justify-between gap-2">
                             <div className="flex min-w-0 flex-wrap items-center gap-2">
@@ -55,8 +86,8 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
             {item.groupOptions && <GroupOptionSelector item={item} selectedOption={selectedGroupOption} onSelect={onGroupOptionSelect} />}
             {groupResolvedItem.variantOptions && <BaseItemSelector item={groupResolvedItem} selectedOption={selectedVariantOption} onSelect={onVariantOptionSelect} />}
 
-            <div className="border-b border-border px-5 py-4">
-                <button className="primary-button mt-4 w-full" disabled={Boolean(pendingSelection)} onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> {t("item.openSheet")}</button>
+            <div className="px-5 pb-4">
+                <button className="primary-button w-full" disabled={Boolean(pendingSelection)} onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> {t("item.openSheet")}</button>
             </div>
 
             <PriceCalculator item={item} effectiveItem={sheetItem} pendingSelection={pendingSelection} selectedOption={selectedVariantOption} modifiers={modifiers} setModifiers={setModifiers} manualPrice={manualPrice} setManualPrice={setManualPrice} />
