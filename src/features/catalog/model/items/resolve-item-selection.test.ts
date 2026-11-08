@@ -14,16 +14,22 @@ describe('selection resolution', () => {
     it('resolves ordinary items and direct variants', () => {
         expect(resolveItemSelection(concrete).effectiveItem).toBe(concrete)
         expect(resolveItemSelection(concrete).pendingSelection).toBeUndefined()
-        expect(resolveItemSelection(variant).pendingSelection).toBe('baseItem')
+        expect(resolveItemSelection(variant)).toMatchObject({ selectedBaseOption: { id: 'base' }, effectiveItem: concrete, pendingSelection: undefined })
         expect(resolveItemSelection(variant, '', 'base')).toMatchObject({ effectiveItem: concrete, pendingSelection: undefined })
     })
 
     it('requires a member before accepting a base and uses only the selected family', () => {
         expect(resolveItemSelection(group, '', 'base')).toMatchObject({ pendingSelection: 'groupOption', selectedBaseOption: undefined })
         expect(resolveItemSelection(group, 'member', 'base')).toMatchObject({ effectiveItem: concrete, selectedBaseOption: undefined, pendingSelection: undefined })
-        expect(resolveItemSelection(group, 'variant')).toMatchObject({ effectiveItem: variant, pendingSelection: 'baseItem' })
+        expect(resolveItemSelection(group, 'variant')).toMatchObject({ effectiveItem: concrete, selectedBaseOption: { id: 'base' }, pendingSelection: undefined })
         expect(resolveItemSelection(group, 'variant', 'base')).toMatchObject({ effectiveItem: concrete, pendingSelection: undefined })
         expect(resolveItemSelection(group, 'missing', 'base').pendingSelection).toBe('groupOption')
-        expect(resolveItemSelection(group, 'variant', 'missing').pendingSelection).toBe('baseItem')
+        expect(resolveItemSelection(group, 'variant', 'missing').selectedBaseOption?.id).toBe('base')
+    })
+
+    it('requires a choice when multiple bases are available and cannot select from an empty list', () => {
+        const options = variant.variantOptions!
+        expect(resolveItemSelection({ ...variant, variantOptions: [...options, { ...options[0], id: 'other' }] }).pendingSelection).toBe('baseItem')
+        expect(resolveItemSelection({ ...variant, variantOptions: [] }).pendingSelection).toBe('baseItem')
     })
 })

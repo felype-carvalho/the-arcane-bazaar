@@ -178,6 +178,45 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
             }
         })
         return { ...repriced, basePriceGp: null, variantPriceGp, variantOptions }
+    }, (group, entity, rarity, members) => {
+        const initial = withEffectiveRarity(group, rarity)
+        const member = members.find((option) => option.resolvedItem.variantOptions?.length)?.resolvedItem
+        if (!member?.variantOptions) return initial
+        const compatibleBaseIds = new Set(member.variantOptions.map((option) => option.baseItemId))
+        const compatibleBases = files.base.baseitem.filter((base) => {
+            const identity = `${base.name.toLocaleLowerCase('en-US')}|${base.source.toLocaleLowerCase('en-US')}`
+            const baseItem = baseItemsByIdentity.get(identity)
+            return baseItem && compatibleBaseIds.has(baseItem.id)
+        })
+        // Build the initial form from the group's own rules, without later-stage bonuses or entries.
+        const { type: _type, items: _items, property, ...initialFields } = entity
+        const [family] = buildVariantFamilies(compatibleBases, [{
+            name: group.name,
+            source: group.source,
+            edition: member.edition === 'classic' ? 'classic' : undefined,
+            inherits: { ...initialFields, rarity: rarity.toLowerCase(), propertyAdd: property },
+        }])
+        const variantOptions = family.combinations.map((combination): VariantBaseOption => {
+            const identity = `${combination.base.name.toLocaleLowerCase('en-US')}|${combination.base.source.toLocaleLowerCase('en-US')}`
+            const baseItem = baseItemsByIdentity.get(identity)!
+            const effectivePriceGp = resolveVariantPriceGp(family.variant, combination.base, baseItem.basePriceGp, initial.basePriceGp)
+            const resolvedItem = normalizeItem({
+                ...combination.specific,
+                name: group.name,
+                property: [...new Set(combination.specific.property ?? [])],
+            }, indexes)
+            return {
+                id: `${group.id}::initial::${baseItem.id}`,
+                baseItemId: baseItem.id,
+                baseName: baseItem.name,
+                baseSource: baseItem.source,
+                basePriceGp: baseItem.basePriceGp,
+                variantPriceGp: initial.basePriceGp,
+                effectivePriceGp,
+                resolvedItem: { ...resolvedItem, id: group.id, basePriceGp: effectivePriceGp },
+            }
+        })
+        return { ...initial, basePriceGp: null, variantPriceGp: initial.basePriceGp, variantOptions }
     })
     const items = [...candidates.filter((item) => !grouped.incorporatedIds.has(item.id)), ...grouped.items]
 

@@ -208,6 +208,20 @@ describe('magic groups in the real corpus', () => {
         expect(staff.groupOptions?.[3].resolvedItem.properties.length).toBeGreaterThan(staff.groupOptions![1].resolvedItem.properties.length)
     })
 
+    it('provides compatible bases and initial-stage rules for Wave-Swept Weapon', () => {
+        const group = catalog.find((item) => item.name === 'Wave-Swept Weapon' && item.source === 'AU')!
+        const initial = group.groupOptions![0].resolvedItem
+        const firstStage = group.groupOptions![1].resolvedItem
+        expect(initial.variantOptions?.map((option) => option.baseItemId)).toEqual(firstStage.variantOptions?.map((option) => option.baseItemId))
+        expect(initial.variantOptions).toHaveLength(5)
+        const longsword = initial.variantOptions!.find((option) => option.baseName === 'Longsword')!
+        expect(longsword.resolvedItem).toMatchObject({ rarity: 'Common', source: 'AU', basePriceGp: 115 })
+        expect(longsword.resolvedItem.weaponInformation).toContainEqual({ label: 'Base Damage', value: '1d8 slashing' })
+        expect(longsword.resolvedItem.description).not.toContain('+1 bonus')
+        expect(longsword.resolvedItem.description).not.toContain('Barnacled')
+        expect(longsword.resolvedItem.description).toContain('oceanic motifs')
+    })
+
     it('retains the four dragon variants and their combined prices', () => {
         const group = catalog.find((item) => item.name === "Dragon's Wrath Weapon" && item.source === 'FTD')!
         expect(group.groupOptions?.map((option) => option.label)).toEqual(["Slumbering Dragon's Wrath Weapon", "Stirring Dragon's Wrath Weapon", "Wakened Dragon's Wrath Weapon", "Ascendant Dragon's Wrath Weapon"])

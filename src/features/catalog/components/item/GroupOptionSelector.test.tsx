@@ -11,7 +11,7 @@ const item: Item = { ...ITEM_FIXTURES[0], groupOptions: [
 ] }
 
 describe('GroupOptionSelector', () => {
-    it('provides an accessible selector with editorial order, rarity and explicit inference text', async () => {
+    it('provides an accessible selector with rarity and explicit inference text', async () => {
         const user = userEvent.setup()
         const onSelect = vi.fn()
         render(<GroupOptionSelector item={item} onSelect={onSelect} />)
@@ -23,6 +23,20 @@ describe('GroupOptionSelector', () => {
         expect(select).toHaveFocus()
         await user.selectOptions(select, 'stage')
         expect(onSelect).toHaveBeenCalledWith('stage')
+    })
+
+    it('orders versions by ascending rarity, then name, keeping the initial stage first', () => {
+        const options = item.groupOptions!
+        const member = options[1]
+        render(<GroupOptionSelector item={{ ...item, groupOptions: [
+            { ...member, id: 'legendary', label: 'Alpha', resolvedItem: { ...member.resolvedItem, rarity: 'Legendary' } },
+            { ...member, id: 'rare-z', label: 'Zulu', resolvedItem: { ...member.resolvedItem, rarity: 'Rare' } },
+            { ...member, id: 'rare-a', label: 'Alpha', resolvedItem: { ...member.resolvedItem, rarity: 'Rare' } },
+            member,
+            options[0],
+        ] }} onSelect={vi.fn()} />)
+        expect(screen.getAllByRole('option').map((option) => (option as HTMLOptionElement).value))
+            .toEqual(['', 'initial', 'stage', 'rare-a', 'rare-z', 'legendary'])
     })
 
     it('explains missing versions instead of rendering an unusable selector', () => {

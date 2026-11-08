@@ -5,6 +5,11 @@ import { MeasurementProvider } from '@/features/measurements'
 import { ItemModal } from './ItemModal'
 import { ITEM_FIXTURES } from '../../test/fixtures/items'
 import { getItemImages } from '../../model/items/item-images'
+import { buildCatalog } from '../../model/items/build-catalog'
+import type { ItemJsonFiles } from '../../model/items/raw-types'
+import items from '../../data/items.json'
+import base from '../../data/items-base.json'
+import variants from '../../data/magicvariants.json'
 
 vi.mock('../../model/items/item-images', () => ({
     getItemImages: vi.fn().mockResolvedValue([{ src: 'https://example.com/jug.png' }]),
@@ -16,6 +21,25 @@ afterEach(async () => {
 })
 
 describe('translated item sheet', () => {
+    it('shows unique translated properties for the initial Blade of the Guardian', async () => {
+        const catalog = buildCatalog({ items, base, variants } as unknown as ItemJsonFiles)
+        const group = catalog.find((item) => item.name === 'Blade of the Guardian' && item.source === 'AU')!
+        const initial = group.groupOptions!.find((option) => option.kind === 'inferredInitialStage')!
+        const item = initial.resolvedItem.variantOptions![0].resolvedItem
+        expect(item.rarity).toBe(initial.resolvedItem.rarity)
+        expect(item.weaponInformation).toContainEqual({ label: 'Properties', value: 'Heavy, Two-Handed, Evolving Item' })
+
+        await act(() => i18n.changeLanguage('pt-BR'))
+        render(<ItemModal item={item} onClose={vi.fn()} />)
+        const dialog = screen.getByRole('dialog', { name: 'Lâmina do Guardião' })
+        expect(within(dialog).getByText('Pesada, Duas Mãos, Item Evolutivo')).toBeInTheDocument()
+        expect(within(dialog).queryByText(/Heavy, Two-Handed/)).not.toBeInTheDocument()
+
+        await act(() => i18n.changeLanguage('en-US'))
+        expect(within(dialog).getByText('Heavy, Two-Handed, Evolving Item')).toBeInTheDocument()
+        expect(within(dialog).queryByText('Heavy, Two-Handed, Heavy, Two-Handed, Evolving Item')).not.toBeInTheDocument()
+    })
+
     it.each([
         ['metric', '120 ml'],
         ['imperial', '4 onças fluidas'],

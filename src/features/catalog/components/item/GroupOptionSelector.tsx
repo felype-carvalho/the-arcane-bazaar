@@ -1,6 +1,7 @@
 import { Tooltip } from '@/components/ui/Tooltip'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { groupOptionName, groupOptionNameTooltip } from '../../model/item-translations'
+import { RARITIES } from '../../model/filtering'
 import { useId } from 'react'
 import type { Item, ItemGroupOption } from '../../types'
 
@@ -15,7 +16,9 @@ export function GroupOptionSelector({ item, selectedOption, onSelect }: GroupOpt
     const titleId = useId()
     const options = [...(item.groupOptions ?? [])].sort((left, right) => {
         if (left.kind !== right.kind) return left.kind === 'inferredInitialStage' ? -1 : 1
-        return new Intl.Collator(language).compare(groupOptionName(left, language), groupOptionName(right, language)) || left.id.localeCompare(right.id)
+        return RARITIES.indexOf(left.resolvedItem.rarity) - RARITIES.indexOf(right.resolvedItem.rarity)
+            || new Intl.Collator(language).compare(groupOptionName(left, language), groupOptionName(right, language))
+            || left.id.localeCompare(right.id)
     })
     const title = options.some((option) => option.kind === 'inferredInitialStage') ? 'Evolution stage' : 'Item version'
     return (

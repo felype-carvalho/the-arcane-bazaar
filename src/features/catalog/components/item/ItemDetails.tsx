@@ -86,7 +86,7 @@ export function ItemDetails({ item, selectedGroupOption, onGroupOptionSelect, se
             {item.groupOptions && <GroupOptionSelector item={item} selectedOption={selectedGroupOption} onSelect={onGroupOptionSelect} />}
             {groupResolvedItem.variantOptions && <BaseItemSelector item={groupResolvedItem} selectedOption={selectedVariantOption} onSelect={onVariantOptionSelect} />}
 
-            <div className="px-5 pb-4">
+            <div className="px-5 pb-4 mt-4">
                 <button className="primary-button w-full" disabled={Boolean(pendingSelection)} onClick={() => onOpenModal(sheetItem)}><BookOpen size={15} /> {t("item.openSheet")}</button>
             </div>
 

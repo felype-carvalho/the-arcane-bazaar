@@ -5,6 +5,7 @@ export function resolveItemSelection(item: Item, groupOptionId = '', baseOptionI
     const groupResolvedItem = selectedGroupOption?.resolvedItem ?? item
     const selectedBaseOption = (!item.groupOptions || selectedGroupOption)
         ? groupResolvedItem.variantOptions?.find((option) => option.id === baseOptionId)
+            ?? (groupResolvedItem.variantOptions?.length === 1 ? groupResolvedItem.variantOptions[0] : undefined)
         : undefined
     const pendingSelection: 'groupOption' | 'baseItem' | undefined = item.groupOptions && !selectedGroupOption
         ? 'groupOption'

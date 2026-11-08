@@ -102,8 +102,10 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     const selection = selected ? resolveItemSelection(selected, selectedGroupOptionId, selectedBaseOptionId) : undefined
     const selectedVariantOption = selection?.selectedBaseOption
     const selectGroupOption = (optionId: string) => {
+        const nextItem = selected?.groupOptions?.find((option) => option.id === optionId)?.resolvedItem
+        const nextBaseOption = selectedVariantOption && nextItem?.variantOptions?.find((option) => option.baseItemId === selectedVariantOption.baseItemId)
         setSelectedGroupOptionId(optionId)
-        setSelectedBaseOptionId('')
+        setSelectedBaseOptionId(nextBaseOption?.id ?? '')
         setManualPrice('')
     }
 
@@ -120,6 +122,8 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
             setSelectedBaseOptionId('')
         } else if (selectedBaseOptionId && !selection?.selectedBaseOption) {
             setSelectedBaseOptionId('')
+        } else if (selection?.selectedBaseOption && selectedBaseOptionId !== selection.selectedBaseOption.id) {
+            setSelectedBaseOptionId(selection.selectedBaseOption.id)
         }
         setModalItem(null)
     }, [selected, selectedGroupOptionId, selectedBaseOptionId, selection?.selectedGroupOption, selection?.selectedBaseOption])

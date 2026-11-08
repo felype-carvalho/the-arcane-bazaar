@@ -16,6 +16,7 @@ export function buildItemGroups(
     candidates: readonly Item[],
     properties: ReadonlyMap<string, RawItemProperty>,
     applyRarity: (item: Item, rarity: Rarity) => Item = withEffectiveRarity,
+    buildInitialStage: (group: Item, entity: RawItemEntity, rarity: Rarity, members: readonly ItemGroupOption[]) => Item = (group, _entity, rarity) => withEffectiveRarity(group, rarity),
 ) {
     const index = new Map(candidates.map((item) => [entityKey(item.name, item.source), item]))
     const incorporatedIds = new Set<string>()
@@ -68,7 +69,8 @@ export function buildItemGroups(
             const rarityOrigin = explicit ? 'explicit' : rarity === 'Unknown' ? 'unknown' : 'inferred'
             if (rarityOrigin === 'inferred') inferredEvolutionStages++
             if (rarityOrigin === 'unknown') unknownEvolutionStages.push(`${group.name}|${group.source}`)
-            groupOptions.unshift({ id: `${group.id}::initial`, label: 'Initial', source: group.source, kind: 'inferredInitialStage', rarityOrigin, resolvedItem: withEffectiveRarity(group, rarity) })
+            const resolvedItem = buildInitialStage(group, entity, rarity, groupOptions)
+            groupOptions.unshift({ id: `${group.id}::initial`, label: 'Initial', source: group.source, kind: 'inferredInitialStage', rarityOrigin, resolvedItem })
         }
         if (!groupOptions.length) groupsWithoutOptions.push(`${group.name}|${group.source}`)
         const categories = orderCategories(group.category, [...group.categories, ...groupOptions.flatMap((option) => option.resolvedItem.categories)])

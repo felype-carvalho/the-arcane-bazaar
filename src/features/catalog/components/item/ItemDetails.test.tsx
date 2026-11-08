@@ -89,7 +89,7 @@ describe('ItemDetails artwork', () => {
         }
         const group: ItemGroupOption = {
             id: 'version', label: 'Version', source: 'DMG', kind: 'member', rarityOrigin: 'explicit',
-            resolvedItem: { ...ITEM_FIXTURES[1], variantOptions: [base] },
+            resolvedItem: { ...ITEM_FIXTURES[1], variantOptions: [base, { ...base, id: 'other-base', baseItemId: 'other-sword' }] },
         }
         const groupedItem = { ...item, groupOptions: [group] }
         const { rerender } = render(details({ item: groupedItem }))

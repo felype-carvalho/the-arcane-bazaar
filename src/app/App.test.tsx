@@ -100,7 +100,7 @@ vi.mock('@/features/catalog/api/catalog', async () => {
     const { default: base } = await import('@/features/catalog/data/items-base.json')
     const { default: variants } = await import('@/features/catalog/data/magicvariants.json')
     const groups = buildCatalog({ items, base, variants } as unknown as import('@/features/catalog/model/items/raw-types').ItemJsonFiles)
-        .filter((item) => item.origin === 'itemGroup' && ['Spellwrought Tattoo', 'Staff of Skulls', "Dragon's Wrath Weapon"].includes(item.name))
+        .filter((item) => item.origin === 'itemGroup' && ['Spellwrought Tattoo', 'Staff of Skulls', "Dragon's Wrath Weapon", 'Wave-Swept Weapon'].includes(item.name))
     const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, modernItem, genericVariant, ...filler]
     return { getItems: () => Promise.resolve([...catalog, ...(testCatalogState.includeGroups ? groups : [])].map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
@@ -500,7 +500,7 @@ describe('Arcane Bazaar app', () => {
         expect(within(adjustmentTotal).getByText('-15%')).toHaveClass('negative')
     })
 
-    it('lists a generic variant once and prices it from the selected base item', async () => {
+    it('automatically selects the only base item and uses it for pricing and the item sheet', async () => {
         const user = userEvent.setup()
         renderApp()
         await user.click(screen.getByRole('radio', { name: 'Magic' }))
@@ -511,12 +511,12 @@ describe('Arcane Bazaar app', () => {
         expect(within(row).getByText('◇ Variable')).toBeInTheDocument()
         await user.click(row)
 
-        const details = (await screen.findAllByLabelText('Test Weapon Variant details'))[0]
-        expect(within(details).getByText("Select a base item to calculate this variant's price.")).toBeInTheDocument()
-        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
+        const details = (await screen.findAllByLabelText('Enchanted Longsword details'))[0]
+        expect(within(details).queryByText("Select a base item to calculate this variant's price.")).not.toBeInTheDocument()
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeEnabled()
 
         const baseSelector = within(details).getByRole('combobox', { name: 'Compatible base item' })
-        await user.selectOptions(baseSelector, 'enchanted-longsword')
+        expect(baseSelector).toHaveValue('enchanted-longsword')
 
         const baseCard = within(details).getByRole('region', { name: 'Base item' })
         expect(baseCard.querySelector('dl')).toBeNull()
@@ -650,7 +650,27 @@ describe('group configuration flows', () => {
         expect(within(staff).getByText('Very Rare')).toBeInTheDocument()
     })
 
-    it('requires a dragon stage and base and resets the base when switching stages', async () => {
+    it('selects a base in the initial evolution stage and preserves it across stages', async () => {
+        const user = userEvent.setup()
+        render(<Catalog />)
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        await user.type(screen.getAllByLabelText('Search items')[0], 'Wave-Swept Weapon')
+        const details = (await screen.findAllByLabelText('Wave-Swept Weapon details'))[0]
+        const stages = within(details).getByRole('combobox', { name: 'Evolution stage' })
+        await user.selectOptions(stages, (within(stages).getByRole('option', { name: /Initial.*Common.*inferred/ }) as HTMLOptionElement).value)
+        const bases = within(details).getByRole('combobox', { name: 'Compatible base item' })
+        await user.selectOptions(bases, (within(bases).getByRole('option', { name: /^Longsword/ }) as HTMLOptionElement).value)
+        expect(within(details).getByLabelText('Base price')).toHaveTextContent('115 GP')
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeEnabled()
+        await user.selectOptions(stages, (within(stages).getByRole('option', { name: /Barnacled/ }) as HTMLOptionElement).value)
+        expect(bases).toHaveDisplayValue(/Longsword/)
+        expect(within(details).getByLabelText('Base price')).toHaveTextContent('415 GP')
+        await user.selectOptions(stages, (within(stages).getByRole('option', { name: /Initial/ }) as HTMLOptionElement).value)
+        expect(bases).toHaveDisplayValue(/Longsword/)
+        expect(within(details).getByLabelText('Base price')).toHaveTextContent('115 GP')
+    })
+
+    it('requires a dragon stage and base and preserves a compatible base when switching stages', async () => {
         const user = userEvent.setup()
         renderApp()
         await screen.findByRole('table')
@@ -670,9 +690,11 @@ describe('group configuration flows', () => {
         expect(within(screen.getByRole('dialog')).getByText(/Configuration:/)).toHaveTextContent('Longsword')
         await user.keyboard('{Escape}')
         await user.selectOptions(selector, (within(selector).getByRole('option', { name: /Stirring/ }) as HTMLOptionElement).value)
-        expect(baseSelector).toHaveValue('')
-        expect(within(details).queryByLabelText('Base price')).not.toBeInTheDocument()
+        expect(baseSelector).toHaveDisplayValue(/Longsword/)
+        expect(baseSelector).not.toHaveValue(longsword.value)
+        expect(within(details).getByRole('heading', { name: "Stirring Dragon's Wrath Longsword" })).toBeInTheDocument()
+        expect(within(details).getByLabelText('Base price')).toBeInTheDocument()
         expect(within(details).getByText('Rare')).toBeInTheDocument()
-        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
+        expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeEnabled()
     })
 })
