@@ -117,6 +117,7 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
     ]
     const indexes = buildIndexes(files, resolvedTypes)
     const primaryItems = primaryProcessed.map((entity) => normalizeItem(entity, indexes))
+    const primaryEntitiesById = new Map(primaryItems.map((item, index) => [item.id, primaryProcessed[index]]))
     const baseItemsByIdentity = new Map(primaryItems
         .filter((item) => item.origin === 'baseitem')
         .map((item) => [`${item.name.toLocaleLowerCase('en-US')}|${item.source.toLocaleLowerCase('en-US')}`, item]))
@@ -218,7 +219,32 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
         })
         return { ...initial, basePriceGp: null, variantPriceGp: initial.basePriceGp, variantOptions }
     })
-    const items = [...candidates.filter((item) => !grouped.incorporatedIds.has(item.id)), ...grouped.items]
+    const attachFixedWeaponBase = (item: Item): Item => {
+        if (item.groupOptions) return { ...item, groupOptions: item.groupOptions.map((option) => ({ ...option, resolvedItem: attachFixedWeaponBase(option.resolvedItem) })) }
+        if (item.variantOptions || !item.categories.includes('Weapon')) return item
+        const entity = primaryEntitiesById.get(item.id)
+        if (typeof entity?.baseItem !== 'string') return item
+        const reference = parseUid(entity.baseItem)
+        const identity = `${reference.name.toLocaleLowerCase('en-US')}|${(reference.source ?? 'PHB').toLocaleLowerCase('en-US')}`
+        const baseItem = baseItemsByIdentity.get(identity)
+        if (!baseItem) return item
+        const variantPriceGp = item.basePriceGp != null && baseItem.basePriceGp != null
+            ? item.basePriceGp - baseItem.basePriceGp : null
+        return {
+            ...item,
+            variantOptions: [{
+                id: `${item.id}::base::${baseItem.id}`,
+                baseItemId: baseItem.id,
+                baseName: baseItem.name,
+                baseSource: baseItem.source,
+                basePriceGp: baseItem.basePriceGp,
+                variantPriceGp,
+                effectivePriceGp: item.basePriceGp,
+                resolvedItem: item,
+            }],
+        }
+    }
+    const items = [...candidates.filter((item) => !grouped.incorporatedIds.has(item.id)), ...grouped.items].map(attachFixedWeaponBase)
 
     const ids = new Map<string, string>()
     for (const item of items) {

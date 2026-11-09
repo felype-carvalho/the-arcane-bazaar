@@ -2,6 +2,7 @@ export type {
     Availability,
     Category,
     Item,
+    ItemImageReference,
     ItemGroupOption,
     GroupOptionKind,
     RarityOrigin,

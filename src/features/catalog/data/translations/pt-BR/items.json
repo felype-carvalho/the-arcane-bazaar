@@ -906,7 +906,7 @@
         "name": "Armadura de Resistência a Radiante"
     },
     "genericvariant--dmg--armor-of-thunder-resistance--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante"
+        "name": "Armadura de Resistência a Trovejante"
     },
     "genericvariant--dmg--arrow-of-slaying--variant--dmg--arrow-of-slaying": {
         "name": "Flecha Matadora (*)"
@@ -1155,7 +1155,7 @@
         "name": "Arma de Adamantina"
     },
     "genericvariant--xdmg--ammunition-of-slaying--variant--xdmg--ammunition-of-slaying": {
-        "name": "Munição Exterminadora"
+        "name": "Munição Matadora"
     },
     "genericvariant--xdmg--armor-of-acid-resistance--variant--xdmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido"
@@ -1188,7 +1188,7 @@
         "name": "Armadura de Resistência a Radiante"
     },
     "genericvariant--xdmg--armor-of-thunder-resistance--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante"
+        "name": "Armadura de Resistência a Trovejante"
     },
     "genericvariant--xdmg--armor-of-vulnerability-bludgeoning--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente)"
@@ -1230,58 +1230,58 @@
         "name": "Arco de Energia"
     },
     "genericvariant--xdmg--enspelled-armor-cantrip--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque)"
+        "name": "Armadura Encantada (Truque)"
     },
     "genericvariant--xdmg--enspelled-armor-level-1--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1)"
+        "name": "Armadura Encantada (Nível 1)"
     },
     "genericvariant--xdmg--enspelled-armor-level-2--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2)"
+        "name": "Armadura Encantada (Nível 2)"
     },
     "genericvariant--xdmg--enspelled-armor-level-3--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3)"
+        "name": "Armadura Encantada (Nível 3)"
     },
     "genericvariant--xdmg--enspelled-armor-level-4--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4)"
+        "name": "Armadura Encantada (Nível 4)"
     },
     "genericvariant--xdmg--enspelled-armor-level-5--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5)"
+        "name": "Armadura Encantada (Nível 5)"
     },
     "genericvariant--xdmg--enspelled-armor-level-6--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6)"
+        "name": "Armadura Encantada (Nível 6)"
     },
     "genericvariant--xdmg--enspelled-armor-level-7--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7)"
+        "name": "Armadura Encantada (Nível 7)"
     },
     "genericvariant--xdmg--enspelled-armor-level-8--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8)"
+        "name": "Armadura Encantada (Nível 8)"
     },
     "genericvariant--xdmg--enspelled-weapon-cantrip--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque)"
+        "name": "Arma Encantada (Truque)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-1--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1)"
+        "name": "Arma Encantada (Nível 1)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-2--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2)"
+        "name": "Arma Encantada (Nível 2)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-3--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3)"
+        "name": "Arma Encantada (Nível 3)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-4--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4)"
+        "name": "Arma Encantada (Nível 4)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-5--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5)"
+        "name": "Arma Encantada (Nível 5)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-6--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6)"
+        "name": "Arma Encantada (Nível 6)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-7--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7)"
+        "name": "Arma Encantada (Nível 7)"
     },
     "genericvariant--xdmg--enspelled-weapon-level-8--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8)"
+        "name": "Arma Encantada (Nível 8)"
     },
     "genericvariant--xdmg--executioner-s-axe--variant--xdmg--executioner-s-axe": {
         "name": "Machado do Carrasco"
@@ -3075,7 +3075,7 @@
         "name": "Manual de Saúde Corporal"
     },
     "item--dmg--manual-of-clay-golems": {
-        "name": "Manual dos Golems de Argila"
+        "name": "Manual de Golens de Argila"
     },
     "item--dmg--manual-of-flesh-golems": {
         "name": "Manual de Golens de Carne"
@@ -3378,7 +3378,7 @@
         "name": "Anel de Comando Elemental (Fogo)"
     },
     "item--dmg--ring-of-fire-resistance": {
-        "name": "Anel de Resistência a Dano Ígneo"
+        "name": "Anel de Resistência (Ígneo)"
     },
     "item--dmg--ring-of-force-resistance": {
         "name": "Anel de Resistência (Energético)"
@@ -7122,31 +7122,31 @@
         "name": "Livro de Magias Durável"
     },
     "item--xdmg--enspelled-staff-cantrip": {
-        "name": "Cajado Encantado com Magia (Truque)"
+        "name": "Cajado Encantado (Truque)"
     },
     "item--xdmg--enspelled-staff-level-1": {
-        "name": "Cajado Encantado com Magia (Nível 1)"
+        "name": "Cajado Encantado (Nível 1)"
     },
     "item--xdmg--enspelled-staff-level-2": {
-        "name": "Cajado Encantado com Magia (Nível 2)"
+        "name": "Cajado Encantado (Nível 2)"
     },
     "item--xdmg--enspelled-staff-level-3": {
-        "name": "Cajado Encantado com Magia (Nível 3)"
+        "name": "Cajado Encantado (Nível 3)"
     },
     "item--xdmg--enspelled-staff-level-4": {
-        "name": "Cajado Encantado com Magia (Nível 4)"
+        "name": "Cajado Encantado (Nível 4)"
     },
     "item--xdmg--enspelled-staff-level-5": {
-        "name": "Cajado Encantado com Magia (Nível 5)"
+        "name": "Cajado Encantado (Nível 5)"
     },
     "item--xdmg--enspelled-staff-level-6": {
-        "name": "Cajado Encantado com Magia (Nível 6)"
+        "name": "Cajado Encantado (Nível 6)"
     },
     "item--xdmg--enspelled-staff-level-7": {
-        "name": "Cajado Encantado com Magia (Nível 7)"
+        "name": "Cajado Encantado (Nível 7)"
     },
     "item--xdmg--enspelled-staff-level-8": {
-        "name": "Cajado Encantado com Magia (Nível 8)"
+        "name": "Cajado Encantado (Nível 8)"
     },
     "item--xdmg--ersatz-eye": {
         "name": "Olho Ersatz"
@@ -7527,7 +7527,7 @@
         "name": "Manual de Saúde Corporal"
     },
     "item--xdmg--manual-of-clay-golems": {
-        "name": "Manual dos Golems de Argila"
+        "name": "Manual de Golens de Argila"
     },
     "item--xdmg--manual-of-flesh-golems": {
         "name": "Manual de Golens de Carne"
@@ -7875,7 +7875,7 @@
         "name": "Anel de Queda Suave"
     },
     "item--xdmg--ring-of-fire-resistance": {
-        "name": "Anel de Resistência a Dano Ígneo"
+        "name": "Anel de Resistência (Ígneo)"
     },
     "item--xdmg--ring-of-force-resistance": {
         "name": "Anel de Resistência (Energético)"
@@ -9000,7 +9000,7 @@
         "name": "Pedra de Ioun"
     },
     "itemgroup--dmg--manual-of-golems": {
-        "name": "Manual dos Golems"
+        "name": "Manual de Golens"
     },
     "itemgroup--dmg--potion-of-giant-strength": {
         "name": "Poção de Força de Gigante"
@@ -9021,10 +9021,10 @@
         "name": "Anel de Comando Elemental"
     },
     "itemgroup--dmg--ring-of-resistance": {
-        "name": "Anel da Resistência"
+        "name": "Anel de Resistência"
     },
     "itemgroup--dmg--rod-of-the-pact-keeper": {
-        "name": "Cetro do Protetor do Pacto"
+        "name": "Cetro do Guardião do Pacto"
     },
     "itemgroup--dmg--scroll-of-protection": {
         "name": "Pergaminho de Proteção"
@@ -9192,13 +9192,13 @@
         "name": "Gema Elemental"
     },
     "itemgroup--xdmg--enspelled-armor": {
-        "name": "Armadura Magificada"
+        "name": "Armadura Encantada"
     },
     "itemgroup--xdmg--enspelled-staff": {
-        "name": "Cajado Magificado"
+        "name": "Cajado Encantado"
     },
     "itemgroup--xdmg--enspelled-weapon": {
-        "name": "Arma Magificada"
+        "name": "Arma Encantada"
     },
     "itemgroup--xdmg--eye-and-hand-of-vecna": {
         "name": "Olho e Mão de Vecna"
@@ -9216,7 +9216,7 @@
         "name": "Pedra de Ioun"
     },
     "itemgroup--xdmg--manual-of-golems": {
-        "name": "Manual dos Golems"
+        "name": "Manual de Golens"
     },
     "itemgroup--xdmg--potion-of-giant-strength": {
         "name": "Poção de Força de Gigante"
@@ -9234,10 +9234,10 @@
         "name": "Anel de Comando Elemental"
     },
     "itemgroup--xdmg--ring-of-resistance": {
-        "name": "Anel da Resistência"
+        "name": "Anel de Resistência"
     },
     "itemgroup--xdmg--rod-of-the-pact-keeper": {
-        "name": "Cetro do Protetor do Pacto"
+        "name": "Cetro do Guardião do Pacto"
     },
     "itemgroup--xdmg--scroll-of-protection": {
         "name": "Pergaminho de Proteção"
@@ -11439,7 +11439,7 @@
         "name": "Armadura de Resistência a Radiante (Couraça Peitoral)"
     },
     "specificvariant--dmg--breastplate-of-thunder-resistance--base--phb--breastplate--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Couraça Peitoral)"
+        "name": "Armadura de Resistência a Trovejante (Couraça Peitoral)"
     },
     "specificvariant--dmg--chain-mail-of-acid-resistance--base--phb--chain-mail--variant--dmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido (Cota de Malha)"
@@ -11469,7 +11469,7 @@
         "name": "Armadura de Resistência a Radiante (Cota de Malha)"
     },
     "specificvariant--dmg--chain-mail-of-thunder-resistance--base--phb--chain-mail--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Cota de Malha)"
+        "name": "Armadura de Resistência a Trovejante (Cota de Malha)"
     },
     "specificvariant--dmg--chain-shirt-of-acid-resistance--base--phb--chain-shirt--variant--dmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido (Cota de Malha Parcial)"
@@ -11499,7 +11499,7 @@
         "name": "Armadura de Resistência a Radiante (Cota de Malha Parcial)"
     },
     "specificvariant--dmg--chain-shirt-of-thunder-resistance--base--phb--chain-shirt--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Cota de Malha Parcial)"
+        "name": "Armadura de Resistência a Trovejante (Cota de Malha Parcial)"
     },
     "specificvariant--dmg--club-of-warning--base--phb--club--variant--dmg--weapon-of-warning": {
         "name": "Arma de Alerta (Clava)"
@@ -11703,7 +11703,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Placas Parcial)"
     },
     "specificvariant--dmg--half-plate-armor-of-thunder-resistance--base--phb--half-plate-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Placas Parcial)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Placas Parcial)"
     },
     "specificvariant--dmg--hand-crossbow-of-warning--base--phb--hand-crossbow--variant--dmg--weapon-of-warning": {
         "name": "Arma de Alerta (Besta de Mão)"
@@ -11742,7 +11742,7 @@
         "name": "Armadura de Resistência a Radiante (Gibão de Peles)"
     },
     "specificvariant--dmg--hide-armor-of-thunder-resistance--base--phb--hide-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Gibão de Peles)"
+        "name": "Armadura de Resistência a Trovejante (Gibão de Peles)"
     },
     "specificvariant--dmg--holy-avenger-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--dmg--holy-avenger": {
         "name": "Sacro Vingadora (Cimitarra de Lâmina Dupla)"
@@ -11811,7 +11811,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Couro)"
     },
     "specificvariant--dmg--leather-armor-of-thunder-resistance--base--phb--leather-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Couro)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Couro)"
     },
     "specificvariant--dmg--light-crossbow-of-warning--base--phb--light-crossbow--variant--dmg--weapon-of-warning": {
         "name": "Arma de Alerta (Besta Leve)"
@@ -11985,7 +11985,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura Acolchoada)"
     },
     "specificvariant--dmg--padded-armor-of-thunder-resistance--base--phb--padded-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura Acolchoada)"
+        "name": "Armadura de Resistência a Trovejante (Armadura Acolchoada)"
     },
     "specificvariant--dmg--pike-of-warning--base--phb--pike--variant--dmg--weapon-of-warning": {
         "name": "Arma de Alerta (Lança Longa)"
@@ -12021,7 +12021,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Placas)"
     },
     "specificvariant--dmg--plate-armor-of-thunder-resistance--base--phb--plate-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Placas)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Placas)"
     },
     "specificvariant--dmg--quarterstaff-of-warning--base--phb--quarterstaff--variant--dmg--weapon-of-warning": {
         "name": "Arma de Alerta (Cajado)"
@@ -12069,7 +12069,7 @@
         "name": "Armadura de Resistência a Radiante (Cota de Anéis)"
     },
     "specificvariant--dmg--ring-mail-of-thunder-resistance--base--phb--ring-mail--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Cota de Anéis)"
+        "name": "Armadura de Resistência a Trovejante (Cota de Anéis)"
     },
     "specificvariant--dmg--scale-mail-of-acid-resistance--base--phb--scale-mail--variant--dmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido (Loriga de Escamas)"
@@ -12099,7 +12099,7 @@
         "name": "Armadura de Resistência a Radiante (Loriga de Escamas)"
     },
     "specificvariant--dmg--scale-mail-of-thunder-resistance--base--phb--scale-mail--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Loriga de Escamas)"
+        "name": "Armadura de Resistência a Trovejante (Loriga de Escamas)"
     },
     "specificvariant--dmg--scimitar-of-life-stealing--base--phb--scimitar--variant--dmg--sword-of-life-stealing": {
         "name": "Espada Ladra de Vida (Cimitarra)"
@@ -12171,7 +12171,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura com Espinhos)"
     },
     "specificvariant--dmg--spiked-armor-of-thunder-resistance--base--scag--spiked-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura com Espinhos)"
+        "name": "Armadura de Resistência a Trovejante (Armadura com Espinhos)"
     },
     "specificvariant--dmg--splint-armor-of-acid-resistance--base--phb--splint-armor--variant--dmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido (Armadura de Talas)"
@@ -12201,7 +12201,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Talas)"
     },
     "specificvariant--dmg--splint-armor-of-thunder-resistance--base--phb--splint-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Talas)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Talas)"
     },
     "specificvariant--dmg--studded-leather-armor-of-acid-resistance--base--phb--studded-leather-armor--variant--dmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido (Armadura de Couro Batido)"
@@ -12231,7 +12231,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Couro Batido)"
     },
     "specificvariant--dmg--studded-leather-armor-of-thunder-resistance--base--phb--studded-leather-armor--variant--dmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Couro Batido)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Couro Batido)"
     },
     "specificvariant--dmg--trident-of-warning--base--phb--trident--variant--dmg--weapon-of-warning": {
         "name": "Arma de Alerta (Tridente)"
@@ -15528,7 +15528,7 @@
         "name": "Arma de Alerta (Zarabatana)"
     },
     "specificvariant--xdmg--bolt-of-slaying--base--xphb--bolt--variant--xdmg--ammunition-of-slaying": {
-        "name": "Munição Exterminadora (Virote)"
+        "name": "Munição Matadora (Virote)"
     },
     "specificvariant--xdmg--breastplate-of-acid-resistance--base--xphb--breastplate--variant--xdmg--armor-of-acid-resistance": {
         "name": "Armadura de Resistência a Ácido (Couraça Peitoral)"
@@ -15561,7 +15561,7 @@
         "name": "Armadura de Resistência a Radiante (Couraça Peitoral)"
     },
     "specificvariant--xdmg--breastplate-of-thunder-resistance--base--xphb--breastplate--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Couraça Peitoral)"
+        "name": "Armadura de Resistência a Trovejante (Couraça Peitoral)"
     },
     "specificvariant--xdmg--breastplate-of-vulnerability-bludgeoning--base--xphb--breastplate--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Couraça Peitoral)"
@@ -15639,7 +15639,7 @@
         "name": "Armadura de Resistência a Radiante (Cota de Malha)"
     },
     "specificvariant--xdmg--chain-mail-of-thunder-resistance--base--xphb--chain-mail--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Cota de Malha)"
+        "name": "Armadura de Resistência a Trovejante (Cota de Malha)"
     },
     "specificvariant--xdmg--chain-mail-of-vulnerability-bludgeoning--base--xphb--chain-mail--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Cota de Malha)"
@@ -15681,7 +15681,7 @@
         "name": "Armadura de Resistência a Radiante (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--chain-shirt-of-thunder-resistance--base--xphb--chain-shirt--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Cota de Malha Parcial)"
+        "name": "Armadura de Resistência a Trovejante (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--chain-shirt-of-vulnerability-bludgeoning--base--xphb--chain-shirt--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Cota de Malha Parcial)"
@@ -16020,7 +16020,7 @@
         "name": "Cota de Malha Élfica (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--energy-cell-of-slaying--base--xdmg--energy-cell--variant--xdmg--ammunition-of-slaying": {
-        "name": "Munição Exterminadora (Célula de Energia)"
+        "name": "Munição Matadora (Célula de Energia)"
     },
     "specificvariant--xdmg--energy-longbow--base--xphb--longbow--variant--xdmg--energy-bow": {
         "name": "Arco de Energia (Arco Longo)"
@@ -16029,1759 +16029,1759 @@
         "name": "Arco de Energia (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-cantrip-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Truque) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-cantrip-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Rifle Automático)"
+        "name": "Arma Encantada (Truque) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-cantrip-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Machado de Batalha)"
+        "name": "Arma Encantada (Truque) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-cantrip-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Zarabatana)"
+        "name": "Arma Encantada (Truque) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-cantrip-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Truque) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-cantrip-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Cota de Malha)"
+        "name": "Armadura Encantada (Truque) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-cantrip-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Truque) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-cantrip-club--base--xphb--club--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Clava)"
+        "name": "Arma Encantada (Truque) (Clava)"
     },
     "specificvariant--xdmg--enspelled-cantrip-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Adaga)"
+        "name": "Arma Encantada (Truque) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-cantrip-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Dardo)"
+        "name": "Arma Encantada (Truque) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-cantrip-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Truque) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-cantrip-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Mangual)"
+        "name": "Arma Encantada (Truque) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-cantrip-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Glaive)"
+        "name": "Arma Encantada (Truque) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-cantrip-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Machado Grande)"
+        "name": "Arma Encantada (Truque) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-cantrip-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Clava Grande)"
+        "name": "Arma Encantada (Truque) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-cantrip-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Espada Grande)"
+        "name": "Arma Encantada (Truque) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-cantrip-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Alabarda)"
+        "name": "Arma Encantada (Truque) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-cantrip-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Truque) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-cantrip-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Besta de Mão)"
+        "name": "Arma Encantada (Truque) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-cantrip-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Machadinha)"
+        "name": "Arma Encantada (Truque) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-cantrip-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Besta Pesada)"
+        "name": "Arma Encantada (Truque) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-cantrip-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Gibão de Peles)"
+        "name": "Armadura Encantada (Truque) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-cantrip-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Truque) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-cantrip-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Hoopak)"
+        "name": "Arma Encantada (Truque) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-cantrip-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Rifle de Caça)"
+        "name": "Arma Encantada (Truque) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-cantrip-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Azagaia)"
+        "name": "Arma Encantada (Truque) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-cantrip-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Lança de Montaria)"
+        "name": "Arma Encantada (Truque) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-cantrip-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Pistola a Laser)"
+        "name": "Arma Encantada (Truque) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-cantrip-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Rifle a Laser)"
+        "name": "Arma Encantada (Truque) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-cantrip-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Armadura de Couro)"
+        "name": "Armadura Encantada (Truque) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-cantrip-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Besta Leve)"
+        "name": "Arma Encantada (Truque) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-cantrip-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Martelo Leve)"
+        "name": "Arma Encantada (Truque) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-cantrip-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Truque) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-cantrip-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Arco Longo)"
+        "name": "Arma Encantada (Truque) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-cantrip-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Espada Longa)"
+        "name": "Arma Encantada (Truque) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-cantrip-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Maça)"
+        "name": "Arma Encantada (Truque) (Maça)"
     },
     "specificvariant--xdmg--enspelled-cantrip-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Malho)"
+        "name": "Arma Encantada (Truque) (Malho)"
     },
     "specificvariant--xdmg--enspelled-cantrip-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Maça Estrela)"
+        "name": "Arma Encantada (Truque) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-cantrip-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Mosquete)"
+        "name": "Arma Encantada (Truque) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-cantrip-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Truque) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-cantrip-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Lança Longa)"
+        "name": "Arma Encantada (Truque) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-cantrip-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Pistola)"
+        "name": "Arma Encantada (Truque) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-cantrip-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Armadura de Placas)"
+        "name": "Armadura Encantada (Truque) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-cantrip-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Cajado)"
+        "name": "Arma Encantada (Truque) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-cantrip-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Rapieira)"
+        "name": "Arma Encantada (Truque) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-cantrip-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Revólver)"
+        "name": "Arma Encantada (Truque) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-cantrip-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Cota de Anéis)"
+        "name": "Armadura Encantada (Truque) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-cantrip-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Truque) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-cantrip-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Cimitarra)"
+        "name": "Arma Encantada (Truque) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-cantrip-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Truque) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-cantrip-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Arco Curto)"
+        "name": "Arma Encantada (Truque) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-cantrip-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Espada Curta)"
+        "name": "Arma Encantada (Truque) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-cantrip-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Escopeta)"
+        "name": "Arma Encantada (Truque) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-cantrip-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Foice)"
+        "name": "Arma Encantada (Truque) (Foice)"
     },
     "specificvariant--xdmg--enspelled-cantrip-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Funda)"
+        "name": "Arma Encantada (Truque) (Funda)"
     },
     "specificvariant--xdmg--enspelled-cantrip-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Lança)"
+        "name": "Arma Encantada (Truque) (Lança)"
     },
     "specificvariant--xdmg--enspelled-cantrip-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Armadura de Talas)"
+        "name": "Armadura Encantada (Truque) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-cantrip-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Cajado)"
+        "name": "Arma Encantada (Truque) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-cantrip-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-cantrip": {
-        "name": "Armadura Encantada com Magia (Truque) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Truque) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-cantrip-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Tridente)"
+        "name": "Arma Encantada (Truque) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-cantrip-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Picareta de Guerra)"
+        "name": "Arma Encantada (Truque) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-cantrip-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Martelo de Guerra)"
+        "name": "Arma Encantada (Truque) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-cantrip-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Chicote)"
+        "name": "Arma Encantada (Truque) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-cantrip-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Cajado de Madeira)"
+        "name": "Arma Encantada (Truque) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-cantrip-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-cantrip": {
-        "name": "Arma Encantada com Magia (Truque) (Yklwa)"
+        "name": "Arma Encantada (Truque) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-1-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 1) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-1-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 1) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-1-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 1) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-1-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Zarabatana)"
+        "name": "Arma Encantada (Nível 1) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-1-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 1) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-1-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 1) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-1-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 1) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-1-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Clava)"
+        "name": "Arma Encantada (Nível 1) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-1-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Adaga)"
+        "name": "Arma Encantada (Nível 1) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-1-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Dardo)"
+        "name": "Arma Encantada (Nível 1) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-1-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 1) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-1-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Mangual)"
+        "name": "Arma Encantada (Nível 1) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-1-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Glaive)"
+        "name": "Arma Encantada (Nível 1) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-1-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Machado Grande)"
+        "name": "Arma Encantada (Nível 1) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-1-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Clava Grande)"
+        "name": "Arma Encantada (Nível 1) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-1-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Espada Grande)"
+        "name": "Arma Encantada (Nível 1) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-1-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Alabarda)"
+        "name": "Arma Encantada (Nível 1) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-1-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 1) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-1-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 1) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-1-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Machadinha)"
+        "name": "Arma Encantada (Nível 1) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-1-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 1) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-1-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 1) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-1-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 1) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-1-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Hoopak)"
+        "name": "Arma Encantada (Nível 1) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-1-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 1) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-1-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Azagaia)"
+        "name": "Arma Encantada (Nível 1) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-1-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 1) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-1-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 1) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-1-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 1) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-1-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 1) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-1-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Besta Leve)"
+        "name": "Arma Encantada (Nível 1) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-1-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 1) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-1-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 1) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-1-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Arco Longo)"
+        "name": "Arma Encantada (Nível 1) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-1-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Espada Longa)"
+        "name": "Arma Encantada (Nível 1) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-1-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Maça)"
+        "name": "Arma Encantada (Nível 1) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-1-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Malho)"
+        "name": "Arma Encantada (Nível 1) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-1-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 1) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-1-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Mosquete)"
+        "name": "Arma Encantada (Nível 1) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-1-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 1) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-1-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Lança Longa)"
+        "name": "Arma Encantada (Nível 1) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-1-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Pistola)"
+        "name": "Arma Encantada (Nível 1) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-1-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 1) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-1-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Cajado)"
+        "name": "Arma Encantada (Nível 1) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-1-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Rapieira)"
+        "name": "Arma Encantada (Nível 1) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-1-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Revólver)"
+        "name": "Arma Encantada (Nível 1) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-1-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 1) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-1-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 1) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-1-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Cimitarra)"
+        "name": "Arma Encantada (Nível 1) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-1-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 1) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-1-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Arco Curto)"
+        "name": "Arma Encantada (Nível 1) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-1-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Espada Curta)"
+        "name": "Arma Encantada (Nível 1) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-1-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Escopeta)"
+        "name": "Arma Encantada (Nível 1) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-1-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Foice)"
+        "name": "Arma Encantada (Nível 1) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-1-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Funda)"
+        "name": "Arma Encantada (Nível 1) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-1-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Lança)"
+        "name": "Arma Encantada (Nível 1) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-1-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 1) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-1-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Cajado)"
+        "name": "Arma Encantada (Nível 1) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-1-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-1": {
-        "name": "Armadura Encantada com Magia (Nível 1) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 1) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-1-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Tridente)"
+        "name": "Arma Encantada (Nível 1) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-1-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 1) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-1-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 1) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-1-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Chicote)"
+        "name": "Arma Encantada (Nível 1) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-1-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 1) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-1-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-1": {
-        "name": "Arma Encantada com Magia (Nível 1) (Yklwa)"
+        "name": "Arma Encantada (Nível 1) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-2-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 2) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-2-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 2) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-2-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 2) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-2-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Zarabatana)"
+        "name": "Arma Encantada (Nível 2) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-2-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 2) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-2-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 2) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-2-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 2) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-2-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Clava)"
+        "name": "Arma Encantada (Nível 2) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-2-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Adaga)"
+        "name": "Arma Encantada (Nível 2) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-2-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Dardo)"
+        "name": "Arma Encantada (Nível 2) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-2-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 2) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-2-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Mangual)"
+        "name": "Arma Encantada (Nível 2) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-2-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Glaive)"
+        "name": "Arma Encantada (Nível 2) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-2-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Machado Grande)"
+        "name": "Arma Encantada (Nível 2) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-2-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Clava Grande)"
+        "name": "Arma Encantada (Nível 2) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-2-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Espada Grande)"
+        "name": "Arma Encantada (Nível 2) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-2-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Alabarda)"
+        "name": "Arma Encantada (Nível 2) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-2-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 2) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-2-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 2) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-2-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Machadinha)"
+        "name": "Arma Encantada (Nível 2) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-2-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 2) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-2-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 2) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-2-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 2) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-2-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Hoopak)"
+        "name": "Arma Encantada (Nível 2) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-2-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 2) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-2-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Azagaia)"
+        "name": "Arma Encantada (Nível 2) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-2-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 2) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-2-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 2) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-2-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 2) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-2-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 2) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-2-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Besta Leve)"
+        "name": "Arma Encantada (Nível 2) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-2-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 2) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-2-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 2) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-2-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Arco Longo)"
+        "name": "Arma Encantada (Nível 2) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-2-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Espada Longa)"
+        "name": "Arma Encantada (Nível 2) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-2-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Maça)"
+        "name": "Arma Encantada (Nível 2) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-2-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Malho)"
+        "name": "Arma Encantada (Nível 2) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-2-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 2) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-2-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Mosquete)"
+        "name": "Arma Encantada (Nível 2) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-2-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 2) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-2-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Lança Longa)"
+        "name": "Arma Encantada (Nível 2) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-2-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Pistola)"
+        "name": "Arma Encantada (Nível 2) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-2-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 2) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-2-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Cajado)"
+        "name": "Arma Encantada (Nível 2) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-2-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Rapieira)"
+        "name": "Arma Encantada (Nível 2) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-2-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Revólver)"
+        "name": "Arma Encantada (Nível 2) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-2-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 2) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-2-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 2) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-2-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Cimitarra)"
+        "name": "Arma Encantada (Nível 2) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-2-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 2) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-2-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Arco Curto)"
+        "name": "Arma Encantada (Nível 2) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-2-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Espada Curta)"
+        "name": "Arma Encantada (Nível 2) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-2-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Escopeta)"
+        "name": "Arma Encantada (Nível 2) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-2-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Foice)"
+        "name": "Arma Encantada (Nível 2) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-2-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Funda)"
+        "name": "Arma Encantada (Nível 2) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-2-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Lança)"
+        "name": "Arma Encantada (Nível 2) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-2-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 2) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-2-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Cajado)"
+        "name": "Arma Encantada (Nível 2) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-2-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-2": {
-        "name": "Armadura Encantada com Magia (Nível 2) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 2) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-2-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Tridente)"
+        "name": "Arma Encantada (Nível 2) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-2-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 2) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-2-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 2) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-2-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Chicote)"
+        "name": "Arma Encantada (Nível 2) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-2-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 2) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-2-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-2": {
-        "name": "Arma Encantada com Magia (Nível 2) (Yklwa)"
+        "name": "Arma Encantada (Nível 2) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-3-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 3) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-3-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 3) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-3-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 3) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-3-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Zarabatana)"
+        "name": "Arma Encantada (Nível 3) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-3-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 3) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-3-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 3) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-3-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 3) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-3-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Clava)"
+        "name": "Arma Encantada (Nível 3) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-3-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Adaga)"
+        "name": "Arma Encantada (Nível 3) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-3-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Dardo)"
+        "name": "Arma Encantada (Nível 3) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-3-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 3) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-3-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Mangual)"
+        "name": "Arma Encantada (Nível 3) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-3-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Glaive)"
+        "name": "Arma Encantada (Nível 3) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-3-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Machado Grande)"
+        "name": "Arma Encantada (Nível 3) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-3-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Clava Grande)"
+        "name": "Arma Encantada (Nível 3) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-3-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Espada Grande)"
+        "name": "Arma Encantada (Nível 3) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-3-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Alabarda)"
+        "name": "Arma Encantada (Nível 3) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-3-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 3) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-3-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 3) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-3-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Machadinha)"
+        "name": "Arma Encantada (Nível 3) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-3-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 3) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-3-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 3) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-3-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 3) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-3-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Hoopak)"
+        "name": "Arma Encantada (Nível 3) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-3-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 3) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-3-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Azagaia)"
+        "name": "Arma Encantada (Nível 3) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-3-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 3) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-3-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 3) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-3-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 3) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-3-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 3) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-3-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Besta Leve)"
+        "name": "Arma Encantada (Nível 3) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-3-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 3) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-3-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 3) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-3-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Arco Longo)"
+        "name": "Arma Encantada (Nível 3) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-3-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Espada Longa)"
+        "name": "Arma Encantada (Nível 3) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-3-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Maça)"
+        "name": "Arma Encantada (Nível 3) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-3-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Malho)"
+        "name": "Arma Encantada (Nível 3) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-3-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 3) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-3-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Mosquete)"
+        "name": "Arma Encantada (Nível 3) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-3-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 3) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-3-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Lança Longa)"
+        "name": "Arma Encantada (Nível 3) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-3-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Pistola)"
+        "name": "Arma Encantada (Nível 3) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-3-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 3) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-3-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Cajado)"
+        "name": "Arma Encantada (Nível 3) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-3-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Rapieira)"
+        "name": "Arma Encantada (Nível 3) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-3-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Revólver)"
+        "name": "Arma Encantada (Nível 3) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-3-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 3) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-3-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 3) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-3-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Cimitarra)"
+        "name": "Arma Encantada (Nível 3) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-3-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 3) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-3-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Arco Curto)"
+        "name": "Arma Encantada (Nível 3) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-3-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Espada Curta)"
+        "name": "Arma Encantada (Nível 3) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-3-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Escopeta)"
+        "name": "Arma Encantada (Nível 3) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-3-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Foice)"
+        "name": "Arma Encantada (Nível 3) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-3-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Funda)"
+        "name": "Arma Encantada (Nível 3) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-3-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Lança)"
+        "name": "Arma Encantada (Nível 3) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-3-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 3) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-3-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Cajado)"
+        "name": "Arma Encantada (Nível 3) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-3-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-3": {
-        "name": "Armadura Encantada com Magia (Nível 3) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 3) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-3-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Tridente)"
+        "name": "Arma Encantada (Nível 3) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-3-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 3) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-3-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 3) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-3-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Chicote)"
+        "name": "Arma Encantada (Nível 3) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-3-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 3) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-3-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-3": {
-        "name": "Arma Encantada com Magia (Nível 3) (Yklwa)"
+        "name": "Arma Encantada (Nível 3) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-4-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 4) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-4-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 4) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-4-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 4) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-4-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Zarabatana)"
+        "name": "Arma Encantada (Nível 4) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-4-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 4) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-4-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 4) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-4-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 4) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-4-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Clava)"
+        "name": "Arma Encantada (Nível 4) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-4-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Adaga)"
+        "name": "Arma Encantada (Nível 4) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-4-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Dardo)"
+        "name": "Arma Encantada (Nível 4) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-4-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 4) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-4-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Mangual)"
+        "name": "Arma Encantada (Nível 4) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-4-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Glaive)"
+        "name": "Arma Encantada (Nível 4) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-4-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Machado Grande)"
+        "name": "Arma Encantada (Nível 4) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-4-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Clava Grande)"
+        "name": "Arma Encantada (Nível 4) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-4-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Espada Grande)"
+        "name": "Arma Encantada (Nível 4) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-4-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Alabarda)"
+        "name": "Arma Encantada (Nível 4) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-4-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 4) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-4-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 4) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-4-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Machadinha)"
+        "name": "Arma Encantada (Nível 4) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-4-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 4) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-4-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 4) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-4-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 4) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-4-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Hoopak)"
+        "name": "Arma Encantada (Nível 4) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-4-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 4) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-4-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Azagaia)"
+        "name": "Arma Encantada (Nível 4) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-4-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 4) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-4-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 4) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-4-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 4) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-4-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 4) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-4-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Besta Leve)"
+        "name": "Arma Encantada (Nível 4) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-4-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 4) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-4-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 4) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-4-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Arco Longo)"
+        "name": "Arma Encantada (Nível 4) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-4-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Espada Longa)"
+        "name": "Arma Encantada (Nível 4) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-4-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Maça)"
+        "name": "Arma Encantada (Nível 4) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-4-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Malho)"
+        "name": "Arma Encantada (Nível 4) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-4-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 4) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-4-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Mosquete)"
+        "name": "Arma Encantada (Nível 4) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-4-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 4) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-4-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Lança Longa)"
+        "name": "Arma Encantada (Nível 4) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-4-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Pistola)"
+        "name": "Arma Encantada (Nível 4) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-4-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 4) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-4-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Cajado)"
+        "name": "Arma Encantada (Nível 4) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-4-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Rapieira)"
+        "name": "Arma Encantada (Nível 4) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-4-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Revólver)"
+        "name": "Arma Encantada (Nível 4) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-4-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 4) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-4-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 4) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-4-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Cimitarra)"
+        "name": "Arma Encantada (Nível 4) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-4-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 4) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-4-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Arco Curto)"
+        "name": "Arma Encantada (Nível 4) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-4-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Espada Curta)"
+        "name": "Arma Encantada (Nível 4) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-4-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Escopeta)"
+        "name": "Arma Encantada (Nível 4) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-4-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Foice)"
+        "name": "Arma Encantada (Nível 4) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-4-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Funda)"
+        "name": "Arma Encantada (Nível 4) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-4-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Lança)"
+        "name": "Arma Encantada (Nível 4) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-4-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 4) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-4-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Cajado)"
+        "name": "Arma Encantada (Nível 4) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-4-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-4": {
-        "name": "Armadura Encantada com Magia (Nível 4) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 4) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-4-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Tridente)"
+        "name": "Arma Encantada (Nível 4) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-4-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 4) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-4-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 4) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-4-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Chicote)"
+        "name": "Arma Encantada (Nível 4) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-4-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 4) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-4-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-4": {
-        "name": "Arma Encantada com Magia (Nível 4) (Yklwa)"
+        "name": "Arma Encantada (Nível 4) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-5-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 5) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-5-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 5) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-5-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 5) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-5-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Zarabatana)"
+        "name": "Arma Encantada (Nível 5) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-5-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 5) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-5-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 5) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-5-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 5) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-5-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Clava)"
+        "name": "Arma Encantada (Nível 5) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-5-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Adaga)"
+        "name": "Arma Encantada (Nível 5) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-5-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Dardo)"
+        "name": "Arma Encantada (Nível 5) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-5-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 5) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-5-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Mangual)"
+        "name": "Arma Encantada (Nível 5) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-5-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Glaive)"
+        "name": "Arma Encantada (Nível 5) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-5-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Machado Grande)"
+        "name": "Arma Encantada (Nível 5) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-5-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Clava Grande)"
+        "name": "Arma Encantada (Nível 5) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-5-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Espada Grande)"
+        "name": "Arma Encantada (Nível 5) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-5-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Alabarda)"
+        "name": "Arma Encantada (Nível 5) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-5-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 5) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-5-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 5) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-5-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Machadinha)"
+        "name": "Arma Encantada (Nível 5) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-5-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 5) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-5-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 5) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-5-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 5) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-5-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Hoopak)"
+        "name": "Arma Encantada (Nível 5) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-5-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 5) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-5-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Azagaia)"
+        "name": "Arma Encantada (Nível 5) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-5-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 5) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-5-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 5) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-5-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 5) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-5-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 5) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-5-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Besta Leve)"
+        "name": "Arma Encantada (Nível 5) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-5-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 5) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-5-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 5) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-5-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Arco Longo)"
+        "name": "Arma Encantada (Nível 5) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-5-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Espada Longa)"
+        "name": "Arma Encantada (Nível 5) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-5-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Maça)"
+        "name": "Arma Encantada (Nível 5) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-5-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Malho)"
+        "name": "Arma Encantada (Nível 5) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-5-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 5) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-5-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Mosquete)"
+        "name": "Arma Encantada (Nível 5) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-5-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 5) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-5-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Lança Longa)"
+        "name": "Arma Encantada (Nível 5) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-5-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Pistola)"
+        "name": "Arma Encantada (Nível 5) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-5-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 5) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-5-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Cajado)"
+        "name": "Arma Encantada (Nível 5) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-5-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Rapieira)"
+        "name": "Arma Encantada (Nível 5) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-5-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Revólver)"
+        "name": "Arma Encantada (Nível 5) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-5-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 5) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-5-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 5) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-5-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Cimitarra)"
+        "name": "Arma Encantada (Nível 5) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-5-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 5) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-5-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Arco Curto)"
+        "name": "Arma Encantada (Nível 5) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-5-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Espada Curta)"
+        "name": "Arma Encantada (Nível 5) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-5-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Escopeta)"
+        "name": "Arma Encantada (Nível 5) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-5-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Foice)"
+        "name": "Arma Encantada (Nível 5) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-5-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Funda)"
+        "name": "Arma Encantada (Nível 5) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-5-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Lança)"
+        "name": "Arma Encantada (Nível 5) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-5-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 5) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-5-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Cajado)"
+        "name": "Arma Encantada (Nível 5) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-5-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-5": {
-        "name": "Armadura Encantada com Magia (Nível 5) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 5) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-5-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Tridente)"
+        "name": "Arma Encantada (Nível 5) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-5-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 5) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-5-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 5) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-5-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Chicote)"
+        "name": "Arma Encantada (Nível 5) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-5-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 5) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-5-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-5": {
-        "name": "Arma Encantada com Magia (Nível 5) (Yklwa)"
+        "name": "Arma Encantada (Nível 5) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-6-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 6) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-6-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 6) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-6-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 6) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-6-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Zarabatana)"
+        "name": "Arma Encantada (Nível 6) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-6-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 6) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-6-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 6) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-6-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 6) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-6-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Clava)"
+        "name": "Arma Encantada (Nível 6) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-6-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Adaga)"
+        "name": "Arma Encantada (Nível 6) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-6-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Dardo)"
+        "name": "Arma Encantada (Nível 6) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-6-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 6) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-6-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Mangual)"
+        "name": "Arma Encantada (Nível 6) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-6-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Glaive)"
+        "name": "Arma Encantada (Nível 6) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-6-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Machado Grande)"
+        "name": "Arma Encantada (Nível 6) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-6-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Clava Grande)"
+        "name": "Arma Encantada (Nível 6) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-6-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Espada Grande)"
+        "name": "Arma Encantada (Nível 6) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-6-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Alabarda)"
+        "name": "Arma Encantada (Nível 6) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-6-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 6) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-6-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 6) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-6-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Machadinha)"
+        "name": "Arma Encantada (Nível 6) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-6-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 6) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-6-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 6) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-6-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 6) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-6-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Hoopak)"
+        "name": "Arma Encantada (Nível 6) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-6-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 6) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-6-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Azagaia)"
+        "name": "Arma Encantada (Nível 6) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-6-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 6) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-6-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 6) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-6-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 6) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-6-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 6) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-6-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Besta Leve)"
+        "name": "Arma Encantada (Nível 6) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-6-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 6) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-6-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 6) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-6-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Arco Longo)"
+        "name": "Arma Encantada (Nível 6) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-6-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Espada Longa)"
+        "name": "Arma Encantada (Nível 6) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-6-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Maça)"
+        "name": "Arma Encantada (Nível 6) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-6-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Malho)"
+        "name": "Arma Encantada (Nível 6) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-6-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 6) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-6-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Mosquete)"
+        "name": "Arma Encantada (Nível 6) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-6-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 6) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-6-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Lança Longa)"
+        "name": "Arma Encantada (Nível 6) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-6-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Pistola)"
+        "name": "Arma Encantada (Nível 6) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-6-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 6) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-6-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Cajado)"
+        "name": "Arma Encantada (Nível 6) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-6-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Rapieira)"
+        "name": "Arma Encantada (Nível 6) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-6-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Revólver)"
+        "name": "Arma Encantada (Nível 6) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-6-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 6) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-6-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 6) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-6-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Cimitarra)"
+        "name": "Arma Encantada (Nível 6) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-6-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 6) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-6-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Arco Curto)"
+        "name": "Arma Encantada (Nível 6) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-6-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Espada Curta)"
+        "name": "Arma Encantada (Nível 6) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-6-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Escopeta)"
+        "name": "Arma Encantada (Nível 6) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-6-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Foice)"
+        "name": "Arma Encantada (Nível 6) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-6-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Funda)"
+        "name": "Arma Encantada (Nível 6) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-6-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Lança)"
+        "name": "Arma Encantada (Nível 6) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-6-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 6) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-6-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Cajado)"
+        "name": "Arma Encantada (Nível 6) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-6-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-6": {
-        "name": "Armadura Encantada com Magia (Nível 6) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 6) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-6-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Tridente)"
+        "name": "Arma Encantada (Nível 6) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-6-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 6) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-6-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 6) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-6-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Chicote)"
+        "name": "Arma Encantada (Nível 6) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-6-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 6) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-6-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-6": {
-        "name": "Arma Encantada com Magia (Nível 6) (Yklwa)"
+        "name": "Arma Encantada (Nível 6) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-7-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 7) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-7-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 7) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-7-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 7) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-7-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Zarabatana)"
+        "name": "Arma Encantada (Nível 7) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-7-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 7) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-7-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 7) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-7-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 7) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-7-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Clava)"
+        "name": "Arma Encantada (Nível 7) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-7-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Adaga)"
+        "name": "Arma Encantada (Nível 7) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-7-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Dardo)"
+        "name": "Arma Encantada (Nível 7) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-7-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 7) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-7-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Mangual)"
+        "name": "Arma Encantada (Nível 7) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-7-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Glaive)"
+        "name": "Arma Encantada (Nível 7) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-7-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Machado Grande)"
+        "name": "Arma Encantada (Nível 7) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-7-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Clava Grande)"
+        "name": "Arma Encantada (Nível 7) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-7-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Espada Grande)"
+        "name": "Arma Encantada (Nível 7) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-7-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Alabarda)"
+        "name": "Arma Encantada (Nível 7) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-7-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 7) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-7-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 7) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-7-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Machadinha)"
+        "name": "Arma Encantada (Nível 7) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-7-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 7) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-7-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 7) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-7-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 7) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-7-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Hoopak)"
+        "name": "Arma Encantada (Nível 7) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-7-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 7) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-7-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Azagaia)"
+        "name": "Arma Encantada (Nível 7) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-7-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 7) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-7-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 7) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-7-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 7) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-7-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 7) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-7-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Besta Leve)"
+        "name": "Arma Encantada (Nível 7) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-7-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 7) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-7-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 7) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-7-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Arco Longo)"
+        "name": "Arma Encantada (Nível 7) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-7-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Espada Longa)"
+        "name": "Arma Encantada (Nível 7) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-7-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Maça)"
+        "name": "Arma Encantada (Nível 7) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-7-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Malho)"
+        "name": "Arma Encantada (Nível 7) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-7-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 7) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-7-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Mosquete)"
+        "name": "Arma Encantada (Nível 7) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-7-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 7) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-7-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Lança Longa)"
+        "name": "Arma Encantada (Nível 7) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-7-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Pistola)"
+        "name": "Arma Encantada (Nível 7) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-7-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 7) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-7-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Cajado)"
+        "name": "Arma Encantada (Nível 7) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-7-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Rapieira)"
+        "name": "Arma Encantada (Nível 7) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-7-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Revólver)"
+        "name": "Arma Encantada (Nível 7) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-7-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 7) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-7-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 7) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-7-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Cimitarra)"
+        "name": "Arma Encantada (Nível 7) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-7-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 7) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-7-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Arco Curto)"
+        "name": "Arma Encantada (Nível 7) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-7-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Espada Curta)"
+        "name": "Arma Encantada (Nível 7) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-7-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Escopeta)"
+        "name": "Arma Encantada (Nível 7) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-7-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Foice)"
+        "name": "Arma Encantada (Nível 7) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-7-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Funda)"
+        "name": "Arma Encantada (Nível 7) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-7-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Lança)"
+        "name": "Arma Encantada (Nível 7) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-7-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 7) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-7-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Cajado)"
+        "name": "Arma Encantada (Nível 7) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-7-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-7": {
-        "name": "Armadura Encantada com Magia (Nível 7) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 7) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-7-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Tridente)"
+        "name": "Arma Encantada (Nível 7) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-7-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 7) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-7-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 7) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-7-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Chicote)"
+        "name": "Arma Encantada (Nível 7) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-7-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 7) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-7-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-7": {
-        "name": "Arma Encantada com Magia (Nível 7) (Yklwa)"
+        "name": "Arma Encantada (Nível 7) (Yklwa)"
     },
     "specificvariant--xdmg--enspelled-level-8-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Rifle de Antimatéria)"
+        "name": "Arma Encantada (Nível 8) (Rifle de Antimatéria)"
     },
     "specificvariant--xdmg--enspelled-level-8-automatic-rifle--base--xdmg--automatic-rifle--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Rifle Automático)"
+        "name": "Arma Encantada (Nível 8) (Rifle Automático)"
     },
     "specificvariant--xdmg--enspelled-level-8-battleaxe--base--xphb--battleaxe--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Machado de Batalha)"
+        "name": "Arma Encantada (Nível 8) (Machado de Batalha)"
     },
     "specificvariant--xdmg--enspelled-level-8-blowgun--base--xphb--blowgun--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Zarabatana)"
+        "name": "Arma Encantada (Nível 8) (Zarabatana)"
     },
     "specificvariant--xdmg--enspelled-level-8-breastplate--base--xphb--breastplate--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Couraça Peitoral)"
+        "name": "Armadura Encantada (Nível 8) (Couraça Peitoral)"
     },
     "specificvariant--xdmg--enspelled-level-8-chain-mail--base--xphb--chain-mail--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Cota de Malha)"
+        "name": "Armadura Encantada (Nível 8) (Cota de Malha)"
     },
     "specificvariant--xdmg--enspelled-level-8-chain-shirt--base--xphb--chain-shirt--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Cota de Malha Parcial)"
+        "name": "Armadura Encantada (Nível 8) (Cota de Malha Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-8-club--base--xphb--club--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Clava)"
+        "name": "Arma Encantada (Nível 8) (Clava)"
     },
     "specificvariant--xdmg--enspelled-level-8-dagger--base--xphb--dagger--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Adaga)"
+        "name": "Arma Encantada (Nível 8) (Adaga)"
     },
     "specificvariant--xdmg--enspelled-level-8-dart--base--xphb--dart--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Dardo)"
+        "name": "Arma Encantada (Nível 8) (Dardo)"
     },
     "specificvariant--xdmg--enspelled-level-8-double-bladed-scimitar--base--erlw--double-bladed-scimitar--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Cimitarra de Lâmina Dupla)"
+        "name": "Arma Encantada (Nível 8) (Cimitarra de Lâmina Dupla)"
     },
     "specificvariant--xdmg--enspelled-level-8-flail--base--xphb--flail--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Mangual)"
+        "name": "Arma Encantada (Nível 8) (Mangual)"
     },
     "specificvariant--xdmg--enspelled-level-8-glaive--base--xphb--glaive--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Glaive)"
+        "name": "Arma Encantada (Nível 8) (Glaive)"
     },
     "specificvariant--xdmg--enspelled-level-8-greataxe--base--xphb--greataxe--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Machado Grande)"
+        "name": "Arma Encantada (Nível 8) (Machado Grande)"
     },
     "specificvariant--xdmg--enspelled-level-8-greatclub--base--xphb--greatclub--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Clava Grande)"
+        "name": "Arma Encantada (Nível 8) (Clava Grande)"
     },
     "specificvariant--xdmg--enspelled-level-8-greatsword--base--xphb--greatsword--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Espada Grande)"
+        "name": "Arma Encantada (Nível 8) (Espada Grande)"
     },
     "specificvariant--xdmg--enspelled-level-8-halberd--base--xphb--halberd--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Alabarda)"
+        "name": "Arma Encantada (Nível 8) (Alabarda)"
     },
     "specificvariant--xdmg--enspelled-level-8-half-plate-armor--base--xphb--half-plate-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Armadura de Placas Parcial)"
+        "name": "Armadura Encantada (Nível 8) (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--enspelled-level-8-hand-crossbow--base--xphb--hand-crossbow--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Besta de Mão)"
+        "name": "Arma Encantada (Nível 8) (Besta de Mão)"
     },
     "specificvariant--xdmg--enspelled-level-8-handaxe--base--xphb--handaxe--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Machadinha)"
+        "name": "Arma Encantada (Nível 8) (Machadinha)"
     },
     "specificvariant--xdmg--enspelled-level-8-heavy-crossbow--base--xphb--heavy-crossbow--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Besta Pesada)"
+        "name": "Arma Encantada (Nível 8) (Besta Pesada)"
     },
     "specificvariant--xdmg--enspelled-level-8-hide-armor--base--xphb--hide-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Gibão de Peles)"
+        "name": "Armadura Encantada (Nível 8) (Gibão de Peles)"
     },
     "specificvariant--xdmg--enspelled-level-8-hooked-shortspear--base--oota--hooked-shortspear--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Lança Curta com Gancho)"
+        "name": "Arma Encantada (Nível 8) (Lança Curta com Gancho)"
     },
     "specificvariant--xdmg--enspelled-level-8-hoopak--base--dsotdq--hoopak--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Hoopak)"
+        "name": "Arma Encantada (Nível 8) (Hoopak)"
     },
     "specificvariant--xdmg--enspelled-level-8-hunting-rifle--base--xdmg--hunting-rifle--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Rifle de Caça)"
+        "name": "Arma Encantada (Nível 8) (Rifle de Caça)"
     },
     "specificvariant--xdmg--enspelled-level-8-javelin--base--xphb--javelin--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Azagaia)"
+        "name": "Arma Encantada (Nível 8) (Azagaia)"
     },
     "specificvariant--xdmg--enspelled-level-8-lance--base--xphb--lance--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Lança de Montaria)"
+        "name": "Arma Encantada (Nível 8) (Lança de Montaria)"
     },
     "specificvariant--xdmg--enspelled-level-8-laser-pistol--base--xdmg--laser-pistol--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Pistola a Laser)"
+        "name": "Arma Encantada (Nível 8) (Pistola a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-8-laser-rifle--base--xdmg--laser-rifle--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Rifle a Laser)"
+        "name": "Arma Encantada (Nível 8) (Rifle a Laser)"
     },
     "specificvariant--xdmg--enspelled-level-8-leather-armor--base--xphb--leather-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Armadura de Couro)"
+        "name": "Armadura Encantada (Nível 8) (Armadura de Couro)"
     },
     "specificvariant--xdmg--enspelled-level-8-light-crossbow--base--xphb--light-crossbow--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Besta Leve)"
+        "name": "Arma Encantada (Nível 8) (Besta Leve)"
     },
     "specificvariant--xdmg--enspelled-level-8-light-hammer--base--xphb--light-hammer--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Martelo Leve)"
+        "name": "Arma Encantada (Nível 8) (Martelo Leve)"
     },
     "specificvariant--xdmg--enspelled-level-8-light-repeating-crossbow--base--oota--light-repeating-crossbow--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Besta Leve de Repetição)"
+        "name": "Arma Encantada (Nível 8) (Besta Leve de Repetição)"
     },
     "specificvariant--xdmg--enspelled-level-8-longbow--base--xphb--longbow--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Arco Longo)"
+        "name": "Arma Encantada (Nível 8) (Arco Longo)"
     },
     "specificvariant--xdmg--enspelled-level-8-longsword--base--xphb--longsword--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Espada Longa)"
+        "name": "Arma Encantada (Nível 8) (Espada Longa)"
     },
     "specificvariant--xdmg--enspelled-level-8-mace--base--xphb--mace--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Maça)"
+        "name": "Arma Encantada (Nível 8) (Maça)"
     },
     "specificvariant--xdmg--enspelled-level-8-maul--base--xphb--maul--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Malho)"
+        "name": "Arma Encantada (Nível 8) (Malho)"
     },
     "specificvariant--xdmg--enspelled-level-8-morningstar--base--xphb--morningstar--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Maça Estrela)"
+        "name": "Arma Encantada (Nível 8) (Maça Estrela)"
     },
     "specificvariant--xdmg--enspelled-level-8-musket--base--xphb--musket--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Mosquete)"
+        "name": "Arma Encantada (Nível 8) (Mosquete)"
     },
     "specificvariant--xdmg--enspelled-level-8-padded-armor--base--xphb--padded-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Armadura Acolchoada)"
+        "name": "Armadura Encantada (Nível 8) (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--enspelled-level-8-pike--base--xphb--pike--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Lança Longa)"
+        "name": "Arma Encantada (Nível 8) (Lança Longa)"
     },
     "specificvariant--xdmg--enspelled-level-8-pistol--base--xphb--pistol--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Pistola)"
+        "name": "Arma Encantada (Nível 8) (Pistola)"
     },
     "specificvariant--xdmg--enspelled-level-8-plate-armor--base--xphb--plate-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Armadura de Placas)"
+        "name": "Armadura Encantada (Nível 8) (Armadura de Placas)"
     },
     "specificvariant--xdmg--enspelled-level-8-quarterstaff--base--xphb--quarterstaff--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Cajado)"
+        "name": "Arma Encantada (Nível 8) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-8-rapier--base--xphb--rapier--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Rapieira)"
+        "name": "Arma Encantada (Nível 8) (Rapieira)"
     },
     "specificvariant--xdmg--enspelled-level-8-revolver--base--xdmg--revolver--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Revólver)"
+        "name": "Arma Encantada (Nível 8) (Revólver)"
     },
     "specificvariant--xdmg--enspelled-level-8-ring-mail--base--xphb--ring-mail--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Cota de Anéis)"
+        "name": "Armadura Encantada (Nível 8) (Cota de Anéis)"
     },
     "specificvariant--xdmg--enspelled-level-8-scale-mail--base--xphb--scale-mail--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Loriga de Escamas)"
+        "name": "Armadura Encantada (Nível 8) (Loriga de Escamas)"
     },
     "specificvariant--xdmg--enspelled-level-8-scimitar--base--xphb--scimitar--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Cimitarra)"
+        "name": "Arma Encantada (Nível 8) (Cimitarra)"
     },
     "specificvariant--xdmg--enspelled-level-8-semiautomatic-pistol--base--xdmg--semiautomatic-pistol--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Pistola Semiautomática)"
+        "name": "Arma Encantada (Nível 8) (Pistola Semiautomática)"
     },
     "specificvariant--xdmg--enspelled-level-8-shortbow--base--xphb--shortbow--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Arco Curto)"
+        "name": "Arma Encantada (Nível 8) (Arco Curto)"
     },
     "specificvariant--xdmg--enspelled-level-8-shortsword--base--xphb--shortsword--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Espada Curta)"
+        "name": "Arma Encantada (Nível 8) (Espada Curta)"
     },
     "specificvariant--xdmg--enspelled-level-8-shotgun--base--xdmg--shotgun--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Escopeta)"
+        "name": "Arma Encantada (Nível 8) (Escopeta)"
     },
     "specificvariant--xdmg--enspelled-level-8-sickle--base--xphb--sickle--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Foice)"
+        "name": "Arma Encantada (Nível 8) (Foice)"
     },
     "specificvariant--xdmg--enspelled-level-8-sling--base--xphb--sling--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Funda)"
+        "name": "Arma Encantada (Nível 8) (Funda)"
     },
     "specificvariant--xdmg--enspelled-level-8-spear--base--xphb--spear--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Lança)"
+        "name": "Arma Encantada (Nível 8) (Lança)"
     },
     "specificvariant--xdmg--enspelled-level-8-splint-armor--base--xphb--splint-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Armadura de Talas)"
+        "name": "Armadura Encantada (Nível 8) (Armadura de Talas)"
     },
     "specificvariant--xdmg--enspelled-level-8-staff--base--xphb--staff--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Cajado)"
+        "name": "Arma Encantada (Nível 8) (Cajado)"
     },
     "specificvariant--xdmg--enspelled-level-8-studded-leather-armor--base--xphb--studded-leather-armor--variant--xdmg--enspelled-armor-level-8": {
-        "name": "Armadura Encantada com Magia (Nível 8) (Armadura de Couro Batido)"
+        "name": "Armadura Encantada (Nível 8) (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--enspelled-level-8-trident--base--xphb--trident--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Tridente)"
+        "name": "Arma Encantada (Nível 8) (Tridente)"
     },
     "specificvariant--xdmg--enspelled-level-8-war-pick--base--xphb--war-pick--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Picareta de Guerra)"
+        "name": "Arma Encantada (Nível 8) (Picareta de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-8-warhammer--base--xphb--warhammer--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Martelo de Guerra)"
+        "name": "Arma Encantada (Nível 8) (Martelo de Guerra)"
     },
     "specificvariant--xdmg--enspelled-level-8-whip--base--xphb--whip--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Chicote)"
+        "name": "Arma Encantada (Nível 8) (Chicote)"
     },
     "specificvariant--xdmg--enspelled-level-8-wooden-staff--base--xphb--wooden-staff--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Cajado de Madeira)"
+        "name": "Arma Encantada (Nível 8) (Cajado de Madeira)"
     },
     "specificvariant--xdmg--enspelled-level-8-yklwa--base--toa--yklwa--variant--xdmg--enspelled-weapon-level-8": {
-        "name": "Arma Encantada com Magia (Nível 8) (Yklwa)"
+        "name": "Arma Encantada (Nível 8) (Yklwa)"
     },
     "specificvariant--xdmg--executioner-s-battleaxe--base--xphb--battleaxe--variant--xdmg--executioner-s-axe": {
         "name": "Machado do Carrasco (Machado de Batalha)"
@@ -17796,7 +17796,7 @@
         "name": "Machado do Carrasco (Machadinha)"
     },
     "specificvariant--xdmg--firearm-bullet-of-slaying--base--xphb--firearm-bullet--variant--xdmg--ammunition-of-slaying": {
-        "name": "Munição Exterminadora (Bala de Arma de Fogo)"
+        "name": "Munição Matadora (Bala de Arma de Fogo)"
     },
     "specificvariant--xdmg--flail-of-warning--base--xphb--flail--variant--xdmg--weapon-of-warning": {
         "name": "Arma de Alerta (Mangual)"
@@ -18135,7 +18135,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--half-plate-armor-of-thunder-resistance--base--xphb--half-plate-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Placas Parcial)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Placas Parcial)"
     },
     "specificvariant--xdmg--half-plate-armor-of-vulnerability-bludgeoning--base--xphb--half-plate-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Armadura de Placas Parcial)"
@@ -18186,7 +18186,7 @@
         "name": "Armadura de Resistência a Radiante (Gibão de Peles)"
     },
     "specificvariant--xdmg--hide-armor-of-thunder-resistance--base--xphb--hide-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Gibão de Peles)"
+        "name": "Armadura de Resistência a Trovejante (Gibão de Peles)"
     },
     "specificvariant--xdmg--hide-armor-of-vulnerability-bludgeoning--base--xphb--hide-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Gibão de Peles)"
@@ -18408,7 +18408,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Couro)"
     },
     "specificvariant--xdmg--leather-armor-of-thunder-resistance--base--xphb--leather-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Couro)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Couro)"
     },
     "specificvariant--xdmg--leather-armor-of-vulnerability-bludgeoning--base--xphb--leather-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Armadura de Couro)"
@@ -18576,7 +18576,7 @@
         "name": "Arma de Alerta (Mosquete)"
     },
     "specificvariant--xdmg--needle-of-slaying--base--xphb--needle--variant--xdmg--ammunition-of-slaying": {
-        "name": "Munição Exterminadora (Dardo)"
+        "name": "Munição Matadora (Dardo)"
     },
     "specificvariant--xdmg--nine-lives-stealer-antimatter-rifle--base--xdmg--antimatter-rifle--variant--xdmg--nine-lives-stealer": {
         "name": "Ladra de Nove Vidas (Rifle de Antimatéria)"
@@ -18774,7 +18774,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--padded-armor-of-thunder-resistance--base--xphb--padded-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura Acolchoada)"
+        "name": "Armadura de Resistência a Trovejante (Armadura Acolchoada)"
     },
     "specificvariant--xdmg--padded-armor-of-vulnerability-bludgeoning--base--xphb--padded-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Armadura Acolchoada)"
@@ -18825,7 +18825,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Placas)"
     },
     "specificvariant--xdmg--plate-armor-of-thunder-resistance--base--xphb--plate-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Placas)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Placas)"
     },
     "specificvariant--xdmg--plate-armor-of-vulnerability-bludgeoning--base--xphb--plate-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Armadura de Placas)"
@@ -18885,7 +18885,7 @@
         "name": "Armadura de Resistência a Radiante (Cota de Anéis)"
     },
     "specificvariant--xdmg--ring-mail-of-thunder-resistance--base--xphb--ring-mail--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Cota de Anéis)"
+        "name": "Armadura de Resistência a Trovejante (Cota de Anéis)"
     },
     "specificvariant--xdmg--ring-mail-of-vulnerability-bludgeoning--base--xphb--ring-mail--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Cota de Anéis)"
@@ -18927,7 +18927,7 @@
         "name": "Armadura de Resistência a Radiante (Loriga de Escamas)"
     },
     "specificvariant--xdmg--scale-mail-of-thunder-resistance--base--xphb--scale-mail--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Loriga de Escamas)"
+        "name": "Armadura de Resistência a Trovejante (Loriga de Escamas)"
     },
     "specificvariant--xdmg--scale-mail-of-vulnerability-bludgeoning--base--xphb--scale-mail--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Loriga de Escamas)"
@@ -19137,7 +19137,7 @@
         "name": "Arma Prateada (Yklwa)"
     },
     "specificvariant--xdmg--sling-bullet-of-slaying--base--xphb--sling-bullet--variant--xdmg--ammunition-of-slaying": {
-        "name": "Munição Exterminadora (Bala de Funda)"
+        "name": "Munição Matadora (Bala de Funda)"
     },
     "specificvariant--xdmg--sling-of-warning--base--xphb--sling--variant--xdmg--weapon-of-warning": {
         "name": "Arma de Alerta (Funda)"
@@ -19212,7 +19212,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Talas)"
     },
     "specificvariant--xdmg--splint-armor-of-thunder-resistance--base--xphb--splint-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Talas)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Talas)"
     },
     "specificvariant--xdmg--splint-armor-of-vulnerability-bludgeoning--base--xphb--splint-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Armadura de Talas)"
@@ -19257,7 +19257,7 @@
         "name": "Armadura de Resistência a Radiante (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--studded-leather-armor-of-thunder-resistance--base--xphb--studded-leather-armor--variant--xdmg--armor-of-thunder-resistance": {
-        "name": "Resistência À Armadura a Trovejante (Armadura de Couro Batido)"
+        "name": "Armadura de Resistência a Trovejante (Armadura de Couro Batido)"
     },
     "specificvariant--xdmg--studded-leather-armor-of-vulnerability-bludgeoning--base--xphb--studded-leather-armor--variant--xdmg--armor-of-vulnerability-bludgeoning": {
         "name": "Armadura de Vulnerabilidade (Contundente) (Armadura de Couro Batido)"

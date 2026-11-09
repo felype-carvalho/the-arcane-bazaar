@@ -11,6 +11,21 @@ function fixture(groups: RawItemEntity[], members: RawItemEntity[]): ItemJsonFil
 }
 
 describe('item group construction', () => {
+    it('keeps artwork inheritance specific to each explicit group relationship', () => {
+        const files = fixture([
+            { name: 'First group', source: 'A', rarity: 'varies', items: ['Shared|B'] },
+            { name: 'Second group', source: 'A', rarity: 'varies', items: ['Shared|B'] },
+        ], [{ name: 'Shared', source: 'B', rarity: 'rare' }, { name: 'Shared', source: 'C', rarity: 'rare' }])
+        const original = structuredClone(files)
+        const catalog = buildCatalog(files)
+        for (const name of ['First group', 'Second group']) {
+            const group = catalog.find((item) => item.name === name)!
+            expect(group.groupOptions![0].resolvedItem.imageFallback).toEqual({ name, source: 'A' })
+        }
+        expect(catalog.find((item) => item.name === 'Shared' && item.source === 'C')!.imageFallback).toBeUndefined()
+        expect(files).toEqual(original)
+    })
+
     it('resolves exact identities, default sources and unique fallback in editorial order without mutation', () => {
         const files = fixture([
             { name: 'Group', source: 'A', rarity: 'varies', items: ['Second', 'First|B', 'Unique', 'Missing|A', 'First|C', ' ', 'First|B|invalid'] },

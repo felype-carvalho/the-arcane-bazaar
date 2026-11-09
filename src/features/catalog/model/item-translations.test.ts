@@ -59,6 +59,50 @@ describe('catalog presentation translations', () => {
         expect(itemText(item, 'A revised paragraph.', 'pt-BR')).toBe('A revised paragraph.')
     })
 
+    it.each([
+        ['weapon', 'Arma Encantada'],
+        ['armor', 'Armadura Encantada'],
+        ['staff', 'Cajado Encantado'],
+    ])('keeps the Enspelled %s family name consistent across versions and bases', (kind, expected) => {
+        const group = allItems.get(`itemgroup--xdmg--enspelled-${kind}`)!
+        expect(itemName(group, 'pt-BR')).toBe(expected)
+        expect(group.groupOptions).toHaveLength(9)
+        for (const option of group.groupOptions!) {
+            const version = option.resolvedItem
+            const translated = itemName(version, 'pt-BR')
+            expect(translated).toMatch(new RegExp(`^${expected} \\((Truque|Nível [1-8])\\)$`))
+            for (const base of version.variantOptions ?? []) {
+                expect(itemName(base.resolvedItem, 'pt-BR')).toBe(`${translated} (${itemName({ id: base.baseItemId, name: base.baseName }, 'pt-BR')})`)
+            }
+        }
+        expect(filterAndSortItems([group], { ...EMPTY_FILTERS, search: expected }, 'name', 'asc', 'pt-BR')).toEqual([group])
+    })
+
+    it.each([
+        ['rod-of-the-pact-keeper', 'Cetro do Guardião do Pacto'],
+        ['manual-of-golems', 'Manual de Golens'],
+        ['ring-of-resistance', 'Anel de Resistência'],
+        ['armor-of-resistance', 'Armadura de Resistência'],
+    ])('keeps the %s group terminology consistent in both editions', (family, expected) => {
+        for (const source of ['dmg', 'xdmg']) {
+            const group = allItems.get(`itemgroup--${source}--${family}`)!
+            expect(itemName(group, 'pt-BR')).toBe(expected)
+            for (const option of group.groupOptions!) {
+                expect(itemName(option.resolvedItem, 'pt-BR').startsWith(`${expected} `)).toBe(true)
+            }
+        }
+    })
+
+    it('uses the same slaying terminology for generic ammunition and its arrow variant', () => {
+        const family = [...allItems.values()].find((item) => item.origin === 'genericVariant' && item.name === 'Ammunition of Slaying')!
+        expect(itemName(family, 'pt-BR')).toBe('Munição Matadora')
+        const arrow = family.variantOptions!.find((option) => option.resolvedItem.name === 'Arrow of Slaying')!
+        expect(itemName(arrow.resolvedItem, 'pt-BR')).toBe('Flecha Matadora')
+        for (const option of family.variantOptions!.filter((option) => option !== arrow)) {
+            expect(itemName(option.resolvedItem, 'pt-BR')).toBe(`Munição Matadora (${itemName({ id: option.baseItemId, name: option.baseName }, 'pt-BR')})`)
+        }
+    })
+
     it('preserves original data, selection objects and pricing', () => {
         const item = catalog.find((entry) => entry.variantOptions?.length)!
         const before = JSON.stringify(item)
@@ -110,6 +154,119 @@ describe('catalog presentation translations', () => {
         const item = allItems.get('item--dmg--wand-of-wonder')!
         expect(itemText(item, 'You cast slow.', 'pt-BR')).toBe('Você conjura lentidão.')
         expect(itemText(item, 'You cast slow.', 'en-US')).toBe('You cast slow.')
+    })
+
+    it.each([
+        ['Azuredge', 'Lâminazul'],
+        ['Blackrazor', 'Laminegra'],
+        ['Blackstaff', 'Cajado Obscuro'],
+        ['Bonecounter', 'Contador de Ossos'],
+        ['Dawnbringer', 'Portadora da Aurora'],
+        ['Deathdance', 'Dança da Morte'],
+        ['Dreamlily', 'Lírio-Sonhador'],
+        ['Drown', 'Afogadora'],
+        ['Duskcrusher', 'Esmagador do Crepúsculo'],
+        ['Ebonbane', 'Ruína de Ébano'],
+        ['Fane-Eater', 'Devoradora de Santuários'],
+        ['Fargab', 'Falador Distante'],
+        ['Heretic', 'Herege'],
+        ['Hew', 'Cortar'],
+        ['Ironfang', 'Presa de Ferro'],
+        ['Lightbringer', 'Luminífera'],
+        ['Moonblade', 'Lâmina Lunar'],
+        ['Moorbounder', 'Saltador dos Pântanos'],
+        ['Nightbringer', 'Portadora da Noite'],
+        ['Orcsplitter', 'Parte-Orcs'],
+        ['Pyroconverger', 'Piroconvergente'],
+        ['Ruinblade', 'Lâmina da Ruína'],
+        ['Sunsword', 'Luminífera'],
+        ['Tinderstrike', 'Golpe de Brasa'],
+        ['Wave', 'Onda'],
+        ['Whelm', 'Submergir'],
+        ['Windskiff', 'Esquife do Vento'],
+        ['Windvane', 'Catavento'],
+        ['Grovelthrash', 'Esmaga-Rastejantes'],
+        ['Stormgirdle', 'Cinturão da Tempestade'],
+        ['Verminshroud', 'Mortalha de Vermes'],
+    ])('uses the catalog name in descriptions of %s across editions and stages', (english, portuguese) => {
+        const family = [...allItems.values()].filter((item) => item.name === english || item.name.startsWith(`${english} (`))
+        expect(family.length).toBeGreaterThan(0)
+        const reference = new RegExp(`\\b${english}\\b`, 'i')
+        let references = 0
+        for (const item of family) {
+            for (const { text } of getCatalogTextFields(item)) {
+                if (!reference.test(text)) continue
+                const translated = itemText(item, text, 'pt-BR')
+                expect(translated.toLocaleLowerCase('pt-BR'), `${item.id}: ${text}`).toContain(portuguese.toLocaleLowerCase('pt-BR'))
+                expect(translated, item.id).not.toMatch(reference)
+                expect(itemText(item, text, 'en-US')).toBe(text)
+                references++
+            }
+        }
+        expect(references).toBeGreaterThan(0)
+    })
+
+    it('keeps Portuguese agreement and replaces alternate translations of Drown', () => {
+        const item = allItems.get('item--pota--drown')!
+        const translated = getCatalogTextFields(item).map(({ text }) => itemText(item, text, 'pt-BR')).join('\n')
+        expect(translated).toContain('Afogadora é um tridente de aço')
+        expect(translated).toContain('a Afogadora não poderá ser usada')
+        expect(translated).toContain('sintonizado com a Afogadora por 24 horas consecutivas')
+        expect(translated).not.toMatch(/\b(?:Drown|Afogar)\b/i)
+    })
+
+    it('uses canonical names when descriptions reference other catalog items', () => {
+        for (const source of ['dmg', 'xdmg']) {
+            const sword = allItems.get(`item--${source}--blackrazor`)!
+            const original = getCatalogTextFields(sword).find(({ text }) => text.includes('Wave and Whelm'))!.text
+            const translated = itemText(sword, original, 'pt-BR')
+            expect(translated).toContain('Laminegra sente uma estranha afinidade com Onda e Submergir')
+            expect(translated).toContain('Ela quer')
+            expect(translated).not.toMatch(/Blackrazor|Navalha Negra|Wave|Whelm/)
+
+            const bag = allItems.get(`item--${source}--bag-of-holding`)!
+            const passage = getCatalogTextFields(bag).find(({ text }) => /Heward's handy haversack/i.test(text))!.text
+            expect(itemText(bag, passage, 'pt-BR')).toMatch(/uma [Bb]olsa [Cc]abe [Tt]udo/)
+            expect(itemText(bag, passage, 'pt-BR')).toContain('Mochila Prestativa de Heward')
+        }
+    })
+
+    it('translates plural item references without changing verbs or setting names', () => {
+        const pairs = Object.entries(catalogTranslations.shared)
+        for (const [english, portuguese] of [
+            ['Star Moths', 'Mariposas Estelares'],
+            ['Moorbounders', 'Saltadores dos Pântanos'],
+            ['Outer Essence Shards', 'Fragmentos de Essência Exterior'],
+            ['Dynamite Sticks', 'Bastões de Dinamite'],
+        ]) {
+            const passages = pairs.filter(([source]) => source.toLowerCase().includes(english.toLowerCase()))
+            expect(passages.length).toBeGreaterThan(0)
+            for (const [, translated] of passages) {
+                expect(translated).toContain(portuguese)
+                expect(translated.toLowerCase()).not.toContain(english.toLowerCase())
+            }
+        }
+        const drowning = pairs.find(([source]) => source.includes('might fall, drown,'))!
+        expect(drowning[1]).toContain('afogar-se')
+        expect(drowning[1]).not.toContain('Afogadora')
+        const setting = pairs.find(([source]) => source.includes('in the Dragonlance setting'))!
+        expect(setting[1]).toContain('no cenário Dragonlance')
+    })
+
+    it('adjusts agreement when the Portuguese item name changes gender or number', () => {
+        const pairs = Object.entries(catalogTranslations.shared)
+        for (const [sourceFragment, expected] of [
+            ['A flying fish ship can', 'não foi construída'],
+            ['Hammerhead ships', 'não foram feitas'],
+            ['squid ships are', 'as Naves Lula são populares'],
+            ['A turtle ship is', 'Uma Nave Tartaruga é envolta'],
+            ["Boon Companions' Bands come", 'Os Anéis dos Bons Companheiros vêm em pares'],
+            ['When the cloak is unfurled', 'Quando o manto é desenrolado, ele emite'],
+        ]) {
+            const passage = pairs.find(([source]) => source.includes(sourceFragment))
+            expect(passage, sourceFragment).toBeDefined()
+            expect(passage![1]).toContain(expected)
+        }
     })
 
     it('preserves table shape, numeric cells and edition-specific rules', () => {

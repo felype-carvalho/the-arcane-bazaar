@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import fluffItems from '../../data/fluff-items.json'
+import items from '../../data/items.json'
+import base from '../../data/items-base.json'
+import variants from '../../data/magicvariants.json'
+import { buildCatalog } from './build-catalog'
+import type { ItemJsonFiles } from './raw-types'
+import type { ItemImageReference } from '../../types'
 import { resolveItemImages, type ItemFluffEntry } from './item-images'
 
 describe('item artwork', () => {
@@ -43,6 +49,43 @@ describe('item artwork', () => {
         ]
         expect(resolveItemImages(entries, 'Specific Sword', 'ABC', { name: 'Generic Weapon', source: 'ABC' })[0].src)
             .toBe('https://5e.tools/img/items/ABC/Specific.webp')
+    })
+
+    it('inherits Enspelled family artwork through every version and compatible base', () => {
+        const entries = fluffItems.itemFluff as ItemFluffEntry[]
+        const files = { items, base, variants } as unknown as ItemJsonFiles
+        const catalog = buildCatalog(files)
+        for (const name of ['Enspelled Weapon', 'Enspelled Armor', 'Enspelled Staff']) {
+            const family = catalog.find((item) => item.name === name)!
+            const expected = resolveItemImages(entries, family.name, family.source)
+            expect(expected.length, name).toBeGreaterThan(0)
+            expect(family.groupOptions).toHaveLength(9)
+            for (const option of family.groupOptions!) {
+                const version = option.resolvedItem
+                expect(resolveItemImages(entries, version.name, version.source, version.imageFallback), version.id).toEqual(expected)
+                for (const baseOption of version.variantOptions ?? []) {
+                    const specific = baseOption.resolvedItem
+                    expect(resolveItemImages(entries, specific.name, specific.source, specific.imageFallback), specific.id).toEqual(expected)
+                }
+            }
+        }
+    })
+
+    it('prefers specific and version artwork before falling back to the group', () => {
+        const entries: ItemFluffEntry[] = ['Specific', 'Version', 'Group'].map((name) => ({
+            name,
+            source: 'ABC',
+            images: [{ type: 'image', href: { type: 'internal', path: `items/ABC/${name}.webp` } }],
+        }))
+        const fallback = { name: 'Version', source: 'ABC', fallback: { name: 'Group', source: 'ABC' } }
+        for (let index = 0; index < entries.length; index++) {
+            expect(resolveItemImages(entries.slice(index), 'Specific', 'ABC', fallback)[0].src)
+                .toBe(`https://5e.tools/img/items/ABC/${entries[index].name}.webp`)
+        }
+        expect(resolveItemImages(entries, 'Specific', 'OTHER')).toEqual([])
+        const cyclic: ItemImageReference = { name: 'Missing', source: 'ABC' }
+        cyclic.fallback = cyclic
+        expect(resolveItemImages(entries, 'Missing', 'ABC', cyclic)).toEqual([])
     })
 
     it('ignores missing references, cycles, and invalid image links', () => {

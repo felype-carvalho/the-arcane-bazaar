@@ -100,7 +100,7 @@ vi.mock('@/features/catalog/api/catalog', async () => {
     const { default: base } = await import('@/features/catalog/data/items-base.json')
     const { default: variants } = await import('@/features/catalog/data/magicvariants.json')
     const groups = buildCatalog({ items, base, variants } as unknown as import('@/features/catalog/model/items/raw-types').ItemJsonFiles)
-        .filter((item) => item.origin === 'itemGroup' && ['Spellwrought Tattoo', 'Staff of Skulls', "Dragon's Wrath Weapon", 'Wave-Swept Weapon'].includes(item.name))
+        .filter((item) => ['Spellwrought Tattoo', 'Staff of Skulls', "Dragon's Wrath Weapon", 'Wave-Swept Weapon', 'Keyholes Dagger', 'Grave Reaper', 'Mage Breaker'].includes(item.name))
     const catalog = [commonItem, commonWeapon, ...ITEM_FIXTURES, modernItem, genericVariant, ...filler]
     return { getItems: () => Promise.resolve([...catalog, ...(testCatalogState.includeGroups ? groups : [])].map((item) => ({ ...item, tags: [...item.tags], properties: [...item.properties] }))) }
 })
@@ -596,6 +596,25 @@ describe('Arcane Bazaar app', () => {
 describe('group configuration flows', () => {
     beforeEach(() => { testCatalogState.includeGroups = true })
     afterEach(() => { testCatalogState.includeGroups = false })
+
+    it('shows the automatically selected fixed base for named weapons and evolution stages', async () => {
+        const user = userEvent.setup()
+        render(<Catalog />)
+        await user.click(screen.getByRole('radio', { name: 'Magic' }))
+        const search = screen.getAllByLabelText('Search items')[0]
+        for (const [name, baseName] of [['Grave Reaper', 'Sickle'], ['Mage Breaker', 'Dagger'], ['Keyholes Dagger', 'Dagger']]) {
+            await user.clear(search)
+            await user.type(search, name)
+            const details = (await screen.findAllByLabelText(`${name} details`))[0]
+            if (name === 'Keyholes Dagger') {
+                const stages = within(details).getByRole('combobox', { name: 'Evolution stage' })
+                await user.selectOptions(stages, (within(stages).getByRole('option', { name: /Initial/ }) as HTMLOptionElement).value)
+            }
+            const bases = within(details).getByRole('combobox', { name: 'Compatible base item' })
+            expect(bases).toHaveDisplayValue(new RegExp(baseName))
+            expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeEnabled()
+        }
+    })
 
     it('clears a hidden base selection and does not restore it when its source returns', async () => {
         const user = userEvent.setup()

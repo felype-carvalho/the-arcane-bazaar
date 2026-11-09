@@ -44,6 +44,12 @@ export type ItemDescriptionBlock =
     | { type: 'paragraph'; text: string }
     | { type: 'table'; caption?: string; columns: string[]; rows: string[][] }
 
+export interface ItemImageReference {
+    name: string
+    source: string
+    fallback?: ItemImageReference
+}
+
 export interface Item {
     id: string
     name: string
@@ -63,7 +69,7 @@ export interface Item {
     source: string
     edition: ItemEdition
     origin: ItemOrigin
-    imageFallback?: { name: string; source: string }
+    imageFallback?: ItemImageReference
     groupOptions?: ItemGroupOption[]
     availableRarities?: Rarity[]
     hasExplicitPrice?: boolean

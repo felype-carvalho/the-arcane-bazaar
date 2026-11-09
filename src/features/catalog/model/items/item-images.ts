@@ -1,3 +1,5 @@
+import type { ItemImageReference } from '../../types'
+
 const IMAGE_ROOT = 'https://5e.tools/img/'
 
 export interface ItemImage {
@@ -76,13 +78,23 @@ function findImages(index: ImageIndex, name: string, source: string): ItemImage[
     return []
 }
 
-export function resolveItemImages(entries: readonly ItemFluffEntry[], name: string, source: string, fallback?: { name: string; source: string }): ItemImage[] {
-    const index = createImageIndex(entries)
-    const images = findImages(index, name, source)
-    return images.length || !fallback ? images : findImages(index, fallback.name, fallback.source)
+function findItemImages(index: ImageIndex, name: string, source: string, fallback?: ItemImageReference): ItemImage[] {
+    const visited = new Set<ItemImageReference>()
+    let reference: ItemImageReference | undefined = { name, source, fallback }
+    while (reference && !visited.has(reference)) {
+        visited.add(reference)
+        const images = findImages(index, reference.name, reference.source)
+        if (images.length) return images
+        reference = reference.fallback
+    }
+    return []
 }
 
-export function getItemImages(name: string, source: string, fallback?: { name: string; source: string }): Promise<ItemImage[]> {
+export function resolveItemImages(entries: readonly ItemFluffEntry[], name: string, source: string, fallback?: ItemImageReference): ItemImage[] {
+    return findItemImages(createImageIndex(entries), name, source, fallback)
+}
+
+export function getItemImages(name: string, source: string, fallback?: ItemImageReference): Promise<ItemImage[]> {
     imageIndexPromise ??= import('../../data/fluff-items.json')
         .then(({ default: data }) => {
             const entries: unknown = data.itemFluff
@@ -93,8 +105,5 @@ export function getItemImages(name: string, source: string, fallback?: { name: s
             imageIndexPromise = undefined
             throw error
         })
-    return imageIndexPromise.then((index) => {
-        const images = findImages(index, name, source)
-        return images.length || !fallback ? images : findImages(index, fallback.name, fallback.source)
-    })
+    return imageIndexPromise.then((index) => findItemImages(index, name, source, fallback))
 }

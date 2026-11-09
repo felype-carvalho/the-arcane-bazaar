@@ -6,6 +6,8 @@ import { buildCatalog, type CatalogDiagnostics } from './build-catalog'
 import type { ItemJsonFiles } from './raw-types'
 import { CATEGORIES } from './categories'
 import { EMPTY_FILTERS, filterAndSortItems, getAvailableFilterOptions } from '../filtering'
+import { resolveItemSelection } from './resolve-item-selection'
+import { applySourceSelection } from '../content-visibility'
 
 describe('catalog integration with the real corpus', () => {
     it('builds direct, base, group, and grouped generic-variant products without mutating its sources', () => {
@@ -145,6 +147,33 @@ describe('catalog integration with the real corpus', () => {
 describe('magic groups in the real corpus', () => {
     let catalog: ReturnType<typeof buildCatalog>
     beforeAll(() => { catalog = buildCatalog({ items: itemsJson, base: itemsBaseJson, variants: magicVariantsJson } as unknown as ItemJsonFiles) })
+
+    it.each([
+        ['Grave Reaper', 'Sickle', 200000],
+        ['Mage Breaker', 'Dagger', 4000],
+    ])('exposes the fixed base of %s without changing its price or content', (name, baseName, price) => {
+        const item = catalog.find((entry) => entry.name === name && entry.source === 'AU')!
+        expect(item.variantOptions).toHaveLength(1)
+        const selection = resolveItemSelection(item)
+        expect(selection.pendingSelection).toBeUndefined()
+        expect(selection.selectedBaseOption).toMatchObject({ baseName, baseSource: 'XPHB', effectivePriceGp: price })
+        expect(selection.effectiveItem).toMatchObject({ id: item.id, name, description: item.description, weaponInformation: item.weaponInformation, basePriceGp: price })
+        expect(selection.selectedBaseOption!.basePriceGp! + selection.selectedBaseOption!.variantPriceGp!).toBe(price)
+        expect(applySourceSelection([item], ['AU'])).toHaveLength(0)
+        expect(applySourceSelection([item], ['AU', 'XPHB'])).toHaveLength(1)
+    })
+
+    it('exposes the fixed dagger base in every Keyholes Dagger evolution stage', () => {
+        const group = catalog.find((item) => item.name === 'Keyholes Dagger' && item.source === 'AU')!
+        expect(group.groupOptions).toHaveLength(4)
+        for (const stage of group.groupOptions!) {
+            const selection = resolveItemSelection(group, stage.id)
+            expect(stage.resolvedItem.variantOptions).toHaveLength(1)
+            expect(selection.selectedBaseOption).toMatchObject({ baseName: 'Dagger', baseSource: 'XPHB', effectivePriceGp: stage.resolvedItem.basePriceGp })
+            expect(selection.pendingSelection).toBeUndefined()
+            expect(selection.effectiveItem.basePriceGp).toBe(stage.resolvedItem.basePriceGp)
+        }
+    })
 
     it('applies Warcraft copy operations to the correct weapon states and apparatus text', () => {
         const find = (name: string) => catalog.find((item) => item.name === name && item.source === 'WoW')!

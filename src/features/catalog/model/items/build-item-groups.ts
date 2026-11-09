@@ -1,10 +1,31 @@
-import type { Item, ItemGroupOption, Rarity } from '../../types'
+import type { Item, ItemGroupOption, ItemImageReference, Rarity } from '../../types'
 import { orderCategories } from './categories'
 import { entityKey, lookupUid, parseUid } from './indexes'
 import { withEffectiveRarity } from './normalize-item'
 import type { RawItemEntity, RawItemProperty } from './raw-types'
 
 const EVOLUTION_RARITIES: Rarity[] = ['Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary']
+
+function withGroupArtwork(item: Item, group: Item): Item {
+    const groupReference: ItemImageReference = {
+        name: group.name,
+        source: group.source,
+        ...(group.imageFallback ? { fallback: group.imageFallback } : {}),
+    }
+    const appendGroup = (reference: ItemImageReference | undefined): ItemImageReference => {
+        if (!reference) return groupReference
+        if (entityKey(reference.name, reference.source) === entityKey(group.name, group.source)) return reference
+        return { ...reference, fallback: appendGroup(reference.fallback) }
+    }
+    return {
+        ...item,
+        imageFallback: entityKey(item.name, item.source) === entityKey(group.name, group.source)
+            ? item.imageFallback : appendGroup(item.imageFallback),
+        ...(item.variantOptions ? {
+            variantOptions: item.variantOptions.map((option) => ({ ...option, resolvedItem: withGroupArtwork(option.resolvedItem, group) })),
+        } : {}),
+    }
+}
 
 export function isEvolvingItem(entity: RawItemEntity, properties: ReadonlyMap<string, RawItemProperty>): boolean {
     return (entity.property ?? []).some((uid) => typeof uid === 'string' && uid.trim()
@@ -53,7 +74,7 @@ export function buildItemGroups(
             if (groupOptions.some((option) => option.id === id)) continue
             const explicit = member.rarity !== 'Unknown' && member.rarity !== 'Varies'
             const inherited = !explicit && group.rarity !== 'Varies' && group.rarity !== 'Unknown'
-            const resolvedItem = explicit ? member : applyRarity(member, inherited ? group.rarity : 'Unknown')
+            const resolvedItem = withGroupArtwork(explicit ? member : applyRarity(member, inherited ? group.rarity : 'Unknown'), group)
             groupOptions.push({ id, label: member.name, source: member.source, kind: 'member', rarityOrigin: explicit ? 'explicit' : inherited ? 'inherited' : 'unknown', resolvedItem })
             incorporatedIds.add(member.id)
         }
