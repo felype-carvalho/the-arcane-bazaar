@@ -3,7 +3,7 @@ import { defaultMeasurements, isMeasurementPreferences } from '@/features/measur
 import { createDefaultCatalogPreferences, createDefaultProfileState, createDefaultSettings, DEFAULT_PROFILE_ID } from '../model/defaults'
 import { normalizeCatalogFilters } from '../model/catalog-filter-schema'
 import type { AppSettings, CatalogPreferences, Profile, ProfileState, SettingsStorage } from '../types'
-import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
+import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog/model/sources'
 
 export const SETTINGS_DATABASE_NAME = 'the-arcane-bazaar'
 export const SETTINGS_DATABASE_VERSION = 1

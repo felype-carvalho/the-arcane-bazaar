@@ -5,7 +5,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { createSettingsStorage } from '../api/settings-database'
 import { createDefaultCatalogPreferences, createDefaultProfileState, createDefaultSettings, DEFAULT_PROFILE_ID } from './defaults'
 import type { AppSettings, CatalogPreferences, ProfileState, SettingsContextValue, SettingsStorage } from '../types'
-import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
+import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog/model/sources'
 import { serializeSettingsBackup } from './settings-backup'
 
 const SettingsContext = createContext<SettingsContextValue | null>(null)

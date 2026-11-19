@@ -30,6 +30,7 @@ export interface PricingAdjustment {
 
 export interface PricingResult {
     basePrice: number
+    sellBasePercent: 50 | 100
     buyTotalPercent: number
     sellTotalPercent: number
     buyPrice: number

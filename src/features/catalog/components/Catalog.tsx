@@ -6,7 +6,7 @@ import { getItems } from '../api/catalog'
 import { applySourceSelection } from '../model/content-visibility'
 import { ALL_SOURCE_CODES, normalizeSource } from '../model/sources'
 import { filterAndSortItems, EMPTY_FILTERS, getAvailableFilterOptions } from '../model/filtering'
-import { configurationName } from '../model/item-translations'
+import { configurationName, loadCatalogNames } from '../model/item-translations'
 import { resolveItemSelection } from '../model/items/resolve-item-selection'
 import { DEFAULT_MODIFIERS } from '../model/pricing'
 import type { Category, Item, ItemFilters, ItemType, PricingModifiers, SortDirection, SortKey } from '../types'
@@ -32,6 +32,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     const [items, setItems] = useState<Item[]>([])
     const [loading, setLoading] = useState(true)
     const [loadError, setLoadError] = useState(false)
+    const [loadAttempt, setLoadAttempt] = useState(0)
     const [filters, setFilters] = useState<ItemFilters>(() => preferences?.filters ?? INITIAL_FILTERS)
     const [sortKey, setSortKey] = useState<SortKey>(preferences?.sortKey ?? 'name')
     const [direction, setDirection] = useState<SortDirection>(preferences?.direction ?? 'asc')
@@ -53,8 +54,15 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     const [manualPrice, setManualPrice] = useState('')
 
     useEffect(() => {
-        getItems().then((catalog) => { setItems(catalog); setSelected(catalog[0] ?? null) }).catch(() => setLoadError(true)).finally(() => setLoading(false))
-    }, [])
+        let active = true
+        setLoading(true)
+        setLoadError(false)
+        Promise.all([getItems(), loadCatalogNames()])
+            .then(([catalog]) => { if (active) { setItems(catalog); setSelected(catalog[0] ?? null) } })
+            .catch(() => { if (active) setLoadError(true) })
+            .finally(() => { if (active) setLoading(false) })
+        return () => { active = false }
+    }, [loadAttempt])
 
     useEffect(() => {
         if (!settingsReady || readyAppliedRef.current) return
@@ -129,7 +137,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
     }, [selected, selectedGroupOptionId, selectedBaseOptionId, selection?.selectedGroupOption, selection?.selectedBaseOption])
 
     useEffect(() => {
-        if (loading || !settingsReady) return
+        if (loading || loadError || !settingsReady) return
         const availableRarities = new Set(availableFilterOptions.rarities)
         const availableCategories = new Set(availableFilterOptions.categories)
         const availableSources = new Set(availableFilterOptions.sources)
@@ -141,7 +149,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
             if (rarities.length === current.rarities.length && categories.length === current.categories.length && sources.length === current.sources.length) return current
             return { ...current, rarities, categories, sources }
         })
-    }, [availableFilterOptions, loading, settingsReady])
+    }, [availableFilterOptions, loading, loadError, settingsReady])
 
     const toggleFilter = (group: FilterGroup, value: string) => {
         markPreferenceChange()
@@ -226,7 +234,7 @@ export function Catalog({ selectedSources = ALL_SOURCE_CODES, settingsReady = tr
                         {loading || !settingsReady ? (
                             <div className="flex h-full items-center justify-center"><div className="text-center"><Sparkles className="mx-auto animate-pulse text-gold" /><p className="mt-3 font-display text-xs text-muted">{t("catalog.loading")}</p></div></div>
                         ) : loadError ? (
-                            <div className="flex h-full items-center justify-center p-6 text-center"><div><h2 className="font-display text-lg text-cream">{t("catalog.loadError")}</h2><p className="mt-2 text-sm text-muted">{t("catalog.retryHint")}</p></div></div>
+                            <div className="flex h-full items-center justify-center p-6 text-center"><div><h2 className="font-display text-lg text-cream">{t("catalog.loadError")}</h2><button type="button" className="secondary-button mt-4" onClick={() => setLoadAttempt((attempt) => attempt + 1)}>{t('common.retry')}</button></div></div>
                         ) : (
                             <CatalogList items={pageItems} selectedId={selected?.id} sortKey={sortKey} direction={direction} onSort={sort} onSelect={selectItem} />
                         )}

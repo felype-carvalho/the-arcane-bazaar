@@ -1,9 +1,78 @@
-import portuguese from '../data/translations/pt-BR'
-import type { CatalogTranslations, Item, ItemGroupOption, VariantBaseOption } from '../types'
+import type { CatalogTranslations, Item, ItemGroupOption, ItemTranslation, VariantBaseOption } from '../types'
 
 export type { CatalogTranslations, ItemTranslation } from '../types'
 
-export const catalogTranslations: CatalogTranslations = portuguese
+export const catalogTranslations: CatalogTranslations = { items: {}, shared: {} }
+
+let namesPromise: Promise<void> | undefined
+let textsPromise: Promise<void> | undefined
+let textsLoaded = false
+let searchCache = new WeakMap<Item, string>()
+
+const translationSources = {
+    names: new URL('../data/translations/pt-BR/items.json', import.meta.url),
+    items: new URL('../data/translations/pt-BR/item-texts.json', import.meta.url),
+    shared: new URL('../data/translations/pt-BR/shared-texts.json', import.meta.url),
+}
+
+function requireRecord(value: unknown): Record<string, unknown> {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid catalog translation resource')
+    return value as Record<string, unknown>
+}
+
+function requireStringMap(value: unknown): Record<string, string> {
+    const record = requireRecord(value)
+    if (Object.values(record).some((entry) => typeof entry !== 'string')) throw new Error('Invalid catalog translation text')
+    return record as Record<string, string>
+}
+
+async function fetchTranslationResource(fetcher: typeof fetch, url: URL): Promise<Record<string, unknown>> {
+    const response = await fetcher(url)
+    if (!response.ok) throw new Error(`Catalog translations: HTTP ${response.status}`)
+    return requireRecord(await response.json())
+}
+
+export function loadCatalogNames(fetcher: typeof fetch = fetch): Promise<void> {
+    namesPromise ??= fetchTranslationResource(fetcher, translationSources.names).then((resource) => {
+        const names: Record<string, ItemTranslation> = {}
+        for (const [id, value] of Object.entries(resource)) {
+            const translation = requireRecord(value)
+            if (typeof translation.name !== 'string') throw new Error('Invalid catalog translation name')
+            names[id] = { name: translation.name }
+        }
+        for (const [id, translation] of Object.entries(names)) {
+            catalogTranslations.items[id] = { ...catalogTranslations.items[id], ...translation }
+        }
+        searchCache = new WeakMap()
+    }).catch((error: unknown) => {
+        namesPromise = undefined
+        throw error
+    })
+    return namesPromise
+}
+
+export function areCatalogTextsLoaded(): boolean {
+    return textsLoaded
+}
+
+export function loadCatalogTexts(fetcher: typeof fetch = fetch): Promise<void> {
+    textsPromise ??= Promise.all([
+        fetchTranslationResource(fetcher, translationSources.items),
+        fetchTranslationResource(fetcher, translationSources.shared),
+    ]).then(([itemTexts, sharedResource]) => {
+        const sharedTexts = requireStringMap(sharedResource)
+        const validatedTexts = Object.entries(itemTexts).map(([id, texts]) => [id, requireStringMap(texts)] as const)
+        for (const [id, texts] of validatedTexts) {
+            catalogTranslations.items[id] = { ...catalogTranslations.items[id], texts }
+        }
+        catalogTranslations.shared = sharedTexts
+        textsLoaded = true
+    }).catch((error: unknown) => {
+        textsPromise = undefined
+        throw error
+    })
+    return textsPromise
+}
 
 export function itemName(item: Pick<Item, 'id' | 'name'>, language: string): string {
     return language === 'pt-BR' ? catalogTranslations.items[item.id]?.name || item.name : item.name
@@ -80,8 +149,6 @@ export function presentItem(item: Item, language: string): Item {
 export function normalizeCatalogSearch(value: string): string {
     return value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('pt-BR').trim()
 }
-
-const searchCache = new WeakMap<Item, string>()
 
 export function itemSearchText(item: Item): string {
     const cached = searchCache.get(item)

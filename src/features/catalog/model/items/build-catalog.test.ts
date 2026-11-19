@@ -23,6 +23,29 @@ function createFiles(): ItemJsonFiles {
 }
 
 describe('category membership in catalog construction', () => {
+    it('halves only the rarity portion of consumable variants and preserves explicit pricing rules', () => {
+        const files = createFiles()
+        files.base.baseitem = [{ name: 'Blade', source: 'TST', weapon: true, type: 'M', value: 1500 }]
+        files.variants.magicvariant = [
+            { name: 'Consumable Blade', requires: [{ weapon: true }], inherits: { source: 'TST', rarity: 'rare', miscTags: ['CNS'] } },
+            { name: 'Explicit Blade', requires: [{ weapon: true }], inherits: { source: 'TST', rarity: 'rare', miscTags: ['CNS'], value: 10000 } },
+            { name: 'Expression Blade', requires: [{ weapon: true }], inherits: { source: 'TST', rarity: 'rare', miscTags: ['CNS'], valueExpression: '[[baseItem.value]] + 50000' } },
+            { name: 'Multiplier Blade', requires: [{ weapon: true }], inherits: { source: 'TST', rarity: 'rare', miscTags: ['CNS'], valueMult: 4 } },
+        ]
+        const catalog = buildCatalog(files)
+        for (const [name, price, origin] of [
+            ['Consumable Blade', 2015, 'rarity'],
+            ['Explicit Blade', 115, 'explicit'],
+            ['Expression Blade', 515, 'explicit'],
+            ['Multiplier Blade', 60, 'explicit'],
+        ] as const) {
+            const option = catalog.find((item) => item.name === name)!.variantOptions![0]
+            expect(option.basePriceGp).toBe(15)
+            expect(option.effectivePriceGp).toBe(price)
+            expect(option.resolvedItem).toMatchObject({ basePriceGp: price, basePriceOrigin: origin })
+        }
+    })
+
     it('aggregates heterogeneous families without transferring memberships to concrete options', () => {
         const family = buildCatalog(createFiles()).find((item) => item.name === 'Enchanted Equipment')!
         expect(family.category).toBe('Other')

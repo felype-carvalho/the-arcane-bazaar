@@ -74,8 +74,8 @@ function findModifier<T extends string>(options: readonly PricingModifierOption<
     return option
 }
 
-export function calculatePricing(item: Item, modifiers: PricingModifiers, manualBasePrice?: number | null): PricingResult | null {
-    const basePrice = item.basePriceGp ?? manualBasePrice
+export function calculatePricing(item: Item, modifiers: PricingModifiers, customBasePrice?: number | null): PricingResult | null {
+    const basePrice = customBasePrice ?? item.basePriceGp
     if (basePrice == null || !Number.isFinite(basePrice) || basePrice <= 0) return null
 
     const economy = findModifier(ECONOMY_OPTIONS, modifiers.economy)
@@ -101,13 +101,15 @@ export function calculatePricing(item: Item, modifiers: PricingModifiers, manual
 
     const buyTotalPercent = clamp(adjustments.reduce((sum, value) => sum + value.buyPercent, 0))
     const sellTotalPercent = clamp(adjustments.reduce((sum, value) => sum + value.sellPercent, 0))
+    const sellBasePercent = item.categories.some((category) => category === 'Trade Good' || category === 'Gem') ? 100 : 50
 
     return {
         basePrice,
+        sellBasePercent,
         buyTotalPercent,
         sellTotalPercent,
         buyPrice: CurrencyConverter.normalizeGp(basePrice * (1 + buyTotalPercent / 100)),
-        sellPrice: CurrencyConverter.normalizeGp(basePrice * 0.5 * (1 + sellTotalPercent / 100)),
+        sellPrice: CurrencyConverter.normalizeGp(basePrice * sellBasePercent / 100 * (1 + sellTotalPercent / 100)),
         adjustments,
     }
 }

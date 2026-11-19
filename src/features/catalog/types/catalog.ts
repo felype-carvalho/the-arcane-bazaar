@@ -61,6 +61,7 @@ export interface Item {
     subtype: string
     availability: Availability
     basePriceGp: number | null
+    basePriceOrigin?: 'explicit' | 'rarity' | 'spellScroll'
     weight: string
     description: string
     tags: string[]

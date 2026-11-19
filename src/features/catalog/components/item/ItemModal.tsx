@@ -1,6 +1,6 @@
 import { Tooltip } from '@/components/ui/Tooltip'
 import { MeasurementText, MeasurementValue, tableMeasurement, MeasurementTableHeading } from '@/features/measurements'
-import { baseOptionName, baseOptionNameTooltip, itemNameTooltip, itemText, presentItem } from '../../model/item-translations'
+import { areCatalogTextsLoaded, baseOptionName, baseOptionNameTooltip, itemNameTooltip, itemText, loadCatalogTexts, presentItem } from '../../model/item-translations'
 import { isPreservedCatalogText } from '../../model/translation-coverage'
 import { useInterfaceTranslation } from '@/app/i18n'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
@@ -10,6 +10,7 @@ import type { ItemDescriptionBlock, ItemInformation } from '../../types/catalog'
 import { getSourceName } from '../../model/sources'
 import { getItemImages, type ItemImage } from '../../model/items/item-images'
 import { CurrencyDisplay } from '../pricing/CurrencyDisplay'
+import { CraftingTooltip } from '../pricing/CraftingTooltip'
 import { RarityBadge, TypeMark } from './ItemBadges'
 import { ItemCategories } from './ItemCategories'
 import { ItemImageViewer } from './ItemImageViewer'
@@ -106,6 +107,8 @@ function DescriptionTable({ block, translate }: { block: Extract<ItemDescription
 
 export function ItemModal({ item: originalItem, configurationSummary, selectedVariantOption, onClose }: ItemModalProps) {
     const { t, language } = useInterfaceTranslation()
+    const [translationStatus, setTranslationStatus] = useState<'idle' | 'loading' | 'ready' | 'error'>(() => areCatalogTextsLoaded() ? 'ready' : 'idle')
+    const [translationAttempt, setTranslationAttempt] = useState(0)
     const item = presentItem(originalItem, language)
     const translate = (text: string) => itemText(originalItem, text, language)
     const dialogRef = useRef<HTMLDivElement>(null)
@@ -129,6 +132,15 @@ export function ItemModal({ item: originalItem, configurationSummary, selectedVa
         {!['None', 'Unknown'].includes(item.rarity) && <RarityBadge rarity={item.rarity} />}
         <span className="type-pill bg-[color-mix(in_srgb,#4d2f5e_25%,#101119)]! px-3! py-[3px]! text-xs! [&>span]:text-xs!"><TypeMark type={item.type} /></span>
     </>
+
+    useEffect(() => {
+        if (language !== 'pt-BR') return
+        let active = true
+        setTranslationStatus(areCatalogTextsLoaded() ? 'ready' : 'loading')
+        loadCatalogTexts().then(() => { if (active) setTranslationStatus('ready') })
+            .catch(() => { if (active) setTranslationStatus('error') })
+        return () => { active = false }
+    }, [language, translationAttempt])
 
     useEffect(() => {
         let active = true
@@ -197,7 +209,8 @@ export function ItemModal({ item: originalItem, configurationSummary, selectedVa
                                 <h3 className={sectionHeadingClass}>{t("pricing.basePrice")}</h3>
                                 <div className="flex items-center gap-3 whitespace-nowrap text-lg text-gold-bright">
                                     <Coins className="shrink-0 text-gold" aria-hidden="true" /><CurrencyDisplay valueGp={displayedPrice} className="flex-nowrap!" />
-                                    {item.hasExplicitPrice === false && <span className={`${noteClass} mt-0! shrink-0`}>{t("item.estimated")}</span>}
+                                    <CraftingTooltip basePriceGp={displayedPrice} />
+                                    {(item.basePriceOrigin === 'rarity' || (!item.basePriceOrigin && item.hasExplicitPrice === false)) && <span className={`${noteClass} mt-0! shrink-0`}>{t("item.estimated")}</span>}
                                 </div>
                             </section>}
                         {hasText(item.source) && <section className={summarySectionClass}>
@@ -213,6 +226,10 @@ export function ItemModal({ item: originalItem, configurationSummary, selectedVa
                         </section>}
                     </aside>
                     <div className="flex min-w-0 flex-col gap-[26px] p-[26px] [overflow-wrap:anywhere] max-[900px]:p-5">
+                        {language === 'pt-BR' && translationStatus !== 'ready' && <div role="status" className="rounded border border-gold/30 bg-surface p-3 text-xs text-muted">
+                            {t(translationStatus === 'error' ? 'catalog.translationsError' : 'catalog.translationsLoading')}
+                            {translationStatus === 'error' && <button type="button" className="secondary-button mt-2" onClick={() => setTranslationAttempt((attempt) => attempt + 1)}>{t('common.retry')}</button>}
+                        </div>}
                         {(hasWeight || item.attunement) && <dl className="flex flex-wrap rounded-lg border border-border bg-surface">
                             {hasWeight && <Information label={t("item.weight")} value={item.weight} icon={<Weight aria-hidden="true" />} />}
                             {item.attunement && <Information label={t("item.attunement")} value={t("item.attunementRequired")} icon={<Sparkles aria-hidden="true" />} />}

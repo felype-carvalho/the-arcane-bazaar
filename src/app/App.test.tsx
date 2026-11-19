@@ -646,13 +646,13 @@ describe('group configuration flows', () => {
         const details = screen.getAllByLabelText('Spellwrought Tattoo details')[0]
         expect(within(details).getByText('Varies')).toBeInTheDocument()
         expect(within(details).getByRole('button', { name: 'View full item sheet' })).toBeDisabled()
-        expect(within(details).queryByLabelText('Manual base price (GP)')).not.toBeInTheDocument()
+        expect(within(details).queryByLabelText('Custom base price (GP)')).not.toBeInTheDocument()
         const selector = within(details).getByRole('combobox', { name: 'Item version' })
         const option = within(selector).getByRole('option', { name: /5th Level/ }) as HTMLOptionElement
         await user.selectOptions(selector, option.value)
         for (const panel of screen.getAllByLabelText('Spellwrought Tattoo (5th Level) details')) {
             expect(within(panel).getByText('Rare')).toBeInTheDocument()
-            expect(within(panel).getByLabelText('Base price')).toHaveTextContent('4,000 GP')
+            expect(within(panel).getByLabelText('Base price')).toHaveTextContent('2,000 GP')
         }
         await user.click(within(details).getByRole('button', { name: 'View full item sheet' }))
         const dialog = screen.getByRole('dialog', { name: 'Spellwrought Tattoo (5th Level)' })

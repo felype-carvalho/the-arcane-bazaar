@@ -5,6 +5,7 @@ import { lookupUid } from './indexes'
 import { cleanInlineTags, entryBlockLines, renderEntryTree, resolveEntityEntryBlocks } from './resolve-entries'
 import type { ProcessedItemEntity, RawItemEntry, RawItemProperty, RawItemType, RawNamedEntity } from './raw-types'
 import { isJsonRecord } from './raw-types'
+import { estimatedBasePriceGp, spellScrollPriceGp } from '../base-pricing'
 
 export interface NormalizationIndexes {
     itemEntries: ReadonlyMap<string, RawItemEntry>
@@ -22,14 +23,6 @@ const DAMAGE_TYPES: Record<string, string> = {
 const RARITY_MAP: Record<string, Rarity> = {
     none: 'None', common: 'Common', uncommon: 'Uncommon', rare: 'Rare', 'very rare': 'Very Rare',
     legendary: 'Legendary', artifact: 'Artifact', varies: 'Varies', unknown: 'Unknown', 'unknown (magic)': 'Unknown',
-}
-
-const FALLBACK_PRICE_GP: Partial<Record<Rarity, number>> = {
-    Common: 100,
-    Uncommon: 400,
-    Rare: 4_000,
-    'Very Rare': 40_000,
-    Legendary: 200_000,
 }
 
 const FOCUS_CLASSES: Record<string, string[]> = {
@@ -68,9 +61,13 @@ export function deriveAvailability(rarity: Rarity): Availability {
     return 'Unavailable'
 }
 
-export function deriveBasePriceGp(entity: ProcessedItemEntity, rarity: Rarity): number | null {
+export function deriveBasePriceGp(entity: ProcessedItemEntity, rarity: Rarity, itemType?: Item['type'], categories?: readonly Category[]): number | null {
+    const scrollPrice = spellScrollPriceGp(entity)
+    if (scrollPrice != null) return scrollPrice
     if (typeof entity.value === 'number' && Number.isFinite(entity.value) && entity.value >= 0) return entity.value / 100
-    return FALLBACK_PRICE_GP[rarity] ?? null
+    const rawRarity = String(entity.rarity).toLowerCase()
+    const type = entity._catalogOrigin === 'baseitem' || ['none', 'unknown'].includes(rawRarity) ? 'Common' : 'Magic'
+    return estimatedBasePriceGp(rarity, itemType ?? type, categories ?? resolveCategories(entity))
 }
 
 function sourceFallbacks(entity: ProcessedItemEntity, abbreviation: string): string[] {
@@ -361,7 +358,9 @@ export function normalizeItem(entity: ProcessedItemEntity, indexes: Normalizatio
         categories,
         subtype,
         availability: deriveAvailability(rarity),
-        basePriceGp: deriveBasePriceGp(entity, rarity),
+        basePriceGp: deriveBasePriceGp(entity, rarity, itemType, categories),
+        basePriceOrigin: spellScrollPriceGp(entity) != null ? 'spellScroll'
+            : typeof entity.value === 'number' && Number.isFinite(entity.value) && entity.value >= 0 ? 'explicit' : 'rarity',
         hasExplicitPrice: typeof entity.value === 'number' && Number.isFinite(entity.value) && entity.value >= 0,
         weight: formatWeight(entity.weight),
         description,
@@ -388,6 +387,6 @@ export function withEffectiveRarity(item: Item, rarity: Rarity): Item {
         ...item,
         rarity,
         availability: deriveAvailability(rarity),
-        basePriceGp: item.hasExplicitPrice ? item.basePriceGp : FALLBACK_PRICE_GP[rarity] ?? null,
+        basePriceGp: spellScrollPriceGp(item) ?? (item.hasExplicitPrice ? item.basePriceGp : estimatedBasePriceGp(rarity, item.type, item.categories)),
     }
 }

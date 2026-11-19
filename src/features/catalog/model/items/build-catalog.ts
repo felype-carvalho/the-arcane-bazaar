@@ -133,7 +133,12 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
             const optionVariantPriceGp = effectivePriceGp != null && baseItem.basePriceGp != null
                 ? effectivePriceGp - baseItem.basePriceGp
                 : variantPriceGp
-            const resolvedItem = { ...normalizedSpecific, basePriceGp: effectivePriceGp }
+            const resolvedItem: Item = {
+                ...normalizedSpecific,
+                basePriceGp: effectivePriceGp,
+                basePriceOrigin: typeof family.variant.inherits.valueExpression === 'string' || typeof family.variant.inherits.valueMult === 'number'
+                    ? 'explicit' : normalizedGeneric.basePriceOrigin,
+            }
             return {
                 id: normalizedSpecific.id,
                 baseItemId: baseItem.id,
@@ -214,7 +219,7 @@ export function buildCatalog(input: ItemJsonFiles, options: BuildCatalogOptions 
                 basePriceGp: baseItem.basePriceGp,
                 variantPriceGp: initial.basePriceGp,
                 effectivePriceGp,
-                resolvedItem: { ...resolvedItem, id: group.id, basePriceGp: effectivePriceGp },
+                resolvedItem: { ...resolvedItem, id: group.id, basePriceGp: effectivePriceGp, basePriceOrigin: initial.basePriceOrigin },
             }
         })
         return { ...initial, basePriceGp: null, variantPriceGp: initial.basePriceGp, variantOptions }

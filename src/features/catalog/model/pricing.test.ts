@@ -123,4 +123,22 @@ describe('calculatePricing', () => {
         expect(calculatePricing(variableItem, DEFAULT_MODIFIERS)).toBeNull()
         expect(calculatePricing(variableItem, DEFAULT_MODIFIERS, 12000)?.buyPrice).toBe(12000)
     })
+
+    it.each(['Trade Good', 'Gem'] as const)('uses equal base buy and sell prices for %s while keeping independent modifiers', (category) => {
+        const item = { ...fixedItem, categories: [category], basePriceGp: 100 }
+        expect(calculatePricing(item, DEFAULT_MODIFIERS)).toMatchObject({ buyPrice: 100, sellPrice: 100, sellBasePercent: 100 })
+        expect(calculatePricing(item, { ...DEFAULT_MODIFIERS, market: 'competitive' })).toMatchObject({ buyPrice: 80, sellPrice: 85 })
+    })
+
+    it('allows custom prices to override fixed, zero and variable automatic prices without another discount', () => {
+        for (const basePriceGp of [4000, 0, null]) {
+            const item = { ...fixedItem, basePriceGp, categories: ['Consumable' as const] }
+            expect(calculatePricing(item, DEFAULT_MODIFIERS, 0.5)).toMatchObject({ basePrice: 0.5, buyPrice: 0.5, sellPrice: 0.25 })
+            expect(calculatePricing(item, DEFAULT_MODIFIERS, null)?.basePrice ?? null).toBe(basePriceGp === 0 ? null : basePriceGp)
+        }
+    })
+
+    it.each([0, -1, NaN, Infinity])('rejects invalid custom price %s instead of using the automatic price', (price) => {
+        expect(calculatePricing(fixedItem, DEFAULT_MODIFIERS, price)).toBeNull()
+    })
 })

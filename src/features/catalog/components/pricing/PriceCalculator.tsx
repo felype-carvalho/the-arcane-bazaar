@@ -15,6 +15,8 @@ import {
 } from '../../model/pricing'
 import type { Item, PricingModifiers, VariantBaseOption } from '../../types'
 import { SourceChip } from '../item/SourceChip'
+import { CraftingTooltip } from './CraftingTooltip'
+import { PricingHelp } from './PricingHelp'
 
 interface PriceCalculatorProps {
     item: Item
@@ -54,7 +56,10 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
             <div className="mb-4 flex items-center justify-between">
                 <div>
                     <p className="eyebrow">{t("pricing.eyebrow")}</p>
-                    <h3 id="calculator-title" className="mt-1 font-display text-sm text-cream">{t("pricing.title")}</h3>
+                    <div className="mt-1 flex items-center gap-1">
+                        <h3 id="calculator-title" className="font-display text-sm text-cream">{t("pricing.title")}</h3>
+                        {(effectiveItem ?? item).type === 'Magic' && !['None', 'Unknown'].includes((effectiveItem ?? item).rarity) && <PricingHelp />}
+                    </div>
                 </div>
                 <SlidersHorizontal size={17} className="text-gold" />
             </div>
@@ -73,10 +78,10 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
                 </div>
             )}
 
-            {pricingItem?.basePriceGp == null && pricingItem && (
+            {pricingItem && (
                 <label className="mb-4 block">
                     <span className="field-label">{t("pricing.manualPrice")}</span>
-                    <input className="field mt-1.5 w-full" type="number" min="1" value={manualPrice} onChange={(event) => setManualPrice(event.target.value)} placeholder={t("pricing.manualPricePlaceholder")} />
+                    <input className="field mt-1.5 w-full" type="number" min="0" step="any" aria-invalid={manualValue != null && (!Number.isFinite(manualValue) || manualValue <= 0)} value={manualPrice} onChange={(event) => setManualPrice(event.target.value)} placeholder={t("pricing.manualPricePlaceholder")} />
                 </label>
             )}
 
@@ -86,7 +91,7 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
                 <div className="mt-5">
                     <output className="base-price-card" aria-label={t("pricing.basePrice")}>
                         <span>{t("pricing.basePrice")}</span>
-                        <strong><CurrencyDisplay valueGp={result.basePrice} /></strong>
+                        <div className="flex items-center gap-2"><strong><CurrencyDisplay valueGp={result.basePrice} /></strong><CraftingTooltip basePriceGp={result.basePrice} /></div>
                     </output>
 
                     <div className="mt-3 grid grid-cols-2 gap-2">
@@ -98,7 +103,7 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
                         <div className="price-result sell">
                             <span>{t("pricing.sell")}</span>
                             <strong><CurrencyDisplay valueGp={result.sellPrice} /></strong>
-                            <small>{t("pricing.sellBase")} {percent(result.sellTotalPercent)}</small>
+                            <small>{t("pricing.sellBase", { value: result.sellBasePercent })} {percent(result.sellTotalPercent)}</small>
                         </div>
                     </div>
                     <div className="breakdown mt-3">

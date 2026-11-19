@@ -1,6 +1,6 @@
 import i18n from '@/app/i18n'
 import { defaultMeasurements, isMeasurementPreferences } from '@/features/measurements/model/preferences'
-import { ALL_SOURCE_CODES } from '@/features/catalog'
+import { ALL_SOURCE_CODES } from '@/features/catalog/model/sources'
 import { isValidCatalogFilters, normalizeCatalogFilters } from './catalog-filter-schema'
 import { DEFAULT_PROFILE_ID } from './defaults'
 import type { ProfileState } from '../types'

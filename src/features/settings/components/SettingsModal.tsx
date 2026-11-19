@@ -1,3 +1,4 @@
+import { SourceChip } from '@/features/catalog/components/item/SourceChip'
 import { Tooltip } from '@/components/ui/Tooltip'
 import { MEASUREMENT_CATEGORIES } from '@/features/measurements/model/preferences'
 import type { MeasurementSystem } from '@/features/measurements/types'
@@ -7,13 +8,12 @@ import { useRef, useState, type ChangeEvent } from 'react'
 import { AlertDialog } from '@/components/ui/AlertDialog'
 import { ModalDialog } from '@/components/ui/ModalDialog'
 import {
-    SourceChip,
     normalizeSource,
     SOURCE_GROUPS,
     SOURCES_BY_EDITION,
     type SourceEdition,
     type SourceGroup,
-} from '@/features/catalog'
+} from '@/features/catalog/model/sources'
 import { useSettings } from '../model/SettingsProvider'
 import { MeasurementConversionInfo } from './MeasurementConversionInfo'
 import { readSettingsBackup } from '../model/settings-backup'

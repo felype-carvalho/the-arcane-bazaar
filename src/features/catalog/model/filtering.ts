@@ -3,11 +3,10 @@ import { CATEGORIES } from './items/categories'
 import { normalizeSource } from './sources'
 import { formatCatalogItemName, itemName, itemSearchText, normalizeCatalogSearch } from './item-translations'
 
-export const RARITIES: readonly Rarity[] = ['None', 'Common', 'Uncommon', 'Rare', 'Very Rare', 'Legendary', 'Artifact', 'Varies', 'Unknown']
+import { RARITIES } from './filter-constants'
+export { RARITIES, EMPTY_FILTERS } from './filter-constants'
 
 const RARITY_ORDER = Object.fromEntries(RARITIES.map((rarity, index) => [rarity, index])) as Record<Rarity, number>
-
-export const EMPTY_FILTERS: ItemFilters = { search: '', types: [], rarities: [], categories: [], availabilities: [], sources: [] }
 
 export interface AvailableFilterOptions {
     rarities: Rarity[]

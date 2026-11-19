@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from '@/components/layout/AppLayout'
-import { CatalogPage } from '@/pages/catalog'
+import { CatalogRoute } from '@/pages/catalog/CatalogRoute'
 import { HomePage } from '@/pages/home'
 
 export function AppRoutes() {
@@ -8,7 +8,7 @@ export function AppRoutes() {
         <Routes>
             <Route element={<AppLayout />}>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/catalog" element={<CatalogPage />} />
+                <Route path="/catalog" element={<CatalogRoute />} />
                 <Route path="/merchant" element={<Navigate to="/" replace state={{ showMerchantNotice: true }} />} />
             </Route>
         </Routes>

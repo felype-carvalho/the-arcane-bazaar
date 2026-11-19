@@ -1,6 +1,6 @@
-import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog'
+import { ALL_SOURCE_CODES, normalizeSource } from '@/features/catalog/model/sources'
 import { CATEGORIES } from '@/features/catalog/model/items/categories'
-import { RARITIES } from '@/features/catalog/model/filtering'
+import { RARITIES } from '@/features/catalog/model/filter-constants'
 import type { Availability, Category, ItemFilters, ItemType, Rarity } from '@/features/catalog/types'
 
 const FILTER_KEYS = ['search', 'types', 'rarities', 'categories', 'availabilities', 'sources']
