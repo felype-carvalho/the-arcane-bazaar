@@ -58,9 +58,8 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
         <section className="border-t border-border px-5 py-5" aria-labelledby="calculator-title">
             <div className="mb-4 flex items-center justify-between">
                 <div>
-                    <p className="eyebrow text-xs!">{t("pricing.eyebrow")}</p>
                     <div className="mt-1 flex items-center gap-1">
-                        <h3 id="calculator-title" className="font-display text-sm text-cream">{t("pricing.title")}</h3>
+                        <h3 id="calculator-title" className="font-display text-sm text-cream">{t("pricing.eyebrow")}</h3>
                         {(effectiveItem ?? item).type === 'Magic' && !['None', 'Unknown'].includes((effectiveItem ?? item).rarity) && <PricingHelp />}
                     </div>
                 </div>
