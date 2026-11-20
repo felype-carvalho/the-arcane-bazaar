@@ -172,7 +172,7 @@
     "pricing.title": "Price this item",
     "pricing.variant": "Variant",
     "pricing.combined": "Combined",
-    "pricing.manualPrice": "Custom base price (GP)",
+    "pricing.manualPrice": "Custom base price ({{unit}})",
     "pricing.manualPricePlaceholder": "Leave empty to use the automatic price",
     "pricing.buy": "Buy from merchant",
     "pricing.adjustmentSuffix": "adjustment",
@@ -353,5 +353,7 @@
     "pricing.help.scrolls": "Spell Scroll prices (2014 and 2024)",
     "pricing.help.cantrip": "Cantrip",
     "pricing.help.level": "Level {{value}}",
-    "pricing.help.variable": "Artifact, Varies and Unknown have no rarity estimate. Select a version/base when required, or enter a custom price for an item without an automatic price."
+    "pricing.help.variable": "Artifact, Varies and Unknown have no rarity estimate. Select a version/base when required, or enter a custom price for an item without an automatic price.",
+    "pricing.customCurrency": "Custom base price currency",
+    "pricing.customBasePrice": "Custom base price"
 }

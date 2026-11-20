@@ -172,7 +172,7 @@
     "pricing.title": "Calcular preço do item",
     "pricing.variant": "Variante",
     "pricing.combined": "Combinado",
-    "pricing.manualPrice": "Preço base personalizado (PO)",
+    "pricing.manualPrice": "Preço base personalizado ({{unit}})",
     "pricing.manualPricePlaceholder": "Deixe vazio para usar o preço automático",
     "pricing.buy": "Comprar do comerciante",
     "pricing.adjustmentSuffix": "de ajuste",
@@ -353,5 +353,7 @@
     "pricing.help.scrolls": "Preços de Pergaminho Mágico (2014 e 2024)",
     "pricing.help.cantrip": "Truque",
     "pricing.help.level": "{{value}}º círculo",
-    "pricing.help.variable": "Artefato, Variável e Desconhecida não possuem estimativa por raridade. Selecione uma versão/base quando necessário ou informe um preço personalizado para um item sem preço automático."
+    "pricing.help.variable": "Artefato, Variável e Desconhecida não possuem estimativa por raridade. Selecione uma versão/base quando necessário ou informe um preço personalizado para um item sem preço automático.",
+    "pricing.customCurrency": "Moeda do preço base personalizado",
+    "pricing.customBasePrice": "Preço base personalizado"
 }

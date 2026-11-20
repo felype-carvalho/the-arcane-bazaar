@@ -23,6 +23,24 @@ function Calculator({ value = item, pending = false }: { value?: Item; pending?:
 }
 
 describe('custom pricing and information', () => {
+    it('adds amounts from all three currencies and restores the automatic price when cleared', async () => {
+        const user = userEvent.setup()
+        render(<Calculator />)
+        const gp = screen.getByRole('spinbutton', { name: 'Custom base price (GP)' })
+        const sp = screen.getByRole('spinbutton', { name: 'Custom base price (SP)' })
+        const cp = screen.getByRole('spinbutton', { name: 'Custom base price (CP)' })
+        await user.type(gp, '2')
+        await user.type(sp, '5')
+        await user.type(cp, '25')
+        expect(screen.getByLabelText('Base price')).toHaveTextContent('2 GP7 SP5 CP')
+        await act(() => i18n.changeLanguage('pt-BR'))
+        expect(screen.getByRole('spinbutton', { name: 'Preço base personalizado (PC)' })).toHaveValue(25)
+        await user.clear(gp)
+        await user.clear(sp)
+        await user.clear(cp)
+        expect(screen.getByLabelText('Preço base')).toHaveTextContent('100 PO')
+    })
+
     it('overrides the calculator price, updates crafting, and restores the automatic price when cleared', async () => {
         const user = userEvent.setup()
         render(<Calculator />)

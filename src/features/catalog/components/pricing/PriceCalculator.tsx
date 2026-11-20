@@ -38,7 +38,10 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
     const { t, label, percent, language } = useInterfaceTranslation()
     const [customName, setCustomName] = useState('')
     const [customPercent, setCustomPercent] = useState('')
-    const manualValue = manualPrice === '' ? null : Number(manualPrice)
+    const amounts: string[] = manualPrice.startsWith('[') ? JSON.parse(manualPrice) as string[] : [manualPrice, '', '']
+    const numbers = amounts.map((value) => value === '' ? 0 : Number(value))
+    const invalidAmount = numbers.some((value) => !Number.isFinite(value) || value < 0)
+    const manualValue = amounts.every((value) => value === '') ? null : invalidAmount ? NaN : numbers[0] + numbers[1] / 10 + numbers[2] / 100
     const pending = pendingSelection ?? (!effectiveItem && item.variantOptions ? 'baseItem' : undefined)
     const pricingItem = pending ? undefined : effectiveItem ?? item
     const result = pricingItem ? calculatePricing(pricingItem, modifiers, manualValue) : null
@@ -55,7 +58,7 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
         <section className="border-t border-border px-5 py-5" aria-labelledby="calculator-title">
             <div className="mb-4 flex items-center justify-between">
                 <div>
-                    <p className="eyebrow">{t("pricing.eyebrow")}</p>
+                    <p className="eyebrow text-xs!">{t("pricing.eyebrow")}</p>
                     <div className="mt-1 flex items-center gap-1">
                         <h3 id="calculator-title" className="font-display text-sm text-cream">{t("pricing.title")}</h3>
                         {(effectiveItem ?? item).type === 'Magic' && !['None', 'Unknown'].includes((effectiveItem ?? item).rarity) && <PricingHelp />}
@@ -79,10 +82,17 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
             )}
 
             {pricingItem && (
-                <label className="mb-4 block">
-                    <span className="field-label">{t("pricing.manualPrice")}</span>
-                    <input className="field mt-1.5 w-full" type="number" min="0" step="any" aria-invalid={manualValue != null && (!Number.isFinite(manualValue) || manualValue <= 0)} value={manualPrice} onChange={(event) => setManualPrice(event.target.value)} placeholder={t("pricing.manualPricePlaceholder")} />
-                </label>
+                <div className="mb-4 grid grid-cols-3 gap-2">
+                    <span className="field-label col-span-3 text-xs!">{t("pricing.customBasePrice")}</span>
+                    {(['GP', 'SP', 'CP'] as const).map((unit, index) => <label className="block min-w-0" key={unit}>
+                        <span className={`field-label text-xs! currency-${unit.toLowerCase()}`}>{label(unit)}</span>
+                        <input className={`field mt-1.5 w-full text-sm! currency-${unit.toLowerCase()}`} type="number" min="0" step="any" aria-label={t('pricing.manualPrice', { unit: label(unit) })} aria-invalid={manualValue != null && (!Number.isFinite(manualValue) || manualValue <= 0)} value={amounts[index]} onChange={(event) => {
+                            const next = [...amounts]
+                            next[index] = event.target.value
+                            setManualPrice(next.every((value) => value === '') ? '' : JSON.stringify(next))
+                        }} />
+                    </label>)}
+                </div>
             )}
 
             {!pricingItem ? (
