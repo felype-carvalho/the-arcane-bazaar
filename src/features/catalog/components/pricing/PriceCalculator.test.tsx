@@ -86,11 +86,12 @@ describe('custom pricing and information', () => {
         expect(screen.getByRole('spinbutton', { name: 'Preço base personalizado (PO)' })).toBeInTheDocument()
     })
 
-    it('does not bypass a required version selection or show magical help for mundane items', () => {
+    it('shows pricing help while a version is pending and for mundane items', () => {
         const { rerender } = render(<Calculator pending />)
+        expect(screen.getByRole('button', { name: 'Magic item pricing rules' })).toBeInTheDocument()
         expect(screen.queryByRole('spinbutton', { name: 'Custom base price (GP)' })).not.toBeInTheDocument()
-        rerender(<Calculator value={{ ...item, type: 'Common' }} />)
-        expect(screen.queryByRole('button', { name: 'Magic item pricing rules' })).not.toBeInTheDocument()
+        rerender(<Calculator value={{ ...item, type: 'Common', rarity: 'None' }} />)
+        expect(screen.getByRole('button', { name: 'Magic item pricing rules' })).toBeInTheDocument()
         expect(screen.getByRole('spinbutton', { name: 'Custom base price (GP)' })).toBeInTheDocument()
     })
 })

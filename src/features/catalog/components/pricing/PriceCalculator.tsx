@@ -60,7 +60,7 @@ export function PriceCalculator({ item, effectiveItem, pendingSelection, selecte
                 <div>
                     <div className="mt-1 flex items-center gap-1">
                         <h3 id="calculator-title" className="font-display text-sm text-cream">{t("pricing.eyebrow")}</h3>
-                        {(effectiveItem ?? item).type === 'Magic' && !['None', 'Unknown'].includes((effectiveItem ?? item).rarity) && <PricingHelp />}
+                        <PricingHelp />
                     </div>
                 </div>
                 <SlidersHorizontal size={17} className="text-gold" />

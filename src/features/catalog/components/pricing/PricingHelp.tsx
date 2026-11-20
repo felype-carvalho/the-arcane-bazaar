@@ -13,7 +13,7 @@ export function PricingHelp() {
         {Object.entries(RARITY_BASE_PRICES_GP).map(([rarity, price]) => <span key={rarity} className="flex justify-between gap-3">
             <span>{label(rarity)}</span><CurrencyDisplay valueGp={price} />
         </span>)}
-        <span>{t('pricing.help.consumables')}</span>
+        <span className="text-muted">{t('pricing.help.consumables')}</span>
         <span className="mt-1 font-semibold">{t('pricing.help.scrolls')}</span>
         {SPELL_SCROLL_PRICES_GP.map((price, level) => <span key={level} className="flex justify-between gap-3">
             <span>{level === 0 ? t('pricing.help.cantrip') : t('pricing.help.level', { value: number(level) })}</span><CurrencyDisplay valueGp={price} />

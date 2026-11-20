@@ -521,7 +521,7 @@ describe('Arcane Bazaar app', () => {
         const baseCard = within(details).getByRole('region', { name: 'Base item' })
         expect(baseCard.querySelector('dl')).toBeNull()
         expect(within(baseCard).queryByText('Longsword')).not.toBeInTheDocument()
-        const calculator = within(details).getByRole('region', { name: 'Price this item' })
+        const calculator = within(details).getByRole('region', { name: 'Market calculator' })
         const selectedBasePriceCard = calculator.querySelector<HTMLElement>('.selected-base-price-card')!
         const priceBreakdown = within(selectedBasePriceCard)
         expect(priceBreakdown.getByText('Longsword')).toBeInTheDocument()
